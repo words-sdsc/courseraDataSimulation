@@ -1,8 +1,10 @@
 import sys
 import getopt
+from initialize import *
 
 def main():
-	print "Hello_World!"
+	print "Initializing..."
+	initializer()
 
 if __name__ == "__main__":
 	main()
