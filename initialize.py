@@ -25,7 +25,7 @@ def initializer(noOfUsers=2000):
 	countries = getCountries(noOfUsers) #list
 	random.shuffle(countries)
 	ages = getages(18, 70, 25, noOfUsers, 30) #min (18), max (70), mean 25, sigma 30
-	accuracyFactor 	= getProbabilities(.5, .4, noOfUsers)
+	accuracyFactor 	= getProbabilities(.5, .4, noOfUsers) #mu 0.5, sigma 0.4
 	purchaseFactor 	= getProbabilities(.5, .2, noOfUsers)
 	adFactor 		= getProbabilities(.5, .5, noOfUsers)
 	chatFactor 		= getProbabilities(.5, .4, noOfUsers) # = accuracyFactor
