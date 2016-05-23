@@ -12,3 +12,6 @@ globalUSessions = None
 
 # List containing current team assignments per time update (day).
 globalTeamAssignments = None
+
+#ad-clicks ID
+adDatabase = None

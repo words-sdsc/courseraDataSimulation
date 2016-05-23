@@ -31,7 +31,7 @@
 
 				# >>>>>>>>>>>>>>>>>>>>Alok
 				# fill the AdClicks file with rows for each click - based on user tags
-					# users = getAdClickUsers(T: Team, TD: Time)  //return a list of users from playing ones
+					# writeAdClickUsers(teamid: Int, TD: Time, )  //return a list of users from playing ones
 
 				# >>>>>>>>>>>>>>>>>>>>Dan
 				# fill the InAppPurchases file with rows for each click - based on user tags

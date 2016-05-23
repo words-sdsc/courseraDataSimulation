@@ -4,11 +4,9 @@ import sys
 import getopt
 import global_vars
 from initialize import *
-
+from ad_clicks import *
 # Main function file.
 def main():
-	
-
 	print "Initializing..."
 	global_vars.globalUsers = createUserDatabase(2000) #userID = index on the list
 	global_vars.globalTeams = createTeamDatabase(100)  #teamID = index on the list
@@ -22,9 +20,11 @@ def main():
 	#start time for Day = 0
 	TD = datetime.datetime.now() + datetime.timedelta(days=random.uniform(2, 3))
 
-	#
+	#dayDuration assumed to be in hours
 	dayDuration = datetime.timedelta(hours=4) 
 
+	#WRITE ad clicks for current players from time = TD to time = TD+dayDuration
+	writeAdClicksCSV(TD, dayDuration) # takes teamAssignments, userSessions from global variables
 
 # Main function call hook.
 if __name__ == "__main__":
