@@ -13,7 +13,7 @@ def main():
 	global_vars.globalTeamAssignments = asssignUsersTOteams(userDatabaseList, teamDatabaseList)
 	global_vars.globalUSessions = initializeUserSessions(assignmentsList, teamDatabaseList)
 
-	#helper functions:
+	#auxillary functions:
 	playingMembers 	= getPlayingMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) # ['teamid']->[user1, user2,...] (have open sessions)
 	allMembers  	= getAllMembers(global_vars.globalTeamAssignments) #['teamid']->[user1, user2,...] (all members)
 
