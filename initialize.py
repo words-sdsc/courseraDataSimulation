@@ -9,7 +9,7 @@
 		#Fill team hashmap: ['teamid'] -> ['name': '',  'teamCreationTime': '',  'teamEndTime': '', 'strength': '0-1']
 		#Fill user-team assignment current-state hashmap ['assignmentid']->['userid': '', teamid': '',  'sessionid': '',]
 		#Create sessions for each user who is playing: ['sessionid']->[ 'assignmentid': '', 'start_timeStamp': '', 'end_timeStamp': '', 'team_level': '', 'platformType': '' ]
-		#Fill team current-state hashmap: ['teamid']->['level': '', 'members': [] ]
+		#Fill team current-state hashmap: ['teamid']->[user1, user2,...]
 		#dayLength: Int (mins)
 
 from datasets import *
@@ -18,7 +18,36 @@ import random
 import datetime
 import math
 
-def initializeUserSessions(assignmentsList):
+
+def getAllMembers(assignmentsList):
+	members = {}
+	for a in assignmentsList:
+		teamid = a['teamid']
+		userid = a['userid']
+		if teamid in members:
+			members[teamid].append(userid)
+		else:
+			members[teamid]=[userid]
+
+	for k,v in members.items():
+		print k,v
+	return members
+
+
+def getPlayingMembers(userSessionsList, assignmentsList):
+	members = {}
+	for s in userSessionsList:
+		teamid = assignmentsList[s['assignmentid']]['teamid']
+		userid = assignmentsList[s['assignmentid']]['userid']
+		if teamid in members:
+			members[teamid].append(userid)
+		else:
+			members[teamid]=[userid]
+	#for k,v in members.items():
+	#	print k,v
+	return members
+
+def initializeUserSessions(assignmentsList, teamDatabaseList):
 	howManySessions = 0.5
 	# 50% of assigned users play (have a session) at the start of the game
 	pickedAssignments = np.random.choice(assignmentsList, howManySessions * len(assignmentsList), replace=False)
@@ -31,7 +60,7 @@ def initializeUserSessions(assignmentsList):
 		newSession['assignmentid']	=assignmentsList.index(assignment)
 		newSession['startTimeStamp']=assignment["startTimeStamp"] + datetime.timedelta(days=random.uniform(0, 2))
 		newSession['endTimeStamp']	=float("inf")
-		newSession['team_level']	=1 #every player starts at 1 initially
+		newSession['team_level']	= teamDatabaseList[assignment['teamid']]['currentLevel'] #get team's current level
 		newSession['platformType']	= np.random.choice(platforms, 1, replace=False, p=freq)[0]
 		sessions.append(newSession)
 	print "  ",len(sessions), "sessions generated from ", len(assignmentsList), " available assignments"
@@ -55,17 +84,17 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
     	#every strong team (strength>0.6) should have 60% strong players (gameaccuracy>0.6)
 		if(teamDatabaseList[team]['strength'] > strongTeamThreshhold):
 			#print 'getStrongPlayers: before len of freeUsers', len(freeUsers)
-			strongPlayers = getStrongPlayers(math.floor(0.6*n), freeUsers, userDatabaseList)
+			strongPlayers = getStrongPlayers(math.floor(0.6*n), freeUsers, userDatabaseList) #list
 			#reduce size of available users
 			freeUsers = [x for x in freeUsers if x not in strongPlayers]
 			#print 'after len :', len(freeUsers)
 			n = n - len(strongPlayers)
 			
-		morePlayers = getRandomPlayers(n, freeUsers).tolist()
+		morePlayers = getRandomPlayers(n, freeUsers) # list
 		#reduce size of available users
 		freeUsers = [x for x in freeUsers if x not in morePlayers]
-		iter = strongPlayers
-		iter.extend(morePlayers)
+		iter = strongPlayers 
+		iter.extend(morePlayers) # merge two lists
 
 		for u in iter:
 			newAssignment={}
@@ -95,7 +124,7 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 		else:
 			while (p in pickinitial) or (globalUsersDataset[p]['tags']['gameaccuracy'] <= 0.6):
 				p = np.random.choice(freeusersindex, 1)
-			pick.append(p)
+			pick.extend(p.tolist())
 	#for t in pick:
 	#	print globalUsersDataset[t]['tags']['gameaccuracy']
 	return pick
@@ -103,7 +132,7 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 def getRandomPlayers(n, freeusersindex):
 	random.shuffle(freeusersindex)
 	pick = np.random.choice(freeusersindex, n, replace=False) #just return n random
-	return pick
+	return pick.tolist()
 
 
 
@@ -126,6 +155,7 @@ def createTeamDatabase(noOfTeams=100):
 		newTeam['teamCreationTime']	=datetime.datetime.now() - datetime.timedelta(days=teamAges[i]+random.uniform(0, 2))
 		newTeam['teamEndTime']		=float("inf")
 		newTeam['strength']	=strengthFactor[i]
+		newTeam['currentLevel']=1 #every team starts at level 1
 		teams.append(newTeam)
 	print '  ', noOfTeams, '  teams generated'
 	return teams # list of users, where teamID = index on the list

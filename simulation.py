@@ -11,7 +11,7 @@
 		#Fill team hashmap: ['teamid'] -> ['name': '',  'teamCreationTime': '',  'teamEndTime': '', 'strength': '0-1']
 		#Fill user-team assignment current-state hashmap ['assignmentid']->['userid': '', teamid': '',  'startTimeStamp': '',]
 		#Create sessions for each user who is playing: ['sessionid']->[ 'assignmentid': '', 'startTimeStamp': '', 'endTimeStamp': '', 'team_level': '', 'platformType': '' ]
-		#Fill team current-state hashmap: ['teamid']->['level': '', 'members': [] ]
+		#Fill team current-state hashmap: ['teamid']->[user1, user2,...]
 		#dayLength: Int (mins)
 
 # for each day in D
