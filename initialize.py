@@ -139,9 +139,6 @@ def getRandomPlayers(n, freeusersindex):
 	pick = np.random.choice(freeusersindex, n, replace=False) #just return n random
 	return pick.tolist()
 
-
-
-
 def createTeamDatabase(noOfTeams=100):
 	teams=[]
 
