@@ -2,7 +2,7 @@ import global_vars
 import random
 
 def getGameClickUsers(team, numUsers, time):
-	globalUsers = global_vars.globalUsers
+	globalUsers =
 	globalUSession = globa_vars.globalUSession
 
 	# Grab users to fill.
