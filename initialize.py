@@ -188,7 +188,7 @@ def createUserDatabase(noOfUsers=2000):
 		newUser['twitter']	=twitterHandles[i]
 		newUser['dob']		=datetime.date.today() - datetime.timedelta(days=365*ages[i])
 		newUser['country']	=countries[i]
-		newUser['timeStamp']=startdate+datetime.timedelta(random.uniform(1,7300)) #days=20yrs*365
+		newUser['timeStamp']=startdate + datetime.timedelta(random.uniform(1,7300)) #days=20yrs*365
 		#'tags is a list'=[gameaccuracy, purchbeh, adbeh, chatbeh]
 		newUser['tags']={'gameaccuracy':round(accuracyFactor[i], 3), 
 						 'purchbeh':round(purchaseFactor[i],3), 
