@@ -18,6 +18,25 @@ import random
 import datetime
 import math
 
+def initializeUserSessions(assignmentsList):
+	howManySessions = 0.5
+	# 50% of assigned users play (have a session) at the start of the game
+	pickedAssignments = np.random.choice(assignmentsList, howManySessions * len(assignmentsList), replace=False)
+	sessions = []
+	platforms	= ['iphone', 'android', 'mac', 'windows', 'linux']
+	freq 		= [0.4, 0.35, 0.05, 0.15, 0.05]
+	print "Generating sessions ..." 
+	for assignment in pickedAssignments:
+		newSession = {}
+		newSession['assignmentid']	=assignmentsList.index(assignment)
+		newSession['startTimeStamp']=assignment["startTimeStamp"] + datetime.timedelta(days=random.uniform(0, 2))
+		newSession['endTimeStamp']	=float("inf")
+		newSession['team_level']	=1 #every player starts at 1 initially
+		newSession['platformType']	= np.random.choice(platforms, 1, replace=False, p=freq)[0]
+		sessions.append(newSession)
+	print "  ",len(sessions), "sessions generated from ", len(assignmentsList), " available assignments"
+	return sessions
+
 def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	# team has strength
 	# user strength is measured by gameaccuracy
@@ -92,7 +111,7 @@ def createTeamDatabase(noOfTeams=100):
 	startdate= datetime.datetime.now() - datetime.timedelta(7300) #days=20yrs*365
 	teamAges = getages(0, 4, 1, noOfTeams, 1) #min (0days), max (4days), mean (1day), sigma 1
 
-	print('   Generating teams ...')
+	print('Generating teams ...')
 	for i in range(0, noOfTeams):
 		newTeam={}
 
@@ -122,7 +141,7 @@ def createUserDatabase(noOfUsers=2000):
 	#date when user accounts started
 	startdate=datetime.datetime.now() - datetime.timedelta(7300) #days=20yrs*365
 	
-	print('   Generating users ...')
+	print('Generating users ...')
 	for i in range(0, noOfUsers):
 		newUser={}
 
