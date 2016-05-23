@@ -1,6 +1,6 @@
 #! python
 # Driver Program
-# import 
+# import
 
 # >>>>>>>>>>>>>>>>>>>>Alok
 # initialize() #global state
@@ -15,7 +15,7 @@
 		#dayLength: Int (mins)
 
 # for each day in D
-	# for every team T 
+	# for every team T
 			# decide team levels at the end of this day
 				#endOfDayLevel = howManyLevelsToday(l: thisLevel, T:Team)
 						#last level is unfinished
@@ -41,15 +41,13 @@
 				# fill the Chat table with users from team T - based on user tags
 					#fillChatTable(T, maxMentions: Int, TD: Time)
 
-				# >>>>>>>>>>>>>>>>>>>>Charles
-				# update global state for next day
-					# call f(p: Int, TD: Time) = updates user team assignments for next day ()
-									# create new teams
-									# end old teams
-									# change p% of user assignments
-					# change user-team assignment
-					# update sessions
+# >>>>>>>>>>>>>>>>>>>>Charles
+# update global state for next day
+	# call f(p: Int, TD: Time) = updates user team assignments for next day ()
+					# create new teams
+					# end old teams
+					# change p% of user assignments
+	# change user-team assignment
+	# update sessions
 
 				#TD=TD+dayDuration
-
-
