@@ -28,8 +28,8 @@ def getAllMembers(assignmentsList):
 		else:
 			members[teamid]=[userid]
 
-	for k,v in members.items():
-		print k,v
+	#for k,v in members.items():
+	#	print k,v
 	return members
 
 
