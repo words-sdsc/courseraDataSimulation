@@ -8,10 +8,10 @@ from initialize import *
 # Main function file.
 def main():
 	print "Initializing..."
-	global_vars.globalUsers = createUserDatabase(2000) #userID = index on the list
-	global_vars.globalTeams = createTeamDatabase(100)  #teamID = index on the list
-	global_vars.globalTeamAssignments = asssignUsersTOteams(global_vars.globalUsers, global_vars.globalTeams)
-	global_vars.globalUSessions = initializeUserSessions(global_vars.globalTeamAssignments, global_vars.globalTeams)
+	global global_vars.globalUsers = createUserDatabase(2000) #userID = index on the list
+	global global_vars.globalTeams = createTeamDatabase(100)  #teamID = index on the list
+	global global_vars.globalTeamAssignments = asssignUsersTOteams(global_vars.globalUsers, global_vars.globalTeams)
+	global global_vars.globalUSessions = initializeUserSessions(global_vars.globalTeamAssignments, global_vars.globalTeams)
 
 	#auxillary functions:
 	playingMembers 	= getPlayingMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) # ['teamid']->[user1, user2,...] (have open sessions)
