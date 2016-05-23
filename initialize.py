@@ -80,10 +80,10 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	for team, n in zip(pickedTeams, teamSizes):
 		#print team
 		strongPlayers = []
-    	#every strong team (strength>0.6) should have 60% strong players (gameaccuracy>0.6)
+		percentStrongPlayers = math.floor(0.5 * n)     	#every strong team (strength>0.6) should have 50% strong players
 		if(teamDatabaseList[team]['strength'] > strongTeamThreshhold):
 			#print 'getStrongPlayers: before len of freeUsers', len(freeUsers)
-			strongPlayers = getStrongPlayers(math.floor(0.6*n), freeUsers, userDatabaseList) #list
+			strongPlayers = getStrongPlayers(percentStrongPlayers, freeUsers, userDatabaseList) #list
 			#reduce size of available users
 			freeUsers = [x for x in freeUsers if x not in strongPlayers]
 			#print 'after len :', len(freeUsers)
@@ -114,16 +114,22 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	return assignments
 
 def getStrongPlayers(n, freeusersindex, globalUsersDataset):
+	strongPlayerThreshold = 5
 	random.shuffle(freeusersindex)
 	pick = []
 	pickinitial = np.random.choice(freeusersindex, n, replace=False)
-	for p in pickinitial:
-		if(globalUsersDataset[p]['tags']['gameaccuracy'] > 0.6):
+	for p in pickinitial: 
+		playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
+		#print playerStrength
+		if(playerStrength > strongPlayerThreshold):
 			pick.append(p)
 		else:
-			while (p in pickinitial) or (globalUsersDataset[p]['tags']['gameaccuracy'] <= 0.6):
+			while (p in pickinitial) or (playerStrength <= strongPlayerThreshold):
 				p = np.random.choice(freeusersindex, 1)
+				playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
+				#print '>>>>>>>>>>>>>>>>>>>>', playerStrength
 			pick.extend(p.tolist())
+		#print playerStrength
 	#for t in pick:
 	#	print globalUsersDataset[t]['tags']['gameaccuracy']
 	return pick
@@ -189,7 +195,7 @@ def createUserDatabase(noOfUsers=2000):
 		#'tags is a list'=[gameaccuracy, purchbeh, adbeh, chatbeh]
 		newUser['tags']={'gameaccuracy':round(accuracyFactor[i], 3), 
 						 'purchbeh':round(purchaseFactor[i],3), 
-						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3) }
+						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3), 'clicksPerSec': random.uniform(1,10) }
 		newUser['id'] = len(users)
 		users.append(newUser)
 
