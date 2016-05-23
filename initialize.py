@@ -101,6 +101,13 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 			newAssignment['teamid']	=team
 			newAssignment['startTimeStamp']=datetime.datetime.now() - datetime.timedelta(days=random.uniform(0, 3))
 			assignments.append(newAssignment)
+
+	assignLog = open("team-assignments.log", "w")
+	for a in sorted(assignments, key=lambda a: a['startTimeStamp']):
+		assignLog.write("%s team=%s, userid=%s\n" %
+			(a['startTimeStamp'], a['teamid'], a['userid']))
+	assignLog.close()
+
 	#for a in assignments:
 	#	print a['userid'],'::',a['teamid'], '::', a['startTimeStamp']
 	print '  ',sum(teamSizes) ,' users assigned to ', len(pickedTeams),' teams'
@@ -183,7 +190,15 @@ def createUserDatabase(noOfUsers=2000):
 		newUser['tags']={'gameaccuracy':round(accuracyFactor[i], 3), 
 						 'purchbeh':round(purchaseFactor[i],3), 
 						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3) }
+		newUser['id'] = len(users)
 		users.append(newUser)
+
+	userLog = open("users.log", "w")
+	for u in sorted(users, key=lambda u: u['timeStamp']):
+		userLog.write("%s id=%s, nick=%s, twitter=%s dob=%s country=%s\n" %
+			(u['timeStamp'], u['id'], u['nickname'],
+			u['twitter'], u['dob'], u['country']))
+	userLog.close()
 
 	print '  ', noOfUsers, ' users generated'
 	return users
