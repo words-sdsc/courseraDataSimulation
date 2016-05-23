@@ -56,7 +56,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 			assignments.append(newAssignment)
 	#for a in assignments:
 	#	print a['userid'],'::',a['teamid'], '::', a['startTimeStamp']
-	#print '  ',sum(teamSizes) ,' users assigned to ', len(pickedTeams),' teams'
+	print '  ',sum(teamSizes) ,' users assigned to ', len(pickedTeams),' teams'
 	return assignments
 
 def getStrongPlayers(n, freeusersindex, globalUsersDataset):
