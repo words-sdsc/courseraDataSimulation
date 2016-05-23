@@ -10,7 +10,6 @@
 		#Fill user-team assignment current-state hashmap ['assignmentid']->['userid': '', teamid': '',  'sessionid': '',]
 		#Create sessions for each user who is playing: ['sessionid']->[ 'assignmentid': '', 'start_timeStamp': '', 'end_timeStamp': '', 'team_level': '', 'platformType': '' ]
 		#Fill team current-state hashmap: ['teamid']->[user1, user2,...]
-		#dayLength: Int (mins)
 
 from datasets import *
 import copy

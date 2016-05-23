@@ -11,7 +11,7 @@ def main():
 	assignmentsList = asssignUsersTOteams(userDatabaseList, teamDatabaseList)
 	userSessionsList = initializeUserSessions(assignmentsList, teamDatabaseList)
 
-	#helper functions:
+	#auxillary functions:
 	playingMembers 	= getPlayingMembers(userSessionsList, assignmentsList) # ['teamid']->[user1, user2,...] (have open sessions)
 	allMembers  	= getAllMembers(assignmentsList) #['teamid']->[user1, user2,...] (all members)
 
