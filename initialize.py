@@ -7,8 +7,8 @@
 				# ['userid'] -> ['nickname': '',  'twitter': '',  'dob': '',  'country': '',  'timeStamp': '', 'tags'=[gameaccuracy, purchbeh, adbeh, chatbeh] ]
 				# globalUsers = createUserDatabase(minAge, maxAge, meanAge) //returns a hash map
 		#Fill team hashmap: ['teamid'] -> ['name': '',  'teamCreationTime': '',  'teamEndTime': '', 'strength': '0-1']
-		#Fill user-team assignment current-state hashmap ['assignmentid']->['userid': '', teamid': '',  'sessionid': '',]
-		#Create sessions for each user who is playing: ['sessionid']->[ 'assignmentid': '', 'start_timeStamp': '', 'end_timeStamp': '', 'team_level': '', 'platformType': '' ]
+		#Fill user-team assignment current-state hashmap ['assignmentid']->['userid': '', teamid': '',  'userSessionid': '',]
+		#Create sessions for each user who is playing: ['userSessionid']->[ 'assignmentid': '', 'start_timeStamp': '', 'end_timeStamp': '', 'team_level': '', 'platformType': '' ]
 		#Fill team current-state hashmap: ['teamid']->[user1, user2,...]
 
 from datasets import *
@@ -75,10 +75,10 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 	sessions = []
 	platforms	= ['iphone', 'android', 'mac', 'windows', 'linux']
 	freq 		= [0.4, 0.35, 0.05, 0.15, 0.05]
-	print "Generating sessions ..."
+	print "Generating user sessions ..."
 	for assignment in pickedAssignments:
 		newSession = {}
-		newSession['sessionid']  = global_vars.counter
+		newSession['userSessionid']  = global_vars.counter
 		global_vars.counter += 1 
 		newSession['assignmentid']	=assignment["assignmentid"]
 		newSession['startTimeStamp']=assignment["startTimeStamp"] + datetime.timedelta(days=random.uniform(0, 2))
@@ -86,7 +86,7 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 		newSession['team_level']	= teamDatabaseList[assignment['teamid']]['currentLevel'] #get team's current level
 		newSession['platformType']	= np.random.choice(platforms, 1, replace=False, p=freq)[0]
 		sessions.append(newSession)
-	print "  ",len(sessions), "sessions generated from ", len(assignmentsList), " available assignments"
+	print "  ",len(sessions), "user sessions generated from ", len(assignmentsList), " available assignments (1 session/user)"
 	return sessions
 
 def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
@@ -98,10 +98,10 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	#all players are free at the start of the game
 	freeUsers = range(0,len(userDatabaseList)) 
 
-	#pick a set of indices of teams (60%) that get >1 users assigned
+	#pick a set of indices of teams (60%) that get >0 users assigned
 	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(0.6*len(teamDatabaseList)))
-	# team length min = 1, max = 30
-	teamSizes   = np.random.choice(range(1,30), len(pickedTeams))
+	# team length min = 1, maxteamsize = 20
+	teamSizes   = np.random.choice(range(1,20), len(pickedTeams))
 
 	strongTeamThreshhold = 0.6
 	for team, n in zip(pickedTeams, teamSizes):

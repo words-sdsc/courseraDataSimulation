@@ -9,8 +9,8 @@ def writeGameClicksForTeam(team, numHits, time):
 	# Append file writer.
 	appendFile = open("game-clicks.log", "a")
 	for row in gameClicks:
-		appendFile.write("%s, user_session=%s, %s, isHit=%s\n" %
-			(row[0], row[1], row[2], row[3]))
+		appendFile.write("time=%s, clickid=%s,  userid=%s, usersessionid=%s, isHit=%s\n" %
+			(row[0], row[1], row[2], row[3], row[4]))
 	appendFile.close()
 
 
@@ -25,6 +25,7 @@ def createGameClickUsers(userIDs, numHits, time):
 	userSession = 0
 
 	counter = 0
+	uniqueClickID = 0
 	# loop until we have satisfied number of hits
 	while counter < numHits:
 		# Randomly select a value from our distribution.
@@ -32,9 +33,11 @@ def createGameClickUsers(userIDs, numHits, time):
 		# Generate hit value
 		isHit = getIsHitBasedOffAccuracy(global_vars.globalUsers[randUserID]["tags"]["gameaccuracy"])
 		# Append Result
-		gameClickFileBuf.append([randUserID, userSession, time, isHit])
+		gameClickFileBuf.append([time, uniqueClickID, randUserID, userSession, isHit])
 		if isHit > 0:
 			counter += 1
+		# Increment unique counter id.
+		uniqueClickID += 1
 
 	return gameClickFileBuf
 

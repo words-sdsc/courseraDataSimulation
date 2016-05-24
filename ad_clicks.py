@@ -33,7 +33,7 @@ def writeAdClicksCSV(startTime, dayDuration, ):
 				teamid = assgn['teamid']
 				userid = assgn['userid']
 		adfactor = global_vars.globalUsers[userid]['tags']['adbeh']
-		totalUsers.append((teamid, userid)) #list
+		totalUsers.append((teamid, userid, s['userSessionid'])) #list
 		adProbabilities.append(adfactor) #list
 		addition += adfactor
 
@@ -51,8 +51,11 @@ def writeAdClicksCSV(startTime, dayDuration, ):
 		adEvent['adclickid'] = global_vars.counter
 		global_vars.counter += 1 
 		adEvent['timeStamp'] = startTime + datetime.timedelta(hours=random.uniform(0, dayDuration.seconds // 3600))
+
 		adEvent['teamid'] = totalUsers[indx][0]
 		adEvent['userid'] = totalUsers[indx][1]
+		adEvent['userSessionid'] = totalUsers[indx][2]
+
 		pickAnAd 				= np.random.choice(len(adDatabase), 1)[0]
 		adEvent['adID']   		= adDatabase[pickAnAd][0]
 		adEvent['adCategory'] 	= adDatabase[pickAnAd][1]
@@ -61,6 +64,6 @@ def writeAdClicksCSV(startTime, dayDuration, ):
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	assignLog = open("ad-clicks.log", "a")
 	for a in sorted(adclicks, key=lambda a: a['timeStamp']):
-		assignLog.write("%s, adclickid=%s, team=%s, userid=%s, adID=%s, adCategory=%s\n" %
-			(a['timeStamp'], a['adclickid'], a['teamid'], a['userid'], a['adID'], a['adCategory']))
+		assignLog.write("time=%s, adclickid=%s, userSessionid=%s, teamid=%s, userid=%s, adID=%s, adCategory=%s\n" %
+			(a['timeStamp'], a['adclickid'], a['userSessionid'], a['teamid'], a['userid'], a['adID'], a['adCategory']))
 	assignLog.close()
