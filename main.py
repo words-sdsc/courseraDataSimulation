@@ -27,8 +27,8 @@ def main():
 
 	# Write the game_clicks. TODO: Implement main function loop for team alteration.
 	# Write one team for now. Ugly patchy access for now...
-	numOfClicks = 100
-	writeGameClicksForTeam(playingMembers.values()[0], numOfClicks, TD)
+ 	totalHits= 100
+	writeGameClicksForTeam(playingMembers.values()[0], totalHits, TD)
 
 	#WRITE ad clicks for current players from time = TD to time = TD+dayDuration
 	writeAdClicksCSV(TD, dayDuration) # takes teamAssignments, userSessions from global variables

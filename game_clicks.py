@@ -2,8 +2,8 @@ import global_vars
 import random
 import numpy.random
 
-def writeGameClicksForTeam(team, numUsers, time):
-	gameClicks = createGameClickUsers(team, numUsers, time)
+def writeGameClicksForTeam(team, numHits, time):
+	gameClicks = createGameClickUsers(team, numHits, time)
 
 	# Data created, flush it to file.
 	# Append file writer.
@@ -14,39 +14,38 @@ def writeGameClicksForTeam(team, numUsers, time):
 	appendFile.close()
 
 
-# Creates a list of game click rows for writing to file.
-def createGameClickUsers(userIDs, numClicks, time):
-	globalUsers = global_vars.globalUsers
-	# Grab users to fill. Based off the user's clicks per sec.
-	# TODO: Minimum 1 click for each user?
-	randIDS = getRandUsersBasedOffCPS(userIDs, numClicks)
+# Creates a distribution from given userID CPS. Then
+def createGameClickUsers(userIDs, numHits, time):
+	# Calculate distribution of dataset based off CPS.
+	cpsDistribute = getCPSUserList(userIDs, 1000)
+
 	gameClickFileBuf = []
 
-	# TODO: Will set user session after next day update is implemented.
-	userSession =  0
+	# TODO: will be defined after next day function is defined
+	userSession = 0
 
-	for userID in randIDS:
-		gameClickFileBuf.append([userID, userSession, time, getIsHitBasedOffAccuracy(global_vars.globalUsers[userID]["tags"]["gameaccuracy"])])
+	counter = 0
+	# loop until we have satisfied number of hits
+	while counter < numHits:
+		# Randomly select a value from our distribution.
+		randUserID = random.choice(cpsDistribute)
+		# Generate hit value
+		isHit = getIsHitBasedOffAccuracy(global_vars.globalUsers[randUserID]["tags"]["gameaccuracy"])
+		# Append Result
+		gameClickFileBuf.append([randUserID, userSession, time, isHit])
+		if isHit > 0:
+			counter += 1
 
 	return gameClickFileBuf
 
-
-# Gets a random user with CPS in mind.
-# TODO: Implement minimum user get threshold.
-def getRandUsersBasedOffCPS(userIDs, numUsers):
-	if numUsers <= 0:
-		return []
-
+# Creates a list of userIDs reflecting clicksPerSec distribution.
+def getCPSUserList(userIDs, samples):
 	result = []
-	counter = 0
-	while counter < numUsers:
-		# Get a random user.
-		randUser = random.choice(userIDs)
-
-		# Accept random user based off clicksPerSec
-		if random.randint(1, 10) <= global_vars.globalUsers[randUser]["tags"]["clicksPerSec"]:
-			result.append(randUser)
-			counter += 1
+	while len(result) <= samples:
+		randUserID = random.choice(userIDs)
+		# CDF of normal distribution. Add the user if succeed.
+		if numpy.random.normal(0.5, 0.4) <= global_vars.globalUsers[randUserID]["tags"]["clicksPerSec"]:
+			result.append(randUserID)
 
 	return result
 
