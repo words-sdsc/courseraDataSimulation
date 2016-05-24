@@ -53,7 +53,7 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 	sessions = []
 	platforms	= ['iphone', 'android', 'mac', 'windows', 'linux']
 	freq 		= [0.4, 0.35, 0.05, 0.15, 0.05]
-	print "Generating sessions ..." 
+	print "Generating sessions ..."
 	for assignment in pickedAssignments:
 		newSession = {}
 		newSession['assignmentid']	=assignmentsList.index(assignment)
@@ -88,11 +88,11 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 			freeUsers = [x for x in freeUsers if x not in strongPlayers]
 			#print 'after len :', len(freeUsers)
 			n = n - len(strongPlayers)
-			
+
 		morePlayers = getRandomPlayers(n, freeUsers) # list
 		#reduce size of available users
 		freeUsers = [x for x in freeUsers if x not in morePlayers]
-		iter = strongPlayers 
+		iter = strongPlayers
 		iter.extend(morePlayers) # merge two lists
 
 		for u in iter:
@@ -118,7 +118,7 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 	random.shuffle(freeusersindex)
 	pick = []
 	pickinitial = np.random.choice(freeusersindex, n, replace=False)
-	for p in pickinitial: 
+	for p in pickinitial:
 		playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
 		#print playerStrength
 		if(playerStrength > strongPlayerThreshold):
@@ -144,7 +144,7 @@ def createTeamDatabase(noOfTeams=100):
 
 	#~~~~~~~~~~~~~~~~~~1. generate teams ~~~~~~~~~~~~~~~~~~
 	teamNames		= getUserNames(noOfTeams)
-	strengthFactor 	= getProbabilities(.5, 0.5, noOfTeams) #mu 0.5, sigma 0.5 (high number means strong) 
+	strengthFactor 	= getProbabilities(.5, 0.5, noOfTeams) #mu 0.5, sigma 0.5 (high number means strong)
 	#date when user accounts started
 	startdate= datetime.datetime.now() - datetime.timedelta(7300) #days=20yrs*365
 	teamAges = getages(0, 4, 1, noOfTeams, 1) #min (0days), max (4days), mean (1day), sigma 1
@@ -179,7 +179,7 @@ def createUserDatabase(noOfUsers=2000):
 
 	#date when user accounts started
 	startdate=datetime.datetime.now() - datetime.timedelta(7300) #days=20yrs*365
-	
+
 	print('Generating users ...')
 	for i in range(0, noOfUsers):
 		newUser={}
@@ -190,8 +190,8 @@ def createUserDatabase(noOfUsers=2000):
 		newUser['country']	=countries[i]
 		newUser['timeStamp']=startdate + datetime.timedelta(random.uniform(1,7300)) #days=20yrs*365
 		#'tags is a list'=[gameaccuracy, purchbeh, adbeh, chatbeh]
-		newUser['tags']={'gameaccuracy':round(accuracyFactor[i], 3), 
-						 'purchbeh':round(purchaseFactor[i],3), 
+		newUser['tags']={'gameaccuracy':round(accuracyFactor[i], 3),
+						 'purchbeh':round(purchaseFactor[i],3),
 						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3), 'clicksPerSec': random.uniform(1,10) }
 		newUser['id'] = len(users)
 		users.append(newUser)
@@ -207,5 +207,3 @@ def createUserDatabase(noOfUsers=2000):
 	return users
 
 	# ['userid'] -> ['nickname': '',  'twitter': '',  'dob': '',  'country': '',  'timeStamp': '', 'tags'=[gameaccuracy, purchbeh, adbeh, chatbeh] ]
-
-
