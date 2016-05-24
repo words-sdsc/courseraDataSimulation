@@ -8,13 +8,15 @@ globalUsers = None
 globalTeams = None
 
 # List containing current sessions per time update (day).
-globalUSessions = None
+yesterday_globalUSessions 	= None
+globalUSessions 			= None
 
 # List containing current team assignments per time update (day).
-globalTeamAssignments = None
+yesterday_globalTeamAssignments = None
+globalTeamAssignments 			= None
 
 #collection of adID and categories
 adDatabase = None
 
-#global counter for generating unique IDs
+#global counter for generating unique IDs (increment this after every use)
 counter = 5000

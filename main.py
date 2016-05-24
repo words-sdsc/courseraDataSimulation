@@ -7,13 +7,14 @@ from initialize import *
 from ad_clicks import *
 from game_clicks import *
 import os
+from random import randint
 
 # Main function file.
 def main():
 
 	print "Initializing..."
-	global_vars.globalUsers = createUserDatabase(2000) #userID = index on the list
-	global_vars.globalTeams = createTeamDatabase(100)  #teamID = index on the list
+	global_vars.globalUsers = createUserDatabase(randint(2000, 3000)) #userID = index on the list
+	global_vars.globalTeams = createTeamDatabase(randint(100,200))  #teamID = index on the list
 	global_vars.globalTeamAssignments = asssignUsersTOteams(global_vars.globalUsers, global_vars.globalTeams)
 	global_vars.globalUSessions = initializeUserSessions(global_vars.globalTeamAssignments, global_vars.globalTeams)
 
