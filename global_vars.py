@@ -13,5 +13,8 @@ globalUSessions = None
 # List containing current team assignments per time update (day).
 globalTeamAssignments = None
 
-#ad-clicks ID
+#collection of adID and categories
 adDatabase = None
+
+#global counter for generating unique IDs
+counter = 5000

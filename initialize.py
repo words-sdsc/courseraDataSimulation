@@ -16,6 +16,7 @@ import copy
 import random
 import datetime
 import math
+import global_vars
 
 
 def getAllMembers(assignmentsList):
@@ -36,8 +37,11 @@ def getAllMembers(assignmentsList):
 def getPlayingMembers(userSessionsList, assignmentsList):
 	members = {}
 	for s in userSessionsList:
-		teamid = assignmentsList[s['assignmentid']]['teamid']
-		userid = assignmentsList[s['assignmentid']]['userid']
+		#GET ASSIGNMENT FOR THIS SESSION
+		for assgn in assignmentsList:
+			if(assgn['assignmentid'] == s['assignmentid']):
+				teamid = assgn['teamid']
+				userid = assgn['userid']
 		if teamid in members:
 			members[teamid].append(userid)
 		else:
@@ -56,7 +60,9 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 	print "Generating sessions ..."
 	for assignment in pickedAssignments:
 		newSession = {}
-		newSession['assignmentid']	=assignmentsList.index(assignment)
+		newSession['sessionid']  = global_vars.counter
+		global_vars.counter += 1 
+		newSession['assignmentid']	=assignment["assignmentid"]
 		newSession['startTimeStamp']=assignment["startTimeStamp"] + datetime.timedelta(days=random.uniform(0, 2))
 		newSession['endTimeStamp']	=float("inf")
 		newSession['team_level']	= teamDatabaseList[assignment['teamid']]['currentLevel'] #get team's current level
@@ -97,6 +103,8 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 
 		for u in iter:
 			newAssignment={}
+			newAssignment['assignmentid'] = global_vars.counter
+			global_vars.counter += 1
 			newAssignment['userid']	=u
 			newAssignment['teamid']	=team
 			newAssignment['startTimeStamp']=datetime.datetime.now() - datetime.timedelta(days=random.uniform(0, 3))

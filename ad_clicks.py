@@ -3,10 +3,11 @@ import random
 import numpy as np
 import datetime
 
-def writeAdClicksCSV(startTime, dayDuration	):
-	#get users who are playing and their ad probabilities
-	teamAssignments =global_vars.globalTeamAssignments
+def writeAdClicksCSV(startTime, dayDuration, ):
+	#get global variables
+	teamAssignments = global_vars.globalTeamAssignments
 	userSessions	= global_vars.globalUSessions
+	assignmentsList = global_vars.globalTeamAssignments
 	totalUsers 		= []
 	adProbabilities = []
 
@@ -21,11 +22,16 @@ def writeAdClicksCSV(startTime, dayDuration	):
 	else:
 		adDatabase = global_vars.adDatabase
 
-	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GET list1= (teamid,userid) list2=adfactor for each user currently playing
+	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GET list1= (teamid,userid) and list2=adfactor for each user currently playing
+	#get users who are playing and their ad probabilities
+
 	addition = 0
 	for s in userSessions:
-		userid = teamAssignments[s['assignmentid']]['userid']
-		teamid = teamAssignments[s['assignmentid']]['teamid']
+		#GET ASSIGNMENT FOR THIS SESSION
+		for assgn in assignmentsList:
+			if(assgn['assignmentid'] == s['assignmentid']):
+				teamid = assgn['teamid']
+				userid = assgn['userid']
 		adfactor = global_vars.globalUsers[userid]['tags']['adbeh']
 		totalUsers.append((teamid, userid)) #list
 		adProbabilities.append(adfactor) #list
@@ -42,6 +48,8 @@ def writeAdClicksCSV(startTime, dayDuration	):
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE adclicks from these users
 	for indx in adUsers:
 		adEvent = {}
+		adEvent['adclickid'] = global_vars.counter
+		global_vars.counter += 1 
 		adEvent['timeStamp'] = startTime + datetime.timedelta(hours=random.uniform(0, dayDuration.seconds // 3600))
 		adEvent['teamid'] = totalUsers[indx][0]
 		adEvent['userid'] = totalUsers[indx][1]
@@ -53,6 +61,6 @@ def writeAdClicksCSV(startTime, dayDuration	):
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	assignLog = open("ad-clicks.log", "a")
 	for a in sorted(adclicks, key=lambda a: a['timeStamp']):
-		assignLog.write("%s, team=%s, userid=%s, adID=%s, adCategory=%s\n" %
-			(a['timeStamp'], a['teamid'], a['userid'], a['adID'], a['adCategory']))
+		assignLog.write("%s, adclickid=%s, team=%s, userid=%s, adID=%s, adCategory=%s\n" %
+			(a['timeStamp'], a['adclickid'], a['teamid'], a['userid'], a['adID'], a['adCategory']))
 	assignLog.close()

@@ -30,7 +30,7 @@ def main():
  	totalHits= 100
 	writeGameClicksForTeam(playingMembers.values()[0], totalHits, TD)
 
-	#WRITE ad clicks for current players from time = TD to time = TD+dayDuration
+	#WRITE ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
 	writeAdClicksCSV(TD, dayDuration) # takes teamAssignments, userSessions from global variables
 
 # Main function call hook.
