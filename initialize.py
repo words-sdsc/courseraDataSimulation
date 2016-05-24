@@ -124,7 +124,12 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 		if(playerStrength > strongPlayerThreshold):
 			pick.append(p)
 		else:
+			itns = 0
+			maxit = 2*len(freeusersindex)
 			while (p in pickinitial) or (playerStrength <= strongPlayerThreshold):
+				itns += 1
+				if(itns >= maxit):
+					break
 				p = np.random.choice(freeusersindex, 1)
 				playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
 				#print '>>>>>>>>>>>>>>>>>>>>', playerStrength
