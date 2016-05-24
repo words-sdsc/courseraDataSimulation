@@ -18,12 +18,25 @@ import datetime
 import math
 import global_vars
 
-def getFreeMembers(userSessions, teamAssignments):
+def getFreeTeamMembers(userSessions, teamAssignments):
+	#print '%%%%%%%%%%%%%%%%%%%%%%%%%% available members'
 	#['teamid']->[userid1,...] (free users with no open sessions)
-	
+	playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) # ['teamid']->[userid1, userid2,...] (have open sessions)
+	allMembers  	= getAllTeamMembers(global_vars.globalTeamAssignments) #['teamid']->[userid1, userid2,...] (all members)
+	freeMembers 	= {}
+	for teamid, members in allMembers.items():
+		usersWithSessions=[]
+		if teamid in playingMembers:
+			usersWithSessions = playingMembers[teamid]
+		availableMembers = list(set(members) - set(usersWithSessions))
+		freeMembers[teamid]=availableMembers
+	#for k,v in freeMembers.items():
+	#	print k,v
+	return freeMembers
 
 
-def getAllMembers(assignmentsList):
+def getAllTeamMembers(assignmentsList):
+	#print '%%%%%%%%%%%%%%%%%%%%%%%%%% all members'
 	members = {}
 	for a in assignmentsList:
 		teamid = a['teamid']
@@ -38,7 +51,8 @@ def getAllMembers(assignmentsList):
 	return members
 
 
-def getPlayingMembers(userSessionsList, assignmentsList):
+def getPlayingTeamMembers(userSessionsList, assignmentsList):
+	#print '%%%%%%%%%%%%%%%%%%%%%%%%%% members with sessions'
 	members = {}
 	for s in userSessionsList:
 		#GET ASSIGNMENT FOR THIS SESSION
@@ -78,9 +92,12 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	# team has strength
 	# user strength is measured by gameaccuracy
-	print 'Generating user-team assignments ...'
+	print 'Generating Initial user-team assignments ...'
 	assignments = [] #list
-	freeUsers = range(0,len(userDatabaseList))
+
+	#all players are free at the start of the game
+	freeUsers = range(0,len(userDatabaseList)) 
+
 	#pick a set of indices of teams (60%) that get >1 users assigned
 	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(0.6*len(teamDatabaseList)))
 	# team length min = 1, max = 30

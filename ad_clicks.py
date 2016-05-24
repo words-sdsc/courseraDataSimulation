@@ -39,7 +39,7 @@ def writeAdClicksCSV(startTime, dayDuration, ):
 
 	adProbabilities = [x/addition for x in adProbabilities]
 
-	#pick 30% users for clicking based on their click probabilities
+	#pick 0-30% users for clicking based on their click probabilities
 	factor = random.uniform(0, 0.3)
 	#print factor
 	adUsers = np.random.choice(range(0, len(totalUsers)), factor*len(totalUsers), replace=True, p=adProbabilities).tolist()
