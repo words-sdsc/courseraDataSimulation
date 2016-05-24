@@ -18,6 +18,7 @@ def main():
 	#auxillary functions:
 	playingMembers 	= getPlayingMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) # ['teamid']->[userid1, userid2,...] (have open sessions)
 	allMembers  	= getAllMembers(global_vars.globalTeamAssignments) #['teamid']->[userid1, userid2,...] (all members)
+	freeMembers		= getFreeMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 
 	#start time for Day = 0
 	TD = datetime.datetime.now() + datetime.timedelta(days=random.uniform(2, 3))
@@ -31,7 +32,7 @@ def main():
 	writeGameClicksForTeam(playingMembers.values()[0], totalHits, TD)
 
 	#WRITE ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
-	writeAdClicksCSV(TD, dayDuration) # takes teamAssignments, userSessions from global variables
+	writeAdClicksCSV(TD, dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
 
 # Main function call hook.
 if __name__ == "__main__":

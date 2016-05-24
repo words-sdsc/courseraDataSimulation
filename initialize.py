@@ -18,6 +18,10 @@ import datetime
 import math
 import global_vars
 
+def getFreeMembers(userSessions, teamAssignments):
+	#['teamid']->[userid1,...] (free users with no open sessions)
+	
+
 
 def getAllMembers(assignmentsList):
 	members = {}
