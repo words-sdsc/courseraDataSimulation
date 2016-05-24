@@ -29,8 +29,11 @@ def main():
 	freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 
 	#Remove old log files
-	os.remove("ad-clicks.log")
-	
+	if os.path.exists("ad-clicks.log"):
+		os.remove("ad-clicks.log")
+	if os.path.exists("game-clicks.log"):
+		os.remove("game-clicks.log")
+
 	#start time for Day = 0
 	TD = datetime.datetime.now() + datetime.timedelta(days=random.uniform(2, 3))
 
