@@ -5,6 +5,7 @@ import getopt
 import global_vars
 from initialize import *
 from ad_clicks import *
+from buy_clicks import *
 from game_clicks import *
 import os
 
@@ -28,7 +29,9 @@ def main():
 	freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 
 	#Remove old log files
-	os.remove("ad-clicks.log")
+	for f in ["ad-clicks.log", "buy-clicks.log"]:
+		if os.path.isfile(f):
+			os.remove(f)
 	
 	#start time for Day = 0
 	TD = datetime.datetime.now() + datetime.timedelta(days=random.uniform(2, 3))
@@ -43,6 +46,9 @@ def main():
 
 	# *APPENDS* ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
 	writeAdClicksCSV(TD, dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
+	
+    # *APPENDS* buy clicks to "buy-clicks.log" for current players from time = TD to time = TD+dayDuration
+	writeBuyClicksCSV(TD, dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
 
 # Main function call hook.
 if __name__ == "__main__":

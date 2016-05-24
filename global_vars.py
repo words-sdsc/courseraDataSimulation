@@ -16,5 +16,8 @@ globalTeamAssignments = None
 #collection of adID and categories
 adDatabase = None
 
+#collection of buyID and prices
+buyDatabase = None
+
 #global counter for generating unique IDs
 counter = 5000
