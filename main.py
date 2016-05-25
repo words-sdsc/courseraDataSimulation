@@ -51,14 +51,14 @@ def main():
 	# Loops for day simulation.
 	counter = 0
 	while counter < dayIteration:
+		print "Day Number:" + str(counter + 1)
 		teamCounter = 0
-		for teams in global_vars.globalTeams:
-			# Debug info or not?
-			#print "Generating team: " + str(teamCounter)
+		for teams in playingMembers.values():
+			print "Generating team: " + str(teamCounter)
 
-			# Write the game_clicks. TODO: Implement main function loop for team alteration.
-			# Write one team for now. Ugly patchy access for now...
-			writeGameClicksForTeam(playingMembers.values()[0], totalHits, TD)
+			# Write the game_clicks.
+			# Write one team for now.
+			writeGameClicksForTeam(teams, totalHits, TD)
 
 			# *APPENDS* ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
 			writeAdClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
@@ -68,7 +68,6 @@ def main():
 			teamCounter += 1
 
 		TD += global_vars.dayDuration
-		print "Day Number:" + str(counter + 1)
 		# Update the teams for next day.
 		counter += 1
 
