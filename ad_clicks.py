@@ -48,7 +48,7 @@ def writeAdClicksCSV(startTime, dayDuration):
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE adclicks from these users
 	for indx in adUsers:
 		adEvent = {}
-		adEvent['adclickid'] = global_vars.counter
+		adEvent['txid'] = global_vars.counter
 		global_vars.counter += 1 
 		adEvent['timeStamp'] = startTime + datetime.timedelta(hours=random.uniform(0, dayDuration.seconds // 3600))
 
@@ -64,7 +64,7 @@ def writeAdClicksCSV(startTime, dayDuration):
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	assignLog = open("ad-clicks.log", "a")
 	for a in sorted(adclicks, key=lambda a: a['timeStamp']):
-		assignLog.write("time=%s, adclickid=%s, userSessionid=%s, teamid=%s, userid=%s, adID=%s, adCategory=%s\n" %
-			(a['timeStamp'].strftime(global_vars.timestamp_format), a['adclickid'], 
+		assignLog.write("time=%s, txID=%s, userSessionid=%s, teamid=%s, userid=%s, adID=%s, adCategory=%s\n" %
+			(a['timeStamp'].strftime(global_vars.timestamp_format), a['txid'], 
 			a['userSessionid'], a['teamid'], a['userid'], a['adID'], a['adCategory']))
 	assignLog.close()

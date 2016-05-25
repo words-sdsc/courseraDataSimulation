@@ -56,6 +56,9 @@ def writeBuyClicksCSV(startTime, dayDuration):
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE buyclicks from these users
 	for indx in buyUsers:
 		buyEvent = {}
+		buyEvent['txid'] = global_vars.counter
+		global_vars.counter += 1
+
 		buyEvent['timeStamp'] = startTime + datetime.timedelta(hours=random.uniform(0, dayDuration.seconds // 3600))
 		buyEvent['teamid'] = totalUsers[indx][0]
 		buyEvent['userid'] = totalUsers[indx][1]
@@ -82,8 +85,8 @@ def writeBuyClicksCSV(startTime, dayDuration):
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	buyLog = open("buy-clicks.log", "a")
 	for b in sorted(buyclicks, key=lambda a: a['timeStamp']):
-		buyLog.write("%s, userSessionid=%s, team=%s, userid=%s, buyID=%s, price=%s\n" %
-			(b['timeStamp'].strftime(global_vars.timestamp_format), b['userSessionid'],
+		buyLog.write("%s, txID=%s, userSessionid=%s, team=%s, userid=%s, buyID=%s, price=%s\n" %
+			(b['timeStamp'].strftime(global_vars.timestamp_format), b['txid'], b['userSessionid'],
 			b['teamid'], b['userid'], b['buyID'], b['buyPrice']))
 	buyLog.close()
 
