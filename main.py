@@ -14,6 +14,11 @@ from random import randint
 def main():
 
 	print "Initializing..."
+	#Remove old log files
+	for f in ["ad-clicks.log", "buy-clicks.log", "users.log"]:
+		if os.path.isfile(f):
+			os.remove(f)
+			
 	global_vars.globalUsers = createUserDatabase(randint(2000, 3000)) #userID = index on the list
 	global_vars.globalTeams = createTeamDatabase(randint(100,200))  #teamID = index on the list
 	global_vars.globalTeamAssignments = asssignUsersTOteams(global_vars.globalUsers, global_vars.globalTeams)
@@ -29,10 +34,7 @@ def main():
 	#____[3] get available team members who are assigned but not playing
 	freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 
-	#Remove old log files
-	for f in ["ad-clicks.log", "buy-clicks.log"]:
-		if os.path.isfile(f):
-			os.remove(f)
+	
 
 	#start time for Day = 0
 	TD = datetime.datetime.now() + datetime.timedelta(days=random.uniform(2, 3))
