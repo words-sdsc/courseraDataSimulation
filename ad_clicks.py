@@ -65,5 +65,6 @@ def writeAdClicksCSV(startTime, dayDuration):
 	assignLog = open("ad-clicks.log", "a")
 	for a in sorted(adclicks, key=lambda a: a['timeStamp']):
 		assignLog.write("time=%s, adclickid=%s, userSessionid=%s, teamid=%s, userid=%s, adID=%s, adCategory=%s\n" %
-			(a['timeStamp'], a['adclickid'], a['userSessionid'], a['teamid'], a['userid'], a['adID'], a['adCategory']))
+			(a['timeStamp'].strftime(global_vars.timestamp_format), a['adclickid'], 
+			a['userSessionid'], a['teamid'], a['userid'], a['adID'], a['adCategory']))
 	assignLog.close()

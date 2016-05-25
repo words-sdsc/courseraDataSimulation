@@ -134,7 +134,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	assignLog = open("team-assignments.log", "w")
 	for a in sorted(assignments, key=lambda a: a['startTimeStamp']):
 		assignLog.write("%s team=%s, userid=%s\n" %
-			(a['startTimeStamp'], a['teamid'], a['userid']))
+			(a['startTimeStamp'].strftime(global_vars.timestamp_format), a['teamid'], a['userid']))
 	assignLog.close()
 
 	#for a in assignments:
@@ -233,7 +233,7 @@ def createUserDatabase(noOfUsers=2000):
 	userLog = open("users.log", "w")
 	for u in sorted(users, key=lambda u: u['timeStamp']):
 		userLog.write("%s id=%s, nick=%s, twitter=%s dob=%s country=%s\n" %
-			(u['timeStamp'], u['id'], u['nickname'],
+			(u['timeStamp'].strftime(global_vars.timestamp_format), u['id'], u['nickname'],
 			u['twitter'], u['dob'], u['country']))
 	userLog.close()
 

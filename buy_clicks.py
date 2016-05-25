@@ -71,6 +71,7 @@ def writeBuyClicksCSV(startTime, dayDuration):
 	buyLog = open("buy-clicks.log", "a")
 	for b in sorted(buyclicks, key=lambda a: a['timeStamp']):
 		buyLog.write("%s, userSessionid=%s, team=%s, userid=%s, buyID=%s, price=%s\n" %
-			(b['timeStamp'], b['userSessionid'], b['teamid'], b['userid'], b['buyID'], b['buyPrice']))
+			(b['timeStamp'].strftime(global_vars.timestamp_format), b['userSessionid'],
+			b['teamid'], b['userid'], b['buyID'], b['buyPrice']))
 	buyLog.close()
 
