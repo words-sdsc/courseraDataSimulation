@@ -3,7 +3,7 @@ import random
 import numpy as np
 import datetime
 
-def writeBuyClicksCSV(startTime, dayDuration	):
+def writeBuyClicksCSV(startTime, dayDuration):
 	#get users who are playing and their buying probabilities
 	teamAssignments = global_vars.globalTeamAssignments
 	userSessions	= global_vars.globalUSessions
@@ -13,8 +13,17 @@ def writeBuyClicksCSV(startTime, dayDuration	):
 
 	#numberOfItems = 30
 
+	# price distributions for each platform
+	platformBuyPriceDist = { 'iphone': [.05, .05, .20, .25, .30, .15],
+		'mac': [.15, .15, .15, .30, .15, .10],
+		'android' : [.40, .25, .15, .10, .05, .05 ],
+		'windows': [ .60, .15, .10, .05, .05, .05 ],
+		'linux': [.75, .05, .05, .05, .05, .05] }
+
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE buy database if global variable is None
 	if(global_vars.buyDatabase is None):
+		# NOTE: if you change the number of elements in buyPrices,
+		# need to change all the distributions in platformBuyPriceDist.
 		buyPrices = [0.99, 1.99, 2.99, 4.99, 9.99, 19.99]
 		#pickCategories=np.random.choice(buyPrices, numberOfItems)
 		buyDatabase = zip(range(0,len(buyPrices)), buyPrices) #each member is a tuple (buyID, category)
@@ -51,11 +60,12 @@ def writeBuyClicksCSV(startTime, dayDuration	):
 		buyEvent['teamid'] = totalUsers[indx][0]
 		buyEvent['userid'] = totalUsers[indx][1]
 		platform = totalUsers[indx][3]
-		pickABuy = np.random.choice(len(buyDatabase), 1)[0]
+		pickABuy = np.random.choice(len(buyPrices), 1, p=platformBuyPriceDist[platform])[0]
 		buyEvent['buyID'] = buyDatabase[pickABuy][0]
 		buyEvent['buyPrice'] = buyDatabase[pickABuy][1]
-		buyEvent['userSessionid'] = buyDatabase[pickABuy][2]
+		buyEvent['userSessionid'] = totalUsers[pickABuy][2]
 		buyclicks.append(buyEvent)
+		#print '%s %s' % (platform, buyEvent['buyPrice'])
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	buyLog = open("buy-clicks.log", "a")
