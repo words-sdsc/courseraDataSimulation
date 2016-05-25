@@ -15,7 +15,7 @@ def main():
 
 	print "Initializing..."
 	#Remove old log files
-	for f in ["ad-clicks.log", "buy-clicks.log", "users.log"]:
+	for f in ["game-clicks.log", "ad-clicks.log", "buy-clicks.log", "users.log"]:
 		if os.path.isfile(f):
 			os.remove(f)
 			
