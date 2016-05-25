@@ -69,6 +69,8 @@ def getPlayingTeamMembers(userSessionsList, assignmentsList):
 	return members
 
 def initializeUserSessions(assignmentsList, teamDatabaseList):
+	# assigns 50% assigned players to new sessions, remaining 50% are ignored
+
 	howManySessions = 0.5
 	# 50% of assigned users play (have a session) at the start of the game
 	pickedAssignments = np.random.choice(assignmentsList, howManySessions * len(assignmentsList), replace=False)
@@ -90,6 +92,9 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 	return sessions
 
 def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
+	# assignes users to (60%) of the teams, remaining teams are ignored
+	
+	howManyTeams = 0.6
 	# team has strength
 	# user strength is measured by gameaccuracy
 	print 'Generating Initial user-team assignments ...'
@@ -99,7 +104,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	freeUsers = range(0,len(userDatabaseList)) 
 
 	#pick a set of indices of teams (60%) that get >0 users assigned
-	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(0.6*len(teamDatabaseList)))
+	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(howManyTeams*len(teamDatabaseList)))
 	# team length min = 1, maxteamsize = 20
 	teamSizes   = np.random.choice(range(1,20), len(pickedTeams))
 
