@@ -43,17 +43,18 @@ def main():
 	dayIteration = 5
 
 	# Time measure per day.
-	dayMeasure = datetime.timedelta(hours=4)
+	global_vars.dayDuration = datetime.timedelta(hours=4)
 
+	# Total hits per team
+	totalHits= 100
+
+	# Loops for day simulation.
 	counter = 0
 	while counter < dayIteration:
 		for teams in global_vars.globalTeams:
-			# dayDuration assumed to be in hours
-			global_vars.dayDuration = dayMeasure
 
 			# Write the game_clicks. TODO: Implement main function loop for team alteration.
 			# Write one team for now. Ugly patchy access for now...
-	 		totalHits= 100
 			writeGameClicksForTeam(playingMembers.values()[0], totalHits, TD)
 
 			# *APPENDS* ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
@@ -62,8 +63,8 @@ def main():
 			# *APPENDS* buy clicks to "buy-clicks.log" for current players from time = TD to time = TD+dayDuration
 			writeBuyClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
 
+	TD += global_vars.dayDuration
 	# Update the teams for next day.
-
 	counter += 1
 
 # Main function call hook.
