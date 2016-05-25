@@ -38,7 +38,7 @@ def main():
 	TD = datetime.datetime.now() + datetime.timedelta(days=random.uniform(2, 3))
 
 	# dayDuration assumed to be in hours
-	dayDuration = datetime.timedelta(hours=4)
+	global_vars.dayDuration = datetime.timedelta(hours=4)
 
 	# Write the game_clicks. TODO: Implement main function loop for team alteration.
 	# Write one team for now. Ugly patchy access for now...
@@ -46,7 +46,7 @@ def main():
 	writeGameClicksForTeam(playingMembers.values()[0], totalHits, TD)
 
 	# *APPENDS* ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
-	writeAdClicksCSV(TD, dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
+	writeAdClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
 
 # Main function call hook.
 if __name__ == "__main__":

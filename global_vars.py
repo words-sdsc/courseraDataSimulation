@@ -15,6 +15,9 @@ globalUSessions 			= None
 yesterday_globalTeamAssignments = None
 globalTeamAssignments 			= None
 
+#Day Duration
+dayDuration = None
+
 #collection of adID and categories
 adDatabase = None
 
