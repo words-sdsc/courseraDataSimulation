@@ -3,6 +3,9 @@ import random
 import numpy.random
 import datetime
 
+# Keeps track of total index.
+clickIndex = 0
+
 def writeGameClicksForTeam(team, numHits, time):
 	gameClicks = createGameClickUsers(team, numHits, time)
 
@@ -26,7 +29,8 @@ def createGameClickUsers(userIDs, numHits, time):
 	userSession = 0
 
 	counter = 0
-	uniqueClickID = 0
+	totalClicks = 0
+	global clickIndex
 	# Previous created time.
 	prevTime = time
 	# loop until we have satisfied number of hits
@@ -36,14 +40,15 @@ def createGameClickUsers(userIDs, numHits, time):
 		# Generate hit value
 		isHit = getIsHitBasedOffAccuracy(global_vars.globalUsers[randUserID]["tags"]["gameaccuracy"])
 		# Append Result
-		gameClickFileBuf.append([0, uniqueClickID, randUserID, userSession, isHit])
+		gameClickFileBuf.append([0, clickIndex, randUserID, userSession, isHit])
 		if isHit > 0:
 			counter += 1
 		# Increment unique counter id.
-		uniqueClickID += 1
+		totalClicks += 1
+		clickIndex += 1
 
 	# Insert time now that we have total clicks and return
-	generateTime(time, uniqueClickID, gameClickFileBuf)
+	generateTime(time, totalClicks, gameClickFileBuf)
 
 	return gameClickFileBuf
 

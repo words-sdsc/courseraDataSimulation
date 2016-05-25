@@ -30,7 +30,7 @@ def main():
 	freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 
 	#Remove old log files
-	for f in ["ad-clicks.log", "buy-clicks.log"]:
+	for f in ["ad-clicks.log", "buy-clicks.log", "game-clicks.log"]:
 		if os.path.isfile(f):
 			os.remove(f)
 
@@ -40,7 +40,7 @@ def main():
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
-	dayIteration = 3
+	dayIteration = 1
 
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(hours=4)
@@ -51,7 +51,10 @@ def main():
 	# Loops for day simulation.
 	counter = 0
 	while counter < dayIteration:
+		teamCounter = 0
 		for teams in global_vars.globalTeams:
+			# Debug info or not?
+			#print "Generating team: " + str(teamCounter)
 
 			# Write the game_clicks. TODO: Implement main function loop for team alteration.
 			# Write one team for now. Ugly patchy access for now...
@@ -62,10 +65,12 @@ def main():
 
 			# *APPENDS* buy clicks to "buy-clicks.log" for current players from time = TD to time = TD+dayDuration
 			writeBuyClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
+			teamCounter += 1
 
-	TD += global_vars.dayDuration
-	# Update the teams for next day.
-	counter += 1
+		TD += global_vars.dayDuration
+		print "Day Number:" + str(counter + 1)
+		# Update the teams for next day.
+		counter += 1
 
 # Main function call hook.
 if __name__ == "__main__":
