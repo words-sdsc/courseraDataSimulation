@@ -27,4 +27,4 @@ buyDatabase = None
 #global counter for generating unique IDs (increment this after every use)
 counter = 5000
 
-timestamp_format = "%Y:%m:%d %H:%M:%S"
+timestamp_format = "%Y-%m-%d %H:%M:%S"
