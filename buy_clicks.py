@@ -20,11 +20,11 @@ def writeBuyClicksCSV(startTime, dayDuration):
 		'windows': [ .60, .15, .10, .05, .05, .05 ],
 		'linux': [.75, .05, .05, .05, .05, .05] }
 
+	buyPrices = [0.99, 1.99, 2.99, 4.99, 9.99, 19.99]
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE buy database if global variable is None
 	if(global_vars.buyDatabase is None):
 		# NOTE: if you change the number of elements in buyPrices,
 		# need to change all the distributions in platformBuyPriceDist.
-		buyPrices = [0.99, 1.99, 2.99, 4.99, 9.99, 19.99]
 		#pickCategories=np.random.choice(buyPrices, numberOfItems)
 		buyDatabase = zip(range(0,len(buyPrices)), buyPrices) #each member is a tuple (buyID, category)
 		global_vars.buyDatabase = buyDatabase
