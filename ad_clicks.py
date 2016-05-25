@@ -3,7 +3,7 @@ import random
 import numpy as np
 import datetime
 
-def writeAdClicksCSV(startTime, dayDuration, ):
+def writeAdClicksCSV(startTime, dayDuration):
 	#get global variables
 	teamAssignments = global_vars.globalTeamAssignments
 	userSessions	= global_vars.globalUSessions

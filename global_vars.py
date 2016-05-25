@@ -21,5 +21,8 @@ dayDuration = None
 #collection of adID and categories
 adDatabase = None
 
+#collection of buyID and prices
+buyDatabase = None
+
 #global counter for generating unique IDs (increment this after every use)
 counter = 5000
