@@ -7,6 +7,7 @@ from initialize import *
 from ad_clicks import *
 from buy_clicks import *
 from game_clicks import *
+from update_day import *
 import os
 from random import randint
 
@@ -45,9 +46,6 @@ def main():
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(hours=4)
 
-	# Total hits per team
-	totalHits= 100
-
 	# Loops for day simulation.
 	counter = 0
 	while counter < dayIteration:
@@ -58,7 +56,7 @@ def main():
 
 			# Write the game_clicks.
 			# Write one team for now.
-			writeGameClicksForTeam(teams, totalHits, TD)
+			writeGameClicksForTeam(teams, TD)
 
 			# *APPENDS* ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
 			writeAdClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables

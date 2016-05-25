@@ -6,7 +6,8 @@ import datetime
 # Keeps track of total index.
 clickIndex = 0
 
-def writeGameClicksForTeam(team, numHits, time):
+def writeGameClicksForTeam(team, time):
+	numHits = calculateHitsRequired()
 	gameClicks = createGameClickUsers(team, numHits, time)
 
 	# Data created, flush it to file.
@@ -17,6 +18,9 @@ def writeGameClicksForTeam(team, numHits, time):
 			(row[0], row[1], row[2], row[3], row[4]))
 	appendFile.close()
 
+def calculateHitsRequired():
+	# TODO: Add calculation of hits.
+	return 100
 
 # Creates a distribution from given userID CPS. Then
 def createGameClickUsers(userIDs, numHits, time):
