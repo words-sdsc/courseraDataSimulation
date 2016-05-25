@@ -28,3 +28,5 @@ buyDatabase = None
 counter = 5000
 
 timestamp_format = "%Y-%m-%d %H:%M:%S"
+
+max_accuracy = 0.7

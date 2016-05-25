@@ -66,6 +66,18 @@ def writeBuyClicksCSV(startTime, dayDuration):
 		buyEvent['userSessionid'] = totalUsers[pickABuy][2]
 		buyclicks.append(buyEvent)
 		#print '%s %s' % (platform, buyEvent['buyPrice'])
+	
+		# increase accuracy based on price of item bought
+		accuracy = global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'] + buyEvent['buyPrice']/100
+		# see if accuracy too high
+		if accuracy > global_vars.max_accuracy:
+			accuracy = global_vars .max_accuracy
+		global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'] = accuracy
+
+		#print 'userid %s accuracy %s price %f' % (buyEvent['userid'],
+			#global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'], buyEvent['buyPrice'])
+
+		
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	buyLog = open("buy-clicks.log", "a")
