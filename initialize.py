@@ -212,7 +212,7 @@ def createUserDatabase(noOfUsers=2000):
 	nicknames		= getUserNames(noOfUsers)
 
 	#date when user accounts started
-	startdate=datetime.datetime.now() - datetime.timedelta(7300) #days=20yrs*365
+	startdate=datetime.datetime.now() - datetime.timedelta(7300/5) #days=20yrs*365
 
 	print('Generating users ...')
 	for i in range(0, noOfUsers):
@@ -222,7 +222,7 @@ def createUserDatabase(noOfUsers=2000):
 		newUser['twitter']	=twitterHandles[i]
 		newUser['dob']		=datetime.date.today() - datetime.timedelta(days=365*ages[i]+random.randint(1,365))
 		newUser['country']	=countries[i]
-		newUser['timeStamp']=startdate + datetime.timedelta(random.uniform(1,7300)) #days=20yrs*365
+		newUser['timeStamp']=startdate + datetime.timedelta(random.uniform(1,7300/5)) #days=20yrs*365
 		#'tags is a list'=[gameaccuracy, purchbeh, adbeh, chatbeh]
 		newUser['tags']={'gameaccuracy':round(accuracyFactor[i], 3),
 						 'purchbeh':round(purchaseFactor[i],3),
