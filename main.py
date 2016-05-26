@@ -65,13 +65,12 @@ def main():
 			# Write the game_clicks.
 			# Write one team for now.
 			writeGameClicksForTeam(teams, TD)
-
-			# *APPENDS* ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
-			writeAdClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
-
-			# *APPENDS* buy clicks to "buy-clicks.log" for current players from time = TD to time = TD+dayDuration
-			writeBuyClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
 			teamCounter += 1
+
+		# *APPENDS* ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
+		writeAdClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
+		# *APPENDS* buy clicks to "buy-clicks.log" for current players from time = TD to time = TD+dayDuration
+		writeBuyClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
 
 		TD += global_vars.dayDuration
 		# Simulate Users.
