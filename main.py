@@ -30,7 +30,7 @@ def main():
 	freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 
 	#Remove old log files
-	for f in ["ad-clicks.log", "buy-clicks.log"]:
+	for f in ["ad-clicks.log","buy-clicks.log","game-clicks.log","team-assignments.log","users.log"]:
 		if os.path.isfile(f):
 			os.remove(f)
 
