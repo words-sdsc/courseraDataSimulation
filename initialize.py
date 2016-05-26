@@ -6,7 +6,7 @@
 		#Fill user hashmap:
 				# ['userid'] -> ['nickname': '',  'twitter': '',  'dob': '',  'country': '',  'timeStamp': '', 'tags'=[gameaccuracy, purchbeh, adbeh, chatbeh] ]
 				# globalUsers = createUserDatabase(minAge, maxAge, meanAge) //returns a hash map
-		#Fill team hashmap: ['teamid'] -> ['name': '',  'teamCreationTime': '',  'teamEndTime': '', 'strength': '0-1']
+		#Fill team list: [index] -> ['teamid':123, name': '',  'teamCreationTime': '',  'teamEndTime': '', 'strength': '0-1']
 		#Fill user-team assignment current-state hashmap ['assignmentid']->['userid': '', teamid': '',  'userSessionid': '',]
 		#Create sessions for each user who is playing: [index]->['userSessionid': 123 'assignmentid': '', 'start_timeStamp': '', 'end_timeStamp': '', 'team_level': '', 'platformType': '' ]
 		#Fill team current-state hashmap: ['teamid']->[user1, user2,...]
@@ -209,7 +209,9 @@ def createTeamDatabase(noOfTeams=100):
 		newTeam['teamEndTime']		=float("inf")
 		newTeam['strength']	=strengthFactor[i]
 		newTeam['currentLevel']=1 #every team starts at level 1
-		newTeam['id'] = i
+		newTeam['teamid'] = global_vars.teamIDCounter
+		global_vars.teamIDCounter += 1
+
 		teams.append(newTeam)
 	print '  ', noOfTeams, '  teams generated'
 	return teams # list of users, where teamID = index on the list

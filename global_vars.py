@@ -26,6 +26,7 @@ buyDatabase = None
 
 #global counter for generating unique IDs (increment this after every use)
 counter = 5000
+teamIDCounter = 0
 
 # Platform distributions
 platforms	= ['iphone', 'android', 'mac', 'windows', 'linux']

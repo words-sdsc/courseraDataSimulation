@@ -1,4 +1,5 @@
 import global_vars
+import datasets.py
 
 # Team assignment buffer used for housing all team writes.
 teamAssignBuffer = []
@@ -18,7 +19,8 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	global_vars.yesterday_globalTeamAssignments = list(global_vars.globalTeamAssignments)
 
 	# Function call for leveling up!
-	levelUp()
+	# TODO
+	#levelUp()
 	# Function dealing with any user movement.
 	userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD)
 
@@ -32,15 +34,14 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 # Simualte the user movements. Starts from stoping user play, to unassign
 # and then unassigned to not playing to playing. That way all transitions
 # are recorded.
-def userMovement(playingUsers, notPlayingUsers, unassginedUsers, TD):
-	userLeaveRate = TD.to_seconds() /  1200 # Seconds that user should stay
+def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
+	userLeaveRate = TD.to_seconds() /  1200 # Seconds that avg user should stay
 
 	playingToNotPlaying(userRetainRate, playingUsers, notPlayingUsers, TD)
-	notPlayingToUnassigned()
+	notPlayingToUnassigned(0.60, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
-	unassignedToNotPlaying()
+	unassignedToNotPlaying(0.60, playingUsers, notPlayingUsers, unassignedUsers, TD)
 	notPlayingToPlaying(userRetainRate, playingUsers, notPlayingUsers, TD)
-
 
 
 # Helper functions for simulation #
@@ -61,9 +62,9 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 def endUserSession(userID, TD):
 	# Edit globals
 	session = getSessionWithUserID(userID)
-	buf = list(session.values())
-	# Write end time.
-	buf[3] = TD
+	buf = [session["userSessionid"], session["assignmentid"],
+		session["startTimeStamp"], TD, session["team_level"],
+		session["platformType"]]
 
 	# Add user to write buffer.
 	userSessionBuffer.append([sessionId] + buf)
@@ -71,9 +72,21 @@ def endUserSession(userID, TD):
 	# delete the old session
 	del global_vars.globalUSessions[sessionId]
 
-def notPlayingToUnassigned(fraction):
-	# fraction / num users in team = each users chance of leaving
-	checkTeamEmpty()
+
+# Generate movement of fraction of people going to unassigned
+def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
+	# fraction is percentage of users from all notplaying that move.
+	for index, userIDs in notPlayingUsers:
+		for userID in userIDs:
+			if random.uniform(0, 1) <= fraction:
+				# Move the user.
+				unassignedUsers[index] = userID
+				userIDs.remove(userID)
+
+				# Delete empty team.
+				if len(userIDs) <= 0
+					deleteTeam(userIDs, playingUsers, notPlayingUsers, unassignedUsers, TD)
+
 
 # Function to start user session
 def startUserSession(userID, TD):
@@ -95,8 +108,38 @@ def startUserSession(userID, TD):
 	# Add to global session.
 	global_vars.globalUSessions.append(newSession)
 
-def unassignedToNotPlaying():
-	checkTeamEmpty()
+	# Being lazy and copy
+	session = newSession
+	# Add buffer:
+	buf = [session["userSessionid"], session["assignmentid"],
+		session["startTimeStamp"], session["endTimeStamp"], session["team_level"],
+		session["platformType"]]
+	# Append buffer
+	userSessionBuffer.append(buf)
+
+# Generate movement of prob of people going to not playing
+def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
+	# fraction is percentage of users from all unassigned that move
+	for index, userIDs in unassignedUsers:
+		for userID in userIDs:
+				if random.uniform(0, 1) <= fraction:
+					# Move the user
+					notPlayUsers[index] = userID
+					userIDs.remove(userID)
+
+					# Create new team!
+					team = {}
+					team["teamid"] = global_vars.teamIDCounter
+					global_vars.teamIDCounter += 1
+					team["name"] = datasets.getUserNames(1)[0]
+					team["teamCreationTime"] = TD
+					team["teamEndTime"] = float("inf")
+					team["strength"] = datasets.getProbabilities(0.5,0.5,1)[0]
+					team["currentLevel"] = 1
+					createTeam(team, playingUsers, notPlayUsers, unassignedUsers)
+
+					# Create team assignment.
+					createTeamAssignment(team["teamid"], userID, TD)
 
 
 def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
@@ -109,32 +152,77 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 				userIDs.remove(userID)
 				startUserSession(userID, TD)
 
+# Create team assignment and write to buffer.
+def createTeamAssignment(teamid, userid, TD)
+	assignT = {}
+	assignT["assignmentid"] = global_vars.counter
+	global_vars.counter += 1
+	assignT["userid"] = userid
+	assignT["teamid"] = teamid
+	assignT["startTimeStamp"] = TD
+
+	global_vars.globalTeamAssignments.append(assignT)
+
+	# Write to buffer.
+	teamAssignBuffer.append([assignT["assignmentid"], assignT["userid"], assignT["teamid"], assignT["startTimeStamp"]])
 
 
-# Function to check if given team is empty, if so, write to buffer.
-def checkTeamEmpty(team):
+# Create a team, overwrite team if exists.
+def createTeam(team, playingUsers, notPlayingUsers, unassignedUsers):
+	global_vars.globalTeams.append(team)
+	playingUsers[team["teamid"]] = []
+	notPlayingUsers[team["teamid"]] = []
+	unassignedUsers[team["teamid"]] = []
+
+# Writes to buffer the end
+# team and delete team.
+def deleteTeam(team, index, playingUsers, notPlayingUsers, unassignedUsers, TD):
+	teamRemoved = global_vars.globalTeams.pop(index)
+	teamRemoved["teamEndTime"] = TD
+	teamBuffer.append(teamRemoved.values())
+	# Delete all traces of this team.
+	del playingUsers[index]
+	del notPlayingUsers[index]
+	del unassignedUsers[index]
+
 
 # Function to check if a team has leveled up from previous day.
 def levelUp():
+	#TODO
 
 # Write the teams buffer.
 def flushWriteTeams():
+	appendFile = open("team.log")
+	for buf in teamAssignBuffer:
+		appendFile.write("teamid=%s, name=%s, teamCreationTime=%s, teamEndTime=%s, strength=%s, currentLevel=%s" %
+		(buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]))
 
-	teamBuffer = []
+	appendFile.close()
+	teamAssignBuffer = []
 
 # Write the assign teams buffer.
 def flushTeamAssign():
+	appendFile = open("team-assignments.log")
+	for buf in teamAssignBuffer:
+		appendFile.write("assignmentid=%s, userid=%s, teamid=%s, startTimeStamp=%s" %
+		(buf[0], buf[1], buf[2], buf[3]))
 
+	appendFile.close()
 	teamAssignBuffer = []
 
 # Write the level up buffer.
 def flushLevelUp():
-
+	# TODO
 	levelUpBuffer = []
 
 # Writes the user session buffer.
 def flushUserSession():
+	appendFile = open("user-session.log")
+	for buf in teamAssignBuffer:
+		appendFile.write("userSessionid=%s, assignmentid=%s, starTimeStamp=%s, endTimeStamp=%s, team_level=%s, platformType=%s" %
+		(buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]))
 
+	appendFile.close()
 	userSessionBuffer = []
 
 # Helper function
