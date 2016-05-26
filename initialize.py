@@ -18,6 +18,17 @@ import datetime
 import math
 import global_vars
 
+def getUnassignedUsers(globalTeamAssignments):
+	allMembers  	= getAllTeamMembers(globalTeamAssignments).values() #['teamid']->[userid1, userid2,...] (all members)
+	assignedMembers = []
+	map(assignedMembers.extend, allMembers)
+	R=list(range(0, len(global_vars.globalUsers))) #list(range(11, 17))
+	unassginedUsers = [x for x in R if x not in assignedMembers]
+	#print 'unassgined=', unassginedUsers
+	#print 'assgined=', len(set(assignedMembers))
+	#print 'total users=',len(global_vars.globalUsers)
+	return unassginedUsers
+
 def getFreeTeamMembers(userSessions, teamAssignments):
 	#print '%%%%%%%%%%%%%%%%%%%%%%%%%% available members'
 	#['teamid']->[userid1,...] (free users with no open sessions)
@@ -69,6 +80,8 @@ def getPlayingTeamMembers(userSessionsList, assignmentsList):
 	return members
 
 def initializeUserSessions(assignmentsList, teamDatabaseList):
+	# assigns 50% assigned players to new sessions, remaining 50% are ignored
+
 	howManySessions = 0.5
 	# 50% of assigned users play (have a session) at the start of the game
 	pickedAssignments = np.random.choice(assignmentsList, howManySessions * len(assignmentsList), replace=False)
@@ -90,6 +103,9 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 	return sessions
 
 def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
+	# assignes users to (60%) of the teams, remaining teams are ignored
+	
+	howManyTeams = 0.6
 	# team has strength
 	# user strength is measured by gameaccuracy
 	print 'Generating Initial user-team assignments ...'
@@ -99,7 +115,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	freeUsers = range(0,len(userDatabaseList)) 
 
 	#pick a set of indices of teams (60%) that get >0 users assigned
-	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(0.6*len(teamDatabaseList)))
+	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(howManyTeams*len(teamDatabaseList)))
 	# team length min = 1, maxteamsize = 20
 	teamSizes   = np.random.choice(range(1,20), len(pickedTeams))
 
@@ -118,7 +134,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 
 		morePlayers = getRandomPlayers(n, freeUsers) # list
 		#reduce size of available users
-		freeUsers = [x for x in freeUsers if x not in morePlayers]
+		#freeUsers = [x for x in freeUsers if x not in morePlayers]
 		iter = strongPlayers
 		iter.extend(morePlayers) # merge two lists
 
@@ -134,7 +150,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	assignLog = open("team-assignments.log", "w")
 	for a in sorted(assignments, key=lambda a: a['startTimeStamp']):
 		assignLog.write("%s team=%s, userid=%s\n" %
-			(a['startTimeStamp'], a['teamid'], a['userid']))
+			(a['startTimeStamp'].strftime(global_vars.timestamp_format), a['teamid'], a['userid']))
 	assignLog.close()
 
 	#for a in assignments:
@@ -154,7 +170,7 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 			pick.append(p)
 		else:
 			itns = 0
-			maxit = 2*len(freeusersindex)
+			maxit = 5*len(freeusersindex)
 			while (p in pickinitial) or (playerStrength <= strongPlayerThreshold):
 				itns += 1
 				if(itns >= maxit):
@@ -162,7 +178,8 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 				p = np.random.choice(freeusersindex, 1)
 				playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
 				#print '>>>>>>>>>>>>>>>>>>>>', playerStrength
-			pick.extend(p.tolist())
+			if(p not in pickinitial):
+				pick.extend(p.tolist())
 		#print playerStrength
 	#for t in pick:
 	#	print globalUsersDataset[t]['tags']['gameaccuracy']
@@ -192,6 +209,7 @@ def createTeamDatabase(noOfTeams=100):
 		newTeam['teamEndTime']		=float("inf")
 		newTeam['strength']	=strengthFactor[i]
 		newTeam['currentLevel']=1 #every team starts at level 1
+		newTeam['id'] = i
 		teams.append(newTeam)
 	print '  ', noOfTeams, '  teams generated'
 	return teams # list of users, where teamID = index on the list
@@ -207,12 +225,12 @@ def createUserDatabase(noOfUsers=2000):
 	accuracyFactor 	= getProbabilities(.5, .4, noOfUsers) #mu 0.5, sigma 0.4
 	purchaseFactor 	= getProbabilities(.5, .2, noOfUsers)
 	adFactor 		= getProbabilities(.5, .5, noOfUsers)
-	chatFactor 		= getProbabilities(.5, .4, noOfUsers) # = accuracyFactor
+	chatFactor 		= getProbabilities(.5, .4, noOfUsers)
 	twitterHandles	= getTwitterIDs(noOfUsers)
 	nicknames		= getUserNames(noOfUsers)
 
 	#date when user accounts started
-	startdate=datetime.datetime.now() - datetime.timedelta(7300/5) #days=20yrs*365
+	startdate=datetime.datetime.now() - datetime.timedelta(7300/5) #days=(20yrs*365)/5
 
 	print('Generating users ...')
 	for i in range(0, noOfUsers):
@@ -222,18 +240,18 @@ def createUserDatabase(noOfUsers=2000):
 		newUser['twitter']	=twitterHandles[i]
 		newUser['dob']		=datetime.date.today() - datetime.timedelta(days=365*ages[i]+random.randint(1,365))
 		newUser['country']	=countries[i]
-		newUser['timeStamp']=startdate + datetime.timedelta(random.uniform(1,7300/5)) #days=20yrs*365
+		newUser['timeStamp']=startdate + datetime.timedelta(random.uniform(1,7300/5)) #days=(20yrs*365)/5
 		#'tags is a list'=[gameaccuracy, purchbeh, adbeh, chatbeh]
 		newUser['tags']={'gameaccuracy':round(accuracyFactor[i], 3),
 						 'purchbeh':round(purchaseFactor[i],3),
 						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3), 'clicksPerSec': random.uniform(1,10) }
-		newUser['id'] = len(users)
+		newUser['id'] = i
 		users.append(newUser)
 
 	userLog = open("users.log", "w")
 	for u in sorted(users, key=lambda u: u['timeStamp']):
 		userLog.write("%s id=%s, nick=%s, twitter=%s dob=%s country=%s\n" %
-			(u['timeStamp'], u['id'], u['nickname'],
+			(u['timeStamp'].strftime(global_vars.timestamp_format), u['id'], u['nickname'],
 			u['twitter'], u['dob'], u['country']))
 	userLog.close()
 

@@ -56,6 +56,9 @@ def writeBuyClicksCSV(startTime, dayDuration):
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE buyclicks from these users
 	for indx in buyUsers:
 		buyEvent = {}
+		buyEvent['txid'] = global_vars.counter
+		global_vars.counter += 1
+
 		buyEvent['timeStamp'] = startTime + datetime.timedelta(hours=random.uniform(0, dayDuration.seconds // 3600))
 		buyEvent['teamid'] = totalUsers[indx][0]
 		buyEvent['userid'] = totalUsers[indx][1]
@@ -66,11 +69,24 @@ def writeBuyClicksCSV(startTime, dayDuration):
 		buyEvent['userSessionid'] = totalUsers[pickABuy][2]
 		buyclicks.append(buyEvent)
 		#print '%s %s' % (platform, buyEvent['buyPrice'])
+	
+		# increase accuracy based on price of item bought
+		accuracy = global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'] + buyEvent['buyPrice']/100
+		# see if accuracy too high
+		if accuracy > global_vars.max_accuracy:
+			accuracy = global_vars .max_accuracy
+		global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'] = accuracy
+
+		#print 'userid %s accuracy %s price %f' % (buyEvent['userid'],
+			#global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'], buyEvent['buyPrice'])
+
+		
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	buyLog = open("buy-clicks.log", "a")
 	for b in sorted(buyclicks, key=lambda a: a['timeStamp']):
-		buyLog.write("%s, userSessionid=%s, team=%s, userid=%s, buyID=%s, price=%s\n" %
-			(b['timeStamp'], b['userSessionid'], b['teamid'], b['userid'], b['buyID'], b['buyPrice']))
+		buyLog.write("%s, txID=%s, userSessionid=%s, team=%s, userid=%s, buyID=%s, price=%s\n" %
+			(b['timeStamp'].strftime(global_vars.timestamp_format), b['txid'], b['userSessionid'],
+			b['teamid'], b['userid'], b['buyID'], b['buyPrice']))
 	buyLog.close()
 

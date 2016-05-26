@@ -2,10 +2,10 @@
 # Variable to house users.
 
 # List containing a list of users.
-globalUsers = None
+globalUsers = []
 
 # List containing current active teams per time update (day).
-globalTeams = None
+globalTeams = []
 
 # List containing current sessions per time update (day).
 yesterday_globalUSessions 	= None
@@ -26,3 +26,7 @@ buyDatabase = None
 
 #global counter for generating unique IDs (increment this after every use)
 counter = 5000
+
+timestamp_format = "%Y-%m-%d %H:%M:%S"
+
+max_accuracy = 0.7

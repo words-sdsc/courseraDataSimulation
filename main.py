@@ -15,8 +15,13 @@ from random import randint
 def main():
 
 	print "Initializing..."
-	global_vars.globalUsers = createUserDatabase(randint(2000, 3000)) #userID = index on the list
-	global_vars.globalTeams = createTeamDatabase(randint(100,200))  #teamID = index on the list
+	#Remove old log files
+	for f in ["game-clicks.log", "ad-clicks.log", "buy-clicks.log", "users.log"]:
+		if os.path.isfile(f):
+			os.remove(f)
+
+	global_vars.globalUsers = createUserDatabase(2000) #randint(2000, 3000)) #userID = index on the list
+	global_vars.globalTeams = createTeamDatabase(200) #randint(100,200))  #teamID = index on the list
 	global_vars.globalTeamAssignments = asssignUsersTOteams(global_vars.globalUsers, global_vars.globalTeams)
 	global_vars.globalUSessions = initializeUserSessions(global_vars.globalTeamAssignments, global_vars.globalTeams)
 
@@ -34,6 +39,9 @@ def main():
 	for f in ["ad-clicks.log", "buy-clicks.log", "game-clicks.log"]:
 		if os.path.isfile(f):
 			os.remove(f)
+
+	#____[4] unassigned users : returns a set of unassigned users
+	unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
 
 	#start time for Day = 0
 	TD = datetime.datetime.now() + datetime.timedelta(days=random.uniform(2, 3))
