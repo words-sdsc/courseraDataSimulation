@@ -33,7 +33,7 @@ def calculateHitsRequired(teamID, team):
 
 		reqTotalHits = (currentLevel * currentLevel - 1)
 
-		hitsReqPerSlice = (reqTotalHits / tracker["slices"])
+		hitsReqPerSlice = math.ceil((reqTotalHits / tracker["slices"]))
 		tracker["hitsReqPerSlice"] = hitsReqPerSlice
 		tracker["reqTotalHits"] = reqTotalHits
 	else:

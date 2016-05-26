@@ -52,7 +52,7 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 	for key, userIDs in playingUsers.iteritems():
 		prob = fraction / len(userIDs)
 		remove = []
-		for index, userID in userIDs:
+		for index, userID in enumerate(userIDs):
 			if random.uniform(0, 1) < prob:
 				#print "deleteing userid = ", userID
 				endUserSession(userID, TD)
@@ -67,7 +67,7 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 def endUserSession(userID, TD):
 	# Edit globals
 	session=getSessionWithUserID(userID)
-
+	print session
 	#print "Session for assgid = ", session['assignmentid']
 	buf = [session["userSessionid"], session["assignmentid"],
 		session["startTimeStamp"], TD, session["team_level"],
@@ -136,7 +136,7 @@ def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUs
 	# fraction is percentage of users from all unassigned that move
 	for key, userIDs in unassignedUsers.iteritems():
 		remove = []
-		for index, userID in userIDs:
+		for index, userID in enumerate(userIDs):
 				if random.uniform(0, 1) <= fraction:
 					# Move the user
 					notPlayUsers[key] = userID
@@ -162,7 +162,7 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 	for key, userIDs in notPlayingUsers.iteritems:
 		prob = fraction / len(userIDs)
 		remove = []
-		for index, userID in userIDs:
+		for index, userID in enumerate(userIDs):
 			if random.uniform(0, 1) < prob:
 				playingUsers[key].append(userID)
 				remove.append(index)
@@ -206,7 +206,7 @@ def deleteTeam(team, index, playingUsers, notPlayingUsers, unassignedUsers, TD):
 # Function to check if a team has leveled up from previous day.
 def levelUp(playingUsers, notPlayingUsers, TD):
 	removal = []
-	for teamID, tracker in global_vars.teamLevelTracker:
+	for teamID, tracker in global_vars.teamLevelTracker.iteritems():
 		if tracker["hits"] >= tracker["reqTotalHits"]:
 			levelTeam(teamID, TD)
 			updateUserSession(playingUsers[teamID], teamID, TD)
