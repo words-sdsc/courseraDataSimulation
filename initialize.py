@@ -112,10 +112,10 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	assignments = [] #list
 
 	#all players are free at the start of the game
-	freeUsers = range(0,len(userDatabaseList))
+	freeUsers = list(range(0,len(userDatabaseList)))
 
 	#pick a set of indices of teams (60%) that get >0 users assigned
-	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(howManyTeams*len(teamDatabaseList)))
+	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(howManyTeams*len(teamDatabaseList)), replace=False)
 	# team length min = 1, maxteamsize = 20
 	teamSizes   = np.random.choice(range(1,20), len(pickedTeams))
 
@@ -123,7 +123,9 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	for team, n in zip(pickedTeams, teamSizes):
 		#print team
 		strongPlayers = []
+		morePlayers = []
 		percentStrongPlayers = math.floor(0.5 * n)     	#every strong team (strength>0.6) should have 50% strong players
+
 		if(teamDatabaseList[team]['strength'] > strongTeamThreshhold):
 			#print 'getStrongPlayers: before len of freeUsers', len(freeUsers)
 			strongPlayers = getStrongPlayers(percentStrongPlayers, freeUsers, userDatabaseList) #list
@@ -134,9 +136,12 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 
 		morePlayers = getRandomPlayers(n, freeUsers) # list
 		#reduce size of available users
-		#freeUsers = [x for x in freeUsers if x not in morePlayers]
-		iter = strongPlayers
+		freeUsers = [x for x in freeUsers if x not in morePlayers] #needed so next iteration does not use these users
+		#overlap = [y for y in strongPlayers if y in morePlayers]
+		#print "overlap = ", overlap
+		iter = list(strongPlayers)
 		iter.extend(morePlayers) # merge two lists
+
 
 		for u in iter:
 			newAssignment={}
@@ -156,13 +161,24 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	#for a in assignments:
 	#	print a['userid'],'::',a['teamid'], '::', a['startTimeStamp']
 	print '  ',sum(teamSizes) ,' users assigned to ', len(pickedTeams),' teams'
+	dup = {}
+	for assg in assignments:
+		if assg['userid'] in dup:
+			dup[assg['userid']].append(assg['teamid'])
+		else:
+			dup[assg['userid']]=[assg['teamid']]
+	for k,v in dup.items():
+		if len(v) >1:
+			print 'ERROR: userid:',k,'teams=',v
 	return assignments
 
 def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 	strongPlayerThreshold = 5
 	random.shuffle(freeusersindex)
 	pick = []
+	#initial set of free users
 	pickinitial = np.random.choice(freeusersindex, n, replace=False)
+
 	for p in pickinitial:
 		playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
 		#print playerStrength
@@ -178,7 +194,7 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 				p = np.random.choice(freeusersindex, 1)
 				playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
 				#print '>>>>>>>>>>>>>>>>>>>>', playerStrength
-			if(p not in pickinitial):
+			if(p not in pickinitial) & (p not in pick):
 				pick.extend(p.tolist())
 		#print playerStrength
 	#for t in pick:

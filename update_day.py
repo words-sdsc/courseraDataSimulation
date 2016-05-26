@@ -54,16 +54,18 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 		prob = fraction / len(userIDs)
 		for userID in userIDs:
 			if random.uniform(0, 1) < prob:
+				#print "deleteing userid = ", userID
+				endUserSession(userID, TD)
 				notPlayingUsers[key].append(userID)
 				userIDs.remove(userID)
-				endUserSession(userID, TD)
 
 
 # Ends user session for users.
 def endUserSession(userID, TD):
 	# Edit globals
-	session = getSessionWithUserID(userID)
-	print session
+	session=getSessionWithUserID(userID)
+
+	#print "Session for assgid = ", session['assignmentid']
 	buf = [session["userSessionid"], session["assignmentid"],
 		session["startTimeStamp"], TD, session["team_level"],
 		session["platformType"]]
@@ -87,8 +89,8 @@ def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUs
 
 				# Delete empty team.
 				if len(userIDs) <= 0:
-					deleteTeam(userIDs, playingUsers, notPlayingUsers, unassignedUsers, TD)
-
+					print ">>>>>>>>>>>>>>>>>?: in notPlayingToUnassigned() Delete team is giving issue ..."
+					#deleteTeam(userIDs, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
 # Function to start user session
 def startUserSession(userID, TD):
@@ -230,8 +232,10 @@ def flushUserSession():
 
 # Helper function
 def getTeamWithAssignmentID(assignmentID):
-	teamID = global_vars.globalTeamAssignments[assignmentID]["teamid"]
-	return global_vars.globalTeams[teamID]
+	for assign in global_vars.globalTeamAssignments:
+		if assign["assignmentid"]==assignmentID:
+			teamID = assign["teamid"]
+			return global_vars.globalTeams[teamID]
 
 
 # Gets the team assignment. None if DNE.
@@ -244,6 +248,7 @@ def getTeamAssignmentWithUserID(userID):
 # Returns entire session else -1.
 def getSessionWithUserID(userID):
 	assignment = getTeamAssignmentWithUserID(userID)
+	#print "Assignment = ", assignment["assignmentid"]
 	for session in global_vars.globalUSessions:
 		if session["assignmentid"] == assignment["assignmentid"]:
 			return session

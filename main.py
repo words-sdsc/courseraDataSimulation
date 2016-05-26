@@ -60,7 +60,7 @@ def main():
 		print "Day Number:" + str(counter + 1)
 		teamCounter = 0
 		for teams in playingMembers.values():
-			print "Generating team: " + str(teamCounter)
+			#print "Generating team: " + str(teamCounter)
 
 			# Write the game_clicks.
 			# Write one team for now.
