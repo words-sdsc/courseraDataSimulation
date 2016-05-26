@@ -2,10 +2,10 @@
 # Variable to house users.
 
 # List containing a list of users.
-globalUsers = None
+globalUsers = []
 
 # List containing current active teams per time update (day).
-globalTeams = None
+globalTeams = []
 
 # List containing current sessions per time update (day).
 yesterday_globalUSessions 	= None

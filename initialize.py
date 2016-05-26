@@ -18,6 +18,17 @@ import datetime
 import math
 import global_vars
 
+def getUnassignedUsers(globalTeamAssignments):
+	allMembers  	= getAllTeamMembers(globalTeamAssignments).values() #['teamid']->[userid1, userid2,...] (all members)
+	assignedMembers = []
+	map(assignedMembers.extend, allMembers)
+	R=list(range(0, len(global_vars.globalUsers))) #list(range(11, 17))
+	unassginedUsers = [x for x in R if x not in assignedMembers]
+	#print 'unassgined=', unassginedUsers
+	#print 'assgined=', len(set(assignedMembers))
+	#print 'total users=',len(global_vars.globalUsers)
+	return unassginedUsers
+
 def getFreeTeamMembers(userSessions, teamAssignments):
 	#print '%%%%%%%%%%%%%%%%%%%%%%%%%% available members'
 	#['teamid']->[userid1,...] (free users with no open sessions)
@@ -123,7 +134,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 
 		morePlayers = getRandomPlayers(n, freeUsers) # list
 		#reduce size of available users
-		freeUsers = [x for x in freeUsers if x not in morePlayers]
+		#freeUsers = [x for x in freeUsers if x not in morePlayers]
 		iter = strongPlayers
 		iter.extend(morePlayers) # merge two lists
 
@@ -159,7 +170,7 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 			pick.append(p)
 		else:
 			itns = 0
-			maxit = 2*len(freeusersindex)
+			maxit = 5*len(freeusersindex)
 			while (p in pickinitial) or (playerStrength <= strongPlayerThreshold):
 				itns += 1
 				if(itns >= maxit):
@@ -167,7 +178,8 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 				p = np.random.choice(freeusersindex, 1)
 				playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
 				#print '>>>>>>>>>>>>>>>>>>>>', playerStrength
-			pick.extend(p.tolist())
+			if(p not in pickinitial):
+				pick.extend(p.tolist())
 		#print playerStrength
 	#for t in pick:
 	#	print globalUsersDataset[t]['tags']['gameaccuracy']
@@ -197,6 +209,7 @@ def createTeamDatabase(noOfTeams=100):
 		newTeam['teamEndTime']		=float("inf")
 		newTeam['strength']	=strengthFactor[i]
 		newTeam['currentLevel']=1 #every team starts at level 1
+		newTeam['id'] = i
 		teams.append(newTeam)
 	print '  ', noOfTeams, '  teams generated'
 	return teams # list of users, where teamID = index on the list
@@ -232,7 +245,7 @@ def createUserDatabase(noOfUsers=2000):
 		newUser['tags']={'gameaccuracy':round(accuracyFactor[i], 3),
 						 'purchbeh':round(purchaseFactor[i],3),
 						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3), 'clicksPerSec': random.uniform(1,10) }
-		newUser['id'] = len(users)
+		newUser['id'] = i
 		users.append(newUser)
 
 	userLog = open("users.log", "w")
