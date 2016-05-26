@@ -71,10 +71,10 @@ def getPlayingTeamMembers(userSessionsList, assignmentsList):
 			if(assgn['assignmentid'] == s['assignmentid']):
 				teamid = assgn['teamid']
 				userid = assgn['userid']
-		if teamid in members:
-			members[teamid].append(userid)
-		else:
-			members[teamid]=[userid]
+				if teamid in members:
+					members[teamid].append(userid)
+				else:
+					members[teamid]=[userid]
 	#for k,v in members.items():
 	#	print k,v
 	return members
