@@ -1,5 +1,6 @@
 import global_vars
 import datasets
+import random
 
 # Team assignment buffer used for housing all team writes.
 teamAssignBuffer = []
@@ -49,12 +50,11 @@ def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 # fraction / # users in team =
 def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 	# fraction / num users in team = each users chance of leaving
-	print playingUsers
-	for index, userIDs in playingUsers:
+	for key, userIDs in playingUsers.iteritems():
 		prob = fraction / len(userIDs)
 		for userID in userIDs:
 			if random.uniform(0, 1) < prob:
-				notPlayUsers[index].append(userID)
+				notPlayingUsers[key].append(userID)
 				userIDs.remove(userID)
 				endUserSession(userID, TD)
 
@@ -63,25 +63,26 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 def endUserSession(userID, TD):
 	# Edit globals
 	session = getSessionWithUserID(userID)
+	print session
 	buf = [session["userSessionid"], session["assignmentid"],
 		session["startTimeStamp"], TD, session["team_level"],
 		session["platformType"]]
 
 	# Add user to write buffer.
-	userSessionBuffer.append([sessionId] + buf)
+	userSessionBuffer.append(buf)
 
-	# delete the old session
-	del global_vars.globalUSessions[sessionId]
+	# delete the old session, currently inefficient, could be optimized
+	global_vars.globalUSessions.remove(session)
 
 
 # Generate movement of fraction of people going to unassigned
 def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
 	# fraction is percentage of users from all notplaying that move.
-	for index, userIDs in notPlayingUsers:
+	for key, userIDs in notPlayingUsers.iteritems():
 		for userID in userIDs:
 			if random.uniform(0, 1) <= fraction:
 				# Move the user.
-				unassignedUsers[index] = userID
+				unassignedUsers[key] = userID
 				userIDs.remove(userID)
 
 				# Delete empty team.
@@ -121,11 +122,11 @@ def startUserSession(userID, TD):
 # Generate movement of prob of people going to not playing
 def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
 	# fraction is percentage of users from all unassigned that move
-	for index, userIDs in unassignedUsers:
+	for key, userIDs in unassignedUsers.iteritems():
 		for userID in userIDs:
 				if random.uniform(0, 1) <= fraction:
 					# Move the user
-					notPlayUsers[index] = userID
+					notPlayUsers[key] = userID
 					userIDs.remove(userID)
 
 					# Create new team!
@@ -145,11 +146,11 @@ def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUs
 
 def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 	# fraction / num users in team = each users chance of leaving
-	for index, userIDs in notPlayingUsers:
+	for key, userIDs in notPlayingUsers.iteritems:
 		prob = fraction / len(userIDs)
 		for userID in userIDs:
 			if random.uniform(0, 1) < prob:
-				playingUsers[index].append(userID)
+				playingUsers[key].append(userID)
 				userIDs.remove(userID)
 				startUserSession(userID, TD)
 
@@ -233,18 +234,17 @@ def getTeamWithAssignmentID(assignmentID):
 	return global_vars.globalTeams[teamID]
 
 
-# Gets the team assignment. -1 if DNE.
+# Gets the team assignment. None if DNE.
 def getTeamAssignmentWithUserID(userID):
 	for assign in global_vars.globalTeamAssignments:
 		if assign["userid"] == userID:
 			return assign
-	return -1
+	return None
 
 # Returns entire session else -1.
 def getSessionWithUserID(userID):
-	teamID = getTeamAssignmentWithUserID(userID)
-
+	assignment = getTeamAssignmentWithUserID(userID)
 	for session in global_vars.globalUSessions:
-		if session["assignmentid"] == userID:
+		if session["assignmentid"] == assignment["assignmentid"]:
 			return session
-	return -1
+	return None
