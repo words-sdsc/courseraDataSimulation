@@ -74,6 +74,8 @@ def main():
 			teamCounter += 1
 
 		TD += global_vars.dayDuration
+		# Simulate Users.
+		simulateNextDay(playingMembers, freeMembers, unassignedUsers, TD)
 		# Update the teams for next day.
 		counter += 1
 

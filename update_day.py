@@ -1,5 +1,5 @@
 import global_vars
-import datasets.py
+import datasets
 
 # Team assignment buffer used for housing all team writes.
 teamAssignBuffer = []
@@ -35,13 +35,13 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 # and then unassigned to not playing to playing. That way all transitions
 # are recorded.
 def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
-	userLeaveRate = TD.to_seconds() /  1200 # Seconds that avg user should stay
+	userRate = global_vars.dayDuration.total_seconds() /  1200 # Seconds that avg user should stay
 
-	playingToNotPlaying(userRetainRate, playingUsers, notPlayingUsers, TD)
+	playingToNotPlaying(userRate, playingUsers, notPlayingUsers, TD)
 	notPlayingToUnassigned(0.60, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
 	unassignedToNotPlaying(0.60, playingUsers, notPlayingUsers, unassignedUsers, TD)
-	notPlayingToPlaying(userRetainRate, playingUsers, notPlayingUsers, TD)
+	notPlayingToPlaying(userRate, playingUsers, notPlayingUsers, TD)
 
 
 # Helper functions for simulation #
@@ -49,10 +49,11 @@ def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 # fraction / # users in team =
 def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 	# fraction / num users in team = each users chance of leaving
-	for index, userIDs in playingUsers
+	print playingUsers
+	for index, userIDs in playingUsers:
 		prob = fraction / len(userIDs)
-		for userID in userIDs
-			if random.uniform(0, 1) < prob
+		for userID in userIDs:
+			if random.uniform(0, 1) < prob:
 				notPlayUsers[index].append(userID)
 				userIDs.remove(userID)
 				endUserSession(userID, TD)
@@ -84,7 +85,7 @@ def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUs
 				userIDs.remove(userID)
 
 				# Delete empty team.
-				if len(userIDs) <= 0
+				if len(userIDs) <= 0:
 					deleteTeam(userIDs, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
 
@@ -144,16 +145,16 @@ def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUs
 
 def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 	# fraction / num users in team = each users chance of leaving
-	for index, userIDs in notPlayingUsers
+	for index, userIDs in notPlayingUsers:
 		prob = fraction / len(userIDs)
-		for userID in userIDs
-			if random.uniform(0, 1) < prob
+		for userID in userIDs:
+			if random.uniform(0, 1) < prob:
 				playingUsers[index].append(userID)
 				userIDs.remove(userID)
 				startUserSession(userID, TD)
 
 # Create team assignment and write to buffer.
-def createTeamAssignment(teamid, userid, TD)
+def createTeamAssignment(teamid, userid, TD):
 	assignT = {}
 	assignT["assignmentid"] = global_vars.counter
 	global_vars.counter += 1
@@ -189,6 +190,7 @@ def deleteTeam(team, index, playingUsers, notPlayingUsers, unassignedUsers, TD):
 # Function to check if a team has leveled up from previous day.
 def levelUp():
 	#TODO
+	return
 
 # Write the teams buffer.
 def flushWriteTeams():
