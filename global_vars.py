@@ -7,6 +7,10 @@ globalUsers = []
 # List containing current active teams per time update (day).
 globalTeams = []
 
+# Used for leveling up.
+# {"teamID"} = {"hits" : 123, "slices" = 123, "hitsReqPerSlice" : 123, "reqTotalHits" : 123}
+teamLevelTracker = {}
+
 # List containing current sessions per time update (day).
 yesterday_globalUSessions 	= None
 globalUSessions 			= None
@@ -27,6 +31,7 @@ buyDatabase = None
 #global counter for generating unique IDs (increment this after every use)
 counter = 5000
 teamIDCounter = 0
+eventIDCounter = 0
 
 # Platform distributions
 platforms	= ['iphone', 'android', 'mac', 'windows', 'linux']

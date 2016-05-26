@@ -2,12 +2,13 @@ import global_vars
 import random
 import numpy.random
 import datetime
+import math
 
 # Keeps track of total index.
 clickIndex = 0
 
-def writeGameClicksForTeam(team, time):
-	numHits = calculateHitsRequired()
+def writeGameClicksForTeam(teamID, team, time):
+	numHits = calculateHitsRequired(teamID, team)
 	gameClicks = createGameClickUsers(team, numHits, time)
 
 	# Data created, flush it to file.
@@ -18,9 +19,60 @@ def writeGameClicksForTeam(team, time):
 			(row[0], row[1], row[2], row[3], row[4]))
 	appendFile.close()
 
-def calculateHitsRequired():
-	# TODO: Add calculation of hits.
-	return 100
+def calculateHitsRequired(teamID, team):
+	tracker = None
+	hitsReqPerSlice = 0
+	reqTotalHits = 0
+	if teamID not in global_vars.teamLevelTracker:
+		tracker = addTeamLevelTracker(teamID, team)
+		currentLevel = getTeamFromTeamID(teamID)["currentLevel"]
+
+		# Limit lower level for subtraction.
+		if currentLevel <= 1:
+			currentLevel = 2
+
+		reqTotalHits = (currentLevel * currentLevel - 1)
+
+		hitsReqPerSlice = (reqTotalHits / tracker["slices"])
+		tracker["hitsReqPerSlice"] = hitsReqPerSlice
+		tracker["reqTotalHits"] = reqTotalHits
+	else:
+		hitsReqPerSlice = global_vars.teamLevelTracker[teamID]["hitsReqPerSlice"]
+		reqTotalHits = tracker["reqTotalHits"]
+		hitsReqPerSlice = tracker["hitsReqPerSlice"]
+
+	if math.floor(reqTotalHits / hitsReqPerSlice) <= 0:
+		tracker["hits"] = reqTotalHits
+		return reqTotalHits - tracker["hits"]
+
+	tracker["hits"] += hitsReqPerSlice
+	return hitsReqPerSlice
+
+# Function to keep track of level up. Returns tracker dict.
+def addTeamLevelTracker(teamID, team):
+	# Expected accuracy of team. .
+	expectedAcc = calculateTotalAccuracyPerSec(team) / len(team)
+	expectedTimeSlice = round(global_vars.dayDuration.total_seconds() / expectedAcc)
+	if expectedTimeSlice <= 0:
+		expectedTimeSlice = 1 # at least one.
+
+	track = {}
+	track["hits"] = 0
+	track["slices"] = expectedTimeSlice
+	global_vars.teamLevelTracker[teamID] = track
+
+	return track
+
+# Calculate the accuracy per sec for days estimate.
+def calculateTotalAccuracyPerSec(team):
+	totalCPS = 0
+	totalAcc = 0
+	for userID in team:
+		user = getUserFromUserID(userID)
+		totalCPS += user["tags"]["clicksPerSec"]
+		totalAcc += user["tags"]["gameaccuracy"]
+
+	return totalAcc/totalCPS
 
 # Creates a distribution from given userID CPS. Then
 def createGameClickUsers(userIDs, numHits, time):
@@ -116,11 +168,23 @@ def getCPSUserList(userIDs, samples):
 	while len(result) <= samples:
 		randUserID = random.choice(userIDs)
 		# CDF of normal distribution. Add the user if succeed.
-		if numpy.random.normal(0.5, 0.4) <= global_vars.globalUsers[randUserID]["tags"]["clicksPerSec"]:
+		if numpy.random.normal(0.5, 0.4) <= getUserFromUserID(randUserID)["tags"]["clicksPerSec"]:
 			result.append(randUserID)
 
 	return result
 
+def getUserFromUserID(userID):
+	for user in global_vars.globalUsers:
+		if user["id"] == userID:
+			return user
+	return None
+
+def getTeamFromTeamID(teamID):
+	for team in global_vars.globalTeams:
+		if team["teamid"] == teamID:
+			return team
+
+	return None
 
 # Returns a 1 hit, or 0 miss for accuracy in mind. Uses CDF of normal.
 def getIsHitBasedOffAccuracy(accuracy):

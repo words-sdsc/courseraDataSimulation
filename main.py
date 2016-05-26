@@ -15,10 +15,6 @@ from random import randint
 def main():
 
 	print "Initializing..."
-	#Remove old log files
-	for f in ["game-clicks.log", "ad-clicks.log", "buy-clicks.log", "users.log"]:
-		if os.path.isfile(f):
-			os.remove(f)
 
 	global_vars.globalUsers = createUserDatabase(2000) #randint(2000, 3000)) #userID = index on the list
 	global_vars.globalTeams = createTeamDatabase(200) #randint(100,200))  #teamID = index on the list
@@ -59,12 +55,12 @@ def main():
 	while counter < dayIteration:
 		print "Day Number:" + str(counter + 1)
 		teamCounter = 0
-		for teams in playingMembers.values():
+		for key, teams in playingMembers.iteritems():
 			print "Generating team: " + str(teamCounter)
 
 			# Write the game_clicks.
 			# Write one team for now.
-			writeGameClicksForTeam(teams, TD)
+			writeGameClicksForTeam(key, teams, TD)
 			teamCounter += 1
 
 		# *APPENDS* ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
