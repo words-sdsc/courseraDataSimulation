@@ -27,6 +27,10 @@ buyDatabase = None
 #global counter for generating unique IDs (increment this after every use)
 counter = 5000
 
+# Platform distributions
+platforms	= ['iphone', 'android', 'mac', 'windows', 'linux']
+freq 		= [0.4, 0.35, 0.05, 0.15, 0.05]
+
 timestamp_format = "%Y-%m-%d %H:%M:%S"
 
 max_accuracy = 0.7

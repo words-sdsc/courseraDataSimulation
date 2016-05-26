@@ -8,7 +8,7 @@
 				# globalUsers = createUserDatabase(minAge, maxAge, meanAge) //returns a hash map
 		#Fill team hashmap: ['teamid'] -> ['name': '',  'teamCreationTime': '',  'teamEndTime': '', 'strength': '0-1']
 		#Fill user-team assignment current-state hashmap ['assignmentid']->['userid': '', teamid': '',  'userSessionid': '',]
-		#Create sessions for each user who is playing: ['userSessionid']->[ 'assignmentid': '', 'start_timeStamp': '', 'end_timeStamp': '', 'team_level': '', 'platformType': '' ]
+		#Create sessions for each user who is playing: [index]->['userSessionid': 123 'assignmentid': '', 'start_timeStamp': '', 'end_timeStamp': '', 'team_level': '', 'platformType': '' ]
 		#Fill team current-state hashmap: ['teamid']->[user1, user2,...]
 
 from datasets import *
@@ -86,13 +86,13 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 	# 50% of assigned users play (have a session) at the start of the game
 	pickedAssignments = np.random.choice(assignmentsList, howManySessions * len(assignmentsList), replace=False)
 	sessions = []
-	platforms	= ['iphone', 'android', 'mac', 'windows', 'linux']
-	freq 		= [0.4, 0.35, 0.05, 0.15, 0.05]
+	platforms	= global_vars.platforms
+	freq 		=  global_vars.freq
 	print "Generating user sessions ..."
 	for assignment in pickedAssignments:
 		newSession = {}
 		newSession['userSessionid']  = global_vars.counter
-		global_vars.counter += 1 
+		global_vars.counter += 1
 		newSession['assignmentid']	=assignment["assignmentid"]
 		newSession['startTimeStamp']=assignment["startTimeStamp"] + datetime.timedelta(days=random.uniform(0, 2))
 		newSession['endTimeStamp']	=float("inf")
@@ -104,7 +104,7 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 
 def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	# assignes users to (60%) of the teams, remaining teams are ignored
-	
+
 	howManyTeams = 0.6
 	# team has strength
 	# user strength is measured by gameaccuracy
@@ -112,7 +112,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	assignments = [] #list
 
 	#all players are free at the start of the game
-	freeUsers = range(0,len(userDatabaseList)) 
+	freeUsers = range(0,len(userDatabaseList))
 
 	#pick a set of indices of teams (60%) that get >0 users assigned
 	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(howManyTeams*len(teamDatabaseList)))
