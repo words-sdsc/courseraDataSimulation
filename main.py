@@ -16,8 +16,8 @@ def main():
 
 	print "Initializing..."
 
-	global_vars.globalUsers = createUserDatabase(2000) #randint(2000, 3000)) #userID = index on the list
-	global_vars.globalTeams = createTeamDatabase(200) #randint(100,200))  #teamID = index on the list
+	global_vars.globalUsers = createUserDatabase(15) #randint(2000, 3000)) #userID = index on the list
+	global_vars.globalTeams = createTeamDatabase(2) #randint(100,200))  #teamID = index on the list
 	global_vars.globalTeamAssignments = asssignUsersTOteams(global_vars.globalUsers, global_vars.globalTeams)
 	global_vars.globalUSessions = initializeUserSessions(global_vars.globalTeamAssignments, global_vars.globalTeams)
 
@@ -73,11 +73,28 @@ def main():
 		TD += global_vars.dayDuration
 
 		# Simulate Users.
-		playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments)
-		freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
-		unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
-
+		# playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments)
+		# freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
+		# unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
+		print global_vars.globalUSessions
+		print global_vars.globalTeamAssignments
+		print global_vars.globalTeams
+		print "Playing: " + str(playingMembers)
+		print "Free: " + str(freeMembers)
+		print "Unassigned: " + str(unassignedUsers)
+		print "All Members: " + str(allMembers)
+		print "\n\n"
+		print "START SIMULATION"
 		simulateNextDay(playingMembers, freeMembers, unassignedUsers, TD)
+		print "END SIMULATION"
+		print global_vars.globalUSessions
+		print global_vars.globalTeamAssignments
+		print global_vars.globalTeams
+		print "Playing: " + str(playingMembers)
+		print "Free: " + str(freeMembers)
+		print "Unassigned: " + str(unassignedUsers)
+		print "All Members: " + str(allMembers)
+		print "\n\n"
 		# Update the teams for next day.
 		counter += 1
 

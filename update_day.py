@@ -26,6 +26,7 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD)
 
 	# Flush the buffers for writing.
+	print "\nFLUSHING OUTPUT\n"
 	flushWriteTeams()
 	flushTeamAssign()
 	flushLevelUp()
@@ -304,9 +305,10 @@ def updateUserSessionWithTeam(team, teamID, TD):
 	for userID in team:
 		print "Updating " + str(userID)
 		oldSession = endUserSession(userID, TD)
-		print "Ending session (pTnP): "
-		print "Session: " + str(endUserSession(userID, TD))
-		startUserSession(userID, TD, oldSession["platformType"])
+		print "Ending session: "
+		print "Session: " + str(endUserSession(userID, TD)) + "\n"
+		print "Starting session: "
+		print "Session: " + str(startUserSession(userID, TD, oldSession["platformType"])) + "\n"
 
 # Write the teams buffer.
 def flushWriteTeams():
