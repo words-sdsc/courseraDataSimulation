@@ -21,7 +21,7 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	global_vars.yesterday_globalTeamAssignments = list(global_vars.globalTeamAssignments)
 
 	# Function call for leveling up!
-	levelUp(playingUsers, notPlayingUsers, TD)
+	#levelUp(playingUsers, notPlayingUsers, TD)
 	# Function dealing with any user movement.
 	userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD)
 
@@ -63,8 +63,9 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 				#print "deleteing userid = ", userID
 				notPlayingUsers[key].append(userID)
 				remove.append(index)
-				print "Ending session: "
-				print endUserSession(userID, TD)
+				print "Ending session (pTnP): "
+				session = endUserSession(userID, TD)
+				print "Session" + str(session)
 		deleteWithKeys(remove, userIDs)
 	print "START GENERATING p to nP"
 	print playingUsers
@@ -196,6 +197,8 @@ def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUs
 				# Create team assignment info. Necessary for both choices.
 				#print "Creating TAssignment For: " + str(userID)
 				createTeamAssignment(teamID, userID, TD)
+				# Remove the user
+				remove.append(index)
 	deleteWithKeys(remove, unassignedUsers)
 	print "DONE GENERATING un to nP"
 	print playingUsers
@@ -276,6 +279,7 @@ def levelUp(playingUsers, notPlayingUsers, TD):
 	for teamID, tracker in global_vars.teamLevelTracker.iteritems():
 		if tracker["hits"] >= tracker["reqTotalHits"]:
 			levelTeam(teamID, TD)
+			print "LEVEL UP! TeamID: " + str(teamID) + "\n"
 			updateUserSessionWithTeam(playingUsers[teamID], teamID, TD)
 			removal.append(teamID)
 
@@ -300,6 +304,8 @@ def updateUserSessionWithTeam(team, teamID, TD):
 	for userID in team:
 		print "Updating " + str(userID)
 		oldSession = endUserSession(userID, TD)
+		print "Ending session (pTnP): "
+		print "Session: " + str(endUserSession(userID, TD))
 		startUserSession(userID, TD, oldSession["platformType"])
 
 # Write the teams buffer.
@@ -372,8 +378,8 @@ def getTeamAssignmentWithUserID(userID):
 	for assign in global_vars.globalTeamAssignments:
 		if assign["userid"] == userID:
 			result = assign
-			#print "Find assign w/uid"
-			#print result
+			print "Find assign w/uid"
+			print "Teamm Assign: " + str(result)
 	return result
 
 # Returns entire session else -1.
