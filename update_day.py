@@ -39,28 +39,37 @@ def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	#FIX IT
 	userRate = global_vars.dayDuration.total_seconds() /  1200 # Seconds that avg user should stay
 
-	playingToNotPlaying(userRate, playingUsers, notPlayingUsers, TD)
-	notPlayingToUnassigned(0.05, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	playingToNotPlaying(0.5, playingUsers, notPlayingUsers, TD)
+	notPlayingToUnassigned(0.5, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
-	unassignedToNotPlaying(0.05, playingUsers, notPlayingUsers, unassignedUsers, TD)
-	notPlayingToPlaying(userRate, playingUsers, notPlayingUsers, TD)
+	unassignedToNotPlaying(0.5, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	notPlayingToPlaying(0.5, playingUsers, notPlayingUsers, TD)
 
 # Helper functions for simulation #
 
 # fraction / # users in team =
 def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
+	print "START GENERATING p to nP"
+	print playingUsers
+	print notPlayingUsers
+	print "\n"
 	# fraction / num users in team = each users chance of leaving
 	for key, userIDs in playingUsers.iteritems():
 		prob = fraction / len(userIDs)
+		prob = fraction
 		remove = []
 		for index, userID in enumerate(userIDs):
 			if random.uniform(0, 1) < prob:
 				#print "deleteing userid = ", userID
 				notPlayingUsers[key].append(userID)
 				remove.append(index)
-				endUserSession(userID, TD)
+				print "Ending session: "
+				print endUserSession(userID, TD)
 		deleteWithKeys(remove, userIDs)
-
+	print "START GENERATING p to nP"
+	print playingUsers
+	print notPlayingUsers
+	print "\n"
 
 # Ends user session for users.
 # Returns the session found and removed.
@@ -94,6 +103,12 @@ def endUserSession(userID, TD):
 
 # Generate movement of fraction of people going to unassigned
 def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
+	print "START GENERATING nP to un"
+	print playingUsers
+	print notPlayingUsers
+	print unassignedUsers
+	print "\n"
+
 	# fraction is percentage of users from all notplaying that move.
 	for key, userIDs in notPlayingUsers.iteritems():
 		remove = []
@@ -106,7 +121,14 @@ def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUs
 				# Delete empty team.
 				if len(userIDs) <= 0:
 					deleteTeam(userIDs, playingUsers, notPlayingUsers, unassignedUsers, TD)
+				deleteTeamAssignment(userID)
+
 		deleteWithKeys(remove, userIDs)
+	print "DONE GENERATING nP to un"
+	print playingUsers
+	print notPlayingUsers
+	print unassignedUsers
+	print "\n"
 
 # Function to start user session, if none platform, uses distribution to random choose.
 # Returns whatever was created.
@@ -136,6 +158,11 @@ def startUserSession(userID, TD, platform = None):
 # Generate movement of prob of people going to not playing
 def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
 	# fraction is percentage of users from all unassigned that move
+	print "START GENERATING un to nP"
+	print playingUsers
+	print notPlayingUsers
+	print unassignedUsers
+	print "\n"
 	remove = []
 	for index, userID in enumerate(unassignedUsers):
 			# User selected to move
@@ -145,7 +172,12 @@ def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUs
 				if random.uniform(0, 1) >= fraction:
 					# Update existing team info.
 					randTeamID = random.choice(notPlayingUsers.keys())
-					updateTeam(randTeamID, userID, playingUsers, notPlayingUsers)
+
+					if randTeamID not in playingUsers:
+						playingUsers[randTeamID] = []
+
+					notPlayingUsers[randTeamID].append(userID)
+
 					teamID = randTeamID
 				else:
 					# Create new team!
@@ -162,11 +194,21 @@ def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUs
 					createTeam(team, playingUsers, notPlayingUsers)
 
 				# Create team assignment info. Necessary for both choices.
+				#print "Creating TAssignment For: " + str(userID)
 				createTeamAssignment(teamID, userID, TD)
 	deleteWithKeys(remove, unassignedUsers)
+	print "DONE GENERATING un to nP"
+	print playingUsers
+	print notPlayingUsers
+	print unassignedUsers
+	print "\n"
 
 def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 	# fraction / num users in team = each users chance of leaving
+	print "START GENERATING nP to tP"
+	print  playingUsers
+	print notPlayUsers
+	print "\n"
 	for key, userIDs in notPlayUsers.iteritems():
 		if len(userIDs) > 0:
 			prob = fraction / len(userIDs)
@@ -180,8 +222,20 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 				else:
 					playingUsers[key] = [userID]
 				remove.append(index)
-				startUserSession(userID, TD)
+				#print "NotPlayingToPlaying: " + str(userID)
+				#print getTeamAssignmentWithUserID(userID)
+				#print startUserSession(userID, TD)
+				#print "\n"
 		deleteWithKeys(remove, userIDs)
+	print "DONE GENERATING nP to tP:"
+	print playingUsers
+	print notPlayUsers
+	print "\n"
+
+def deleteTeamAssignment(userid):
+	assign = getTeamAssignmentWithUserID(userid)
+	#print assign
+	global_vars.globalTeamAssignments.remove(assign)
 
 # Create team assignment and write to buffer.
 def createTeamAssignment(teamid, userid, TD):
@@ -196,13 +250,6 @@ def createTeamAssignment(teamid, userid, TD):
 
 	# Write to buffer.
 	teamAssignBuffer.append([assignT["assignmentid"], assignT["userid"], assignT["teamid"], assignT["startTimeStamp"]])
-
-# Update team info with users.
-def updateTeam(teamID, userID, playingUsers, notPlayingUsers):
-	if(teamID in playingUsers):
-		playingUsers[teamID].append(userID)
-	if(teamID in notPlayingUsers):
-		notPlayingUsers[teamID].append(userID)
 
 # Create a team, overwrite team if exists.
 def createTeam(team, playingUsers, notPlayingUsers):
@@ -251,6 +298,7 @@ def levelTeam(teamID, TD):
 # Function to update the user sessions in a team.
 def updateUserSessionWithTeam(team, teamID, TD):
 	for userID in team:
+		print "Updating " + str(userID)
 		oldSession = endUserSession(userID, TD)
 		startUserSession(userID, TD, oldSession["platformType"])
 
@@ -320,10 +368,13 @@ def getTeamWithAssignmentID(assignmentID):
 
 # Gets the team assignment. None if DNE.
 def getTeamAssignmentWithUserID(userID):
+	result = None
 	for assign in global_vars.globalTeamAssignments:
 		if assign["userid"] == userID:
-			return assign
-	return None
+			result = assign
+			#print "Find assign w/uid"
+			#print result
+	return result
 
 
 # Returns entire session else -1.
