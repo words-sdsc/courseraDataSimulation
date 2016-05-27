@@ -55,7 +55,6 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 		for index, userID in enumerate(userIDs):
 			if random.uniform(0, 1) < prob:
 				#print "deleteing userid = ", userID
-				endUserSession(userID, TD)
 				notPlayingUsers[key].append(userID)
 				remove.append(index)
 				endUserSession(userID, TD)
@@ -66,8 +65,20 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 # Returns the session found and removed.
 def endUserSession(userID, TD):
 	# Edit globals
-	session=getSessionWithUserID(userID)
-	print session
+	session=None #getSessionWithUserID(userID)
+	for assgn in global_vars.globalTeamAssignments:
+					if assgn['userid']==userID:
+						thisassign = assgn
+						for ses in global_vars.globalUSessions:
+							if ses['assignmentid']==thisassign['assignmentid']:
+								session=ses
+
+	#assigned = [assgn['userid'] for assgn in global_vars.globalTeamAssignments if assgn['userid']==userID]
+	#print assigned
+
+
+
+	#print session, userID
 	#print "Session for assgid = ", session['assignmentid']
 	buf = [session["userSessionid"], session["assignmentid"],
 		session["startTimeStamp"], TD, session["team_level"],

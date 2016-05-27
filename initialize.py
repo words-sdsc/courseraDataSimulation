@@ -69,14 +69,28 @@ def getPlayingTeamMembers(userSessionsList, assignmentsList):
 		#GET ASSIGNMENT FOR THIS SESSION
 		for assgn in assignmentsList:
 			if(assgn['assignmentid'] == s['assignmentid']):
+				#print 'found assignment for session : ', s['userSessionid'], assgn['userid']
 				teamid = assgn['teamid']
 				userid = assgn['userid']
 				if teamid in members:
 					members[teamid].append(userid)
 				else:
 					members[teamid]=[userid]
-	#for k,v in members.items():
-	#	print k,v
+	for k,v in members.items():
+		for user in v:
+			#get assignmentid
+			switch = 0
+			for assgn in global_vars.globalTeamAssignments:
+				if assgn['userid']==user:
+					thisassign = assgn
+					for ses in global_vars.globalUSessions:
+						if ses['assignmentid']==thisassign['assignmentid']:
+							switch+=1
+			if switch==0:
+				print "ERROR: playing member WITH NO SESSION"
+
+			#get sessionid
+
 	return members
 
 def initializeUserSessions(assignmentsList, teamDatabaseList):
