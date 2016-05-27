@@ -26,7 +26,6 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD)
 
 	# Flush the buffers for writing.
-	print "\nFLUSHING OUTPUT\n"
 	flushWriteTeams()
 	flushTeamAssign()
 	flushLevelUp()
@@ -66,7 +65,7 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 				remove.append(index)
 				print "Ending session (pTnP): "
 				session = endUserSession(userID, TD)
-				print "Session" + str(session)
+				print "Session" + str(session) + "\n"
 		deleteWithKeys(remove, userIDs)
 	print "START GENERATING p to nP"
 	print playingUsers
@@ -90,14 +89,13 @@ def endUserSession(userID, TD):
 
 	#print session, userID
 	#print "Session for assgid = ", session['assignmentid']
-	buf = [session["userSessionid"], session["assignmentid"],
-		session["startTimeStamp"], TD, session["team_level"],
-		session["platformType"]]
+	buf = [session["userSessionid"], session["assignmentid"],session["startTimeStamp"], TD, session["team_level"],session["platformType"]]
 
 	# Add user to write buffer.
 	userSessionBuffer.append(buf)
 
 	# delete the old session, currently inefficient, could be optimized
+	print "Deleting session: " + str(session) + "\n"
 	global_vars.globalUSessions.remove(session)
 
 	return session
@@ -228,7 +226,7 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 				remove.append(index)
 				#print "NotPlayingToPlaying: " + str(userID)
 				#print getTeamAssignmentWithUserID(userID)
-				#print startUserSession(userID, TD)
+				startUserSession(userID, TD)
 				#print "\n"
 		deleteWithKeys(remove, userIDs)
 	print "DONE GENERATING nP to tP:"
@@ -306,9 +304,10 @@ def updateUserSessionWithTeam(team, teamID, TD):
 		print "Updating " + str(userID)
 		oldSession = endUserSession(userID, TD)
 		print "Ending session: "
-		print "Session: " + str(endUserSession(userID, TD)) + "\n"
+		print "Session: " + str(oldSession) + "\n"
 		print "Starting session: "
-		print "Session: " + str(startUserSession(userID, TD, oldSession["platformType"])) + "\n"
+		start = startUserSession(userID, TD, oldSession["platformType"])
+		print "Session: " + str(start) + "\n"
 
 # Write the teams buffer.
 def flushWriteTeams():
