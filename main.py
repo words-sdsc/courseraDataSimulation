@@ -73,9 +73,9 @@ def main():
 		TD += global_vars.dayDuration
 
 		# Simulate Users.
-		#playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments)
-		#freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
-		#unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
+		playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments)
+		freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
+		unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
 
 		simulateNextDay(playingMembers, freeMembers, unassignedUsers, TD)
 		# Update the teams for next day.

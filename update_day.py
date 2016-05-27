@@ -66,13 +66,13 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 # Returns the session found and removed.
 def endUserSession(userID, TD):
 	# Edit globals
-	session=None #getSessionWithUserID(userID)
-	for assgn in global_vars.globalTeamAssignments:
-					if assgn['userid']==userID:
-						thisassign = assgn
-						for ses in global_vars.globalUSessions:
-							if ses['assignmentid']==thisassign['assignmentid']:
-								session=ses
+	session=getSessionWithUserID(userID)
+	#for assgn in global_vars.globalTeamAssignments:
+	#				if assgn['userid']==userID:
+	#					thisassign = assgn
+	#					for ses in global_vars.globalUSessions:
+	#						if ses['assignmentid']==thisassign['assignmentid']:
+	#							session=ses
 
 	#assigned = [assgn['userid'] for assgn in global_vars.globalTeamAssignments if assgn['userid']==userID]
 	#print assigned
@@ -229,7 +229,7 @@ def levelUp(playingUsers, notPlayingUsers, TD):
 	for teamID, tracker in global_vars.teamLevelTracker.iteritems():
 		if tracker["hits"] >= tracker["reqTotalHits"]:
 			levelTeam(teamID, TD)
-			updateUserSession(playingUsers[teamID], teamID, TD)
+			updateUserSessionWithTeam(playingUsers[teamID], teamID, TD)
 			removal.append(teamID)
 
 	deleteWithKeys(removal, global_vars.teamLevelTracker)
@@ -237,7 +237,7 @@ def levelUp(playingUsers, notPlayingUsers, TD):
 
 # Leveup the team. -1 if team not found. 1 if found
 def levelTeam(teamID, TD):
-	for key, team in global_vars.globalTeams:
+	for team in global_vars.globalTeams:
 		if team["teamid"] == teamID:
 			team["currentLevel"] += 1
 
