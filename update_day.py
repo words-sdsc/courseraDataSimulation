@@ -1,6 +1,7 @@
 import global_vars
 import datasets
 import random
+import numpy
 
 # Team assignment buffer used for housing all team writes.
 teamAssignBuffer = []
@@ -38,9 +39,9 @@ def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	userRate = global_vars.dayDuration.total_seconds() /  1200 # Seconds that avg user should stay
 
 	playingToNotPlaying(userRate, playingUsers, notPlayingUsers, TD)
-	notPlayingToUnassigned(0.60, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	notPlayingToUnassigned(0.05, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
-	unassignedToNotPlaying(0.60, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	unassignedToNotPlaying(0.05, playingUsers, notPlayingUsers, unassignedUsers, TD)
 	notPlayingToPlaying(userRate, playingUsers, notPlayingUsers, TD)
 
 
@@ -76,8 +77,6 @@ def endUserSession(userID, TD):
 	#assigned = [assgn['userid'] for assgn in global_vars.globalTeamAssignments if assgn['userid']==userID]
 	#print assigned
 
-
-
 	#print session, userID
 	#print "Session for assgid = ", session['assignmentid']
 	buf = [session["userSessionid"], session["assignmentid"],
@@ -98,10 +97,10 @@ def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUs
 	# fraction is percentage of users from all notplaying that move.
 	for key, userIDs in notPlayingUsers.iteritems():
 		remove = []
-		for index, userID in userIDs:
+		for index, userID in enumerate(userIDs):
 			if random.uniform(0, 1) <= fraction:
 				# Move the user.
-				unassignedUsers[key] = userID
+				unassignedUsers.append(userID)
 				remove.append(index)
 
 				# Delete empty team.
@@ -126,7 +125,7 @@ def startUserSession(userID, TD, platform = None):
 	platforms	= global_vars.platforms
 	freq 		= global_vars.freq
 	if platform == None:
-		newSession['platformType']	= np.random.choice(platforms, 1, replace=False, p=freq)[0]
+		newSession['platformType']	= numpy.random.choice(platforms, 1, replace=False, p=freq)[0]
 	else:
 		newSession['platformType'] = platform
 	# Add to global session.
@@ -145,37 +144,49 @@ def startUserSession(userID, TD, platform = None):
 # Generate movement of prob of people going to not playing
 def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
 	# fraction is percentage of users from all unassigned that move
-	for key, userIDs in unassignedUsers.iteritems():
-		remove = []
-		for index, userID in enumerate(userIDs):
-				if random.uniform(0, 1) <= fraction:
-					# Move the user
-					notPlayUsers[key] = userID
-					remove.append(index)
-
+	remove = []
+	for index, userID in enumerate(unassignedUsers):
+			# User selected to move
+			if random.uniform(0, 1) <= fraction:
+				teamID = 0
+				# Go to existing team.
+				if random.uniform(0, 1) >= fraction:
+					# Update existing team info.
+					randTeamID = random.choice(notPlayingUsers.keys())
+					updateTeam(randTeamID, userID, playingUsers, notPlayingUsers)
+					teamID = randTeamID
+				else:
 					# Create new team!
 					team = {}
-					team["teamid"] = global_vars.teamIDCounter
-					global_vars.teamIDCounter += 1
 					team["name"] = datasets.getUserNames(1)[0]
 					team["teamCreationTime"] = TD
 					team["teamEndTime"] = float("inf")
 					team["strength"] = datasets.getProbabilities(0.5,0.5,1)[0]
 					team["currentLevel"] = 1
-					createTeam(team, playingUsers, notPlayUsers, unassignedUsers)
+					team["teamid"] = global_vars.teamIDCounter
+					teamID = team["teamid"]
+					global_vars.teamIDCounter += 1
+					# Actual function to create team.
+					createTeam(team, playingUsers, notPlayingUsers)
 
-					# Create team assignment.
-					createTeamAssignment(team["teamid"], userID, TD)
-		deleteWithKeys(remove, userIDs)
+				# Create team assignment info. Necessary for both choices.
+				createTeamAssignment(teamID, userID, TD)
+	deleteWithKeys(remove, unassignedUsers)
 
 def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 	# fraction / num users in team = each users chance of leaving
-	for key, userIDs in notPlayingUsers.iteritems:
-		prob = fraction / len(userIDs)
+	for key, userIDs in notPlayUsers.iteritems():
+		if len(userIDs) > 0:
+			prob = fraction / len(userIDs)
+		else:
+			prob = fraction
 		remove = []
 		for index, userID in enumerate(userIDs):
 			if random.uniform(0, 1) < prob:
-				playingUsers[key].append(userID)
+				if key in playingUsers:
+					playingUsers[key].append(userID)
+				else:
+					playingUsers[key] = [userID]
 				remove.append(index)
 				startUserSession(userID, TD)
 		deleteWithKeys(remove, userIDs)
@@ -194,13 +205,19 @@ def createTeamAssignment(teamid, userid, TD):
 	# Write to buffer.
 	teamAssignBuffer.append([assignT["assignmentid"], assignT["userid"], assignT["teamid"], assignT["startTimeStamp"]])
 
+# Update team info with users.
+def updateTeam(teamID, userID, playingUsers, notPlayingUsers):
+	if(teamID in playingUsers):
+		playingUsers[teamID].append(userID)
+	if(teamID in notPlayingUsers):
+		notPlayingUsers[teamID].append(userID)
 
 # Create a team, overwrite team if exists.
-def createTeam(team, playingUsers, notPlayingUsers, unassignedUsers):
+def createTeam(team, playingUsers, notPlayingUsers):
 	global_vars.globalTeams.append(team)
-	playingUsers[team["teamid"]] = []
-	notPlayingUsers[team["teamid"]] = []
-	unassignedUsers[team["teamid"]] = []
+	# Are they required?
+	# playingUsers[team["teamid"]] = []
+	# notPlayingUsers[team["teamid"]] = []
 
 # Writes to buffer the end
 # team and delete team.
@@ -247,48 +264,59 @@ def updateUserSessionWithTeam(team, teamID, TD):
 
 # Write the teams buffer.
 def flushWriteTeams():
-	appendFile = open("team.log")
+	global teamBuffer
+	appendFile = open("team.log", "a")
 	for buf in teamBuffer:
-		appendFile.write("teamid=%s, name=%s, teamCreationTime=%s, teamEndTime=%s, strength=%s, currentLevel=%s" %
+		appendFile.write("teamid=%s, name=%s, teamCreationTime=%s, teamEndTime=%s, strength=%s, currentLevel=%s\n" %
 		(buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]))
 
 	appendFile.close()
-	teamBuffer = []
+	del teamBuffer[:]
 
 # Write the assign teams buffer.
 def flushTeamAssign():
-	appendFile = open("team-assignments.log")
+	global teamAssignBuffer
+	appendFile = open("team-assignments.log", "a")
 	for buf in teamAssignBuffer:
-		appendFile.write("assignmentid=%s, userid=%s, teamid=%s, startTimeStamp=%s" %
+		appendFile.write("assignmentid=%s, userid=%s, teamid=%s, startTimeStamp=%s\n" %
 		(buf[0], buf[1], buf[2], buf[3]))
 
 	appendFile.close()
-	teamAssignBuffer = []
+	del teamAssignBuffer[:]
 
 # Write the level up buffer.
 def flushLevelUp():
-
-	appendFile = open("level-events.log")
+	global levelUpBuffer
+	appendFile = open("level-events.log", "a")
 	for buf in levelUpBuffer:
-		appendFile.write("eventid=%s, timeStamp=%s, teamid=%s, level=%s, eventType=%s" %
+		appendFile.write("eventid=%s, timeStamp=%s, teamid=%s, level=%s, eventType=%s\n" %
 		(buf[0], buf[1], buf[2], buf[3], buf[4]))
 
-	levelUpBuffer = []
+	del levelUpBuffer[:]
 
 # Writes the user session buffer.
 def flushUserSession():
-	appendFile = open("user-session.log")
+	global userSessionBuffer
+	appendFile = open("user-session.log", "a")
 	for buf in userSessionBuffer:
-		appendFile.write("userSessionid=%s, assignmentid=%s, starTimeStamp=%s, endTimeStamp=%s, team_level=%s, platformType=%s" %
+		appendFile.write("userSessionid=%s, assignmentid=%s, starTimeStamp=%s, endTimeStamp=%s, team_level=%s, platformType=%s\n" %
 		(buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]))
 
 	appendFile.close()
-	userSessionBuffer = []
+	del userSessionBuffer[:]
 
 # Delete dictionary elements given key
 def deleteWithKeys(keys, dictionary):
+	keys = sorted(keys, key=int, reverse=True)
 	for key in keys:
-		del dictionary[keys]
+		del dictionary[key]
+
+# Helper function TODO: NOT IN USE CURRENTLY
+def getTeamWithTeamID(teamID):
+	for team in global_vars.globalTeams:
+		if team["teamid"] == teamID:
+			return team
+	return None
 
 # Helper function
 def getTeamWithAssignmentID(assignmentID):

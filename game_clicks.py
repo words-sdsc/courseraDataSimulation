@@ -8,6 +8,8 @@ import math
 clickIndex = 0
 
 def writeGameClicksForTeam(teamID, team, time):
+	if len(team) == 0:
+		return
 	numHits = calculateHitsRequired(teamID, team)
 	gameClicks = createGameClickUsers(team, numHits, time)
 
@@ -37,7 +39,8 @@ def calculateHitsRequired(teamID, team):
 		tracker["hitsReqPerSlice"] = hitsReqPerSlice
 		tracker["reqTotalHits"] = reqTotalHits
 	else:
-		hitsReqPerSlice = global_vars.teamLevelTracker[teamID]["hitsReqPerSlice"]
+		tracker = global_vars.teamLevelTracker[teamID]
+		hitsReqPerSlice = tracker["hitsReqPerSlice"]
 		reqTotalHits = tracker["reqTotalHits"]
 		hitsReqPerSlice = tracker["hitsReqPerSlice"]
 
@@ -50,8 +53,10 @@ def calculateHitsRequired(teamID, team):
 
 # Function to keep track of level up. Returns tracker dict.
 def addTeamLevelTracker(teamID, team):
-	# Expected accuracy of team. .
+	# Expected accuracy of team.
 	expectedAcc = calculateTotalAccuracyPerSec(team) / len(team)
+	if expectedAcc <= 0:
+		expectedAcc = 100
 	expectedTimeSlice = round(global_vars.dayDuration.total_seconds() / expectedAcc)
 	if expectedTimeSlice <= 0:
 		expectedTimeSlice = 1 # at least one.
@@ -72,7 +77,7 @@ def calculateTotalAccuracyPerSec(team):
 		totalCPS += user["tags"]["clicksPerSec"]
 		totalAcc += user["tags"]["gameaccuracy"]
 
-	return totalAcc/totalCPS
+	return totalAcc * 10 /totalCPS # Accuracy times 10 for weight
 
 # Creates a distribution from given userID CPS. Then
 def createGameClickUsers(userIDs, numHits, time):

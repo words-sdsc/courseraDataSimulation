@@ -45,7 +45,7 @@ def main():
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
-	dayIteration = 1
+	dayIteration = 5
 
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(hours=4)
@@ -53,12 +53,11 @@ def main():
 	# Loops for day simulation.
 	counter = 0
 	while counter < dayIteration:
-		print "Day Number:" + str(counter + 1)
+		print "Day Number: " + str(counter + 1)
 		teamCounter = 0
 
 		for key, teams in playingMembers.iteritems():
-			if(teamCounter%100==0):
-				print "Generating team: " + str(teamCounter)
+			print "Generating team: " + str(teamCounter)
 
 			# Write the game_clicks.
 			# Write one team for now.
@@ -71,11 +70,11 @@ def main():
 		writeBuyClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
 
 		TD += global_vars.dayDuration
-		
+
 		# Simulate Users.
-		playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments)
-		freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
-		unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
+		#playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments)
+		#freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
+		#unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
 
 		simulateNextDay(playingMembers, freeMembers, unassignedUsers, TD)
 		# Update the teams for next day.
