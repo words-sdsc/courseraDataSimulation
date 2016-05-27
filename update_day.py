@@ -131,14 +131,6 @@ def startUserSession(userID, TD, platform = None):
 	# Add to global session.
 	global_vars.globalUSessions.append(newSession)
 
-	# Being lazy and copy
-	session = newSession
-	# Add buffer:
-	buf = [session["userSessionid"], session["assignmentid"],
-		session["startTimeStamp"], session["endTimeStamp"], session["team_level"],
-		session["platformType"]]
-	# Append buffer
-	userSessionBuffer.append(buf)
 	return newSession
 
 # Generate movement of prob of people going to not playing

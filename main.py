@@ -32,7 +32,7 @@ def main():
 	freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 
 	#Remove old log files
-	for f in ["ad-clicks.log","buy-clicks.log","game-clicks.log","team-assignments.log","users.log"]:
+	for f in ["ad-clicks.log","buy-clicks.log","game-clicks.log","team-assignments.log","users.log", "user-session.log"]:
 		if os.path.isfile(f):
 			os.remove(f)
 
@@ -57,7 +57,8 @@ def main():
 		teamCounter = 0
 
 		for key, teams in playingMembers.iteritems():
-			print "Generating team: " + str(teamCounter)
+			if teamCounter % 100 == 0:
+				print "Generating team: " + str(teamCounter)
 
 			# Write the game_clicks.
 			# Write one team for now.
