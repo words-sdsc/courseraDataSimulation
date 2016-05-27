@@ -21,11 +21,13 @@ for l in f:
 
 	if user in users:
 		u = users[user]
-		if u['team'] == team:
-			print 'ERROR: user %s joined same team %s consecutively' % (user, team)
+        # consecutive assignments to same team are ok, since log
+        # does not contain unassignment events.
+		#if u['team'] == team:
+			#print 'ERROR: user %s joined same team %s consecutively' % (user, team)
 
 		diff = (d - u['ts']).total_seconds()
-		if diff < 10 * 60:
+		if diff < 1 * 60:
 			print 'WARNING: user %s quickly changed teams (in %d minutes)' % (user, diff / 60)
 
 	users[user] = {'ts': d, 'team': team}
