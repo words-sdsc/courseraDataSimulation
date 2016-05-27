@@ -84,7 +84,7 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 
 	howManySessions = 0.5
 	# 50% of assigned users play (have a session) at the start of the game
-	pickedAssignments = np.random.choice(assignmentsList, howManySessions * len(assignmentsList), replace=False)
+	pickedAssignments = np.random.choice(assignmentsList, int(howManySessions * len(assignmentsList)), replace=False)
 	sessions = []
 	platforms	= ['iphone', 'android', 'mac', 'windows', 'linux']
 	freq 		= [0.4, 0.35, 0.05, 0.15, 0.05]
@@ -115,7 +115,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	freeUsers = range(0,len(userDatabaseList)) 
 
 	#pick a set of indices of teams (60%) that get >0 users assigned
-	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(howManyTeams*len(teamDatabaseList)))
+	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), int(math.floor(howManyTeams*len(teamDatabaseList))))
 	# team length min = 1, maxteamsize = 20
 	teamSizes   = np.random.choice(range(1,20), len(pickedTeams))
 
@@ -162,7 +162,7 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 	strongPlayerThreshold = 5
 	random.shuffle(freeusersindex)
 	pick = []
-	pickinitial = np.random.choice(freeusersindex, n, replace=False)
+	pickinitial = np.random.choice(freeusersindex, int(n), replace=False)
 	for p in pickinitial:
 		playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
 		#print playerStrength
