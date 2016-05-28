@@ -16,8 +16,8 @@ def main():
 
 	print "Initializing..."
 
-	global_vars.globalUsers = createUserDatabase(15) #randint(2000, 3000)) #userID = index on the list
-	global_vars.globalTeams = createTeamDatabase(2) #randint(100,200))  #teamID = index on the list
+	global_vars.globalUsers = createUserDatabase(2000) #randint(2000, 3000)) #userID = index on the list
+	global_vars.globalTeams = createTeamDatabase(100) #randint(100,200))  #teamID = index on the list
 	global_vars.globalTeamAssignments = asssignUsersTOteams(global_vars.globalUsers, global_vars.globalTeams)
 	global_vars.globalUSessions = initializeUserSessions(global_vars.globalTeamAssignments, global_vars.globalTeams)
 

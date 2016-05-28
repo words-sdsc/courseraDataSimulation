@@ -21,7 +21,7 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	global_vars.yesterday_globalTeamAssignments = list(global_vars.globalTeamAssignments)
 
 	# Function call for leveling up!
-	#levelUp(playingUsers, notPlayingUsers, TD)
+	levelUp(playingUsers, notPlayingUsers, TD)
 	# Function dealing with any user movement.
 	userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD)
 
@@ -49,13 +49,16 @@ def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 
 # fraction / # users in team =
 def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
-	print "START GENERATING p to nP"
-	print playingUsers
-	print notPlayingUsers
-	print "\n"
+	# print "START GENERATING p to nP"
+	# print playingUsers
+	# print notPlayingUsers
+	# print "\n"
 	# fraction / num users in team = each users chance of leaving
 	for key, userIDs in playingUsers.iteritems():
-		prob = fraction / len(userIDs)
+		length = len(userIDs)
+		if length == 0:
+			length = 1
+		prob = fraction / length
 		prob = fraction
 		remove = []
 		for index, userID in enumerate(userIDs):
@@ -63,14 +66,14 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 				#print "deleteing userid = ", userID
 				notPlayingUsers[key].append(userID)
 				remove.append(index)
-				print "Ending session (pTnP): "
+				# print "Ending session (pTnP): "
 				session = endUserSession(userID, TD)
-				print "Session" + str(session) + "\n"
+				# print "Session" + str(session) + "\n"
 		deleteWithKeys(remove, userIDs)
-	print "START GENERATING p to nP"
-	print playingUsers
-	print notPlayingUsers
-	print "\n"
+	# print "START GENERATING p to nP"
+	# print playingUsers
+	# print notPlayingUsers
+	# print "\n"
 
 # Ends user session for users.
 # Returns the session found and removed.
@@ -95,7 +98,7 @@ def endUserSession(userID, TD):
 	userSessionBuffer.append(buf)
 
 	# delete the old session, currently inefficient, could be optimized
-	print "Deleting session: " + str(session) + "\n"
+	# print "Deleting session: " + str(session) + "\n"
 	global_vars.globalUSessions.remove(session)
 
 	return session
@@ -103,11 +106,11 @@ def endUserSession(userID, TD):
 
 # Generate movement of fraction of people going to unassigned
 def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
-	print "START GENERATING nP to un"
-	print playingUsers
-	print notPlayingUsers
-	print unassignedUsers
-	print "\n"
+	# print "START GENERATING nP to un"
+	# print playingUsers
+	# print notPlayingUsers
+	# print unassignedUsers
+	# print "\n"
 
 	# fraction is percentage of users from all notplaying that move.
 	for key, userIDs in notPlayingUsers.iteritems():
@@ -124,11 +127,11 @@ def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUs
 				deleteTeamAssignment(userID)
 
 		deleteWithKeys(remove, userIDs)
-	print "DONE GENERATING nP to un"
-	print playingUsers
-	print notPlayingUsers
-	print unassignedUsers
-	print "\n"
+	# print "DONE GENERATING nP to un"
+	# print playingUsers
+	# print notPlayingUsers
+	# print unassignedUsers
+	# print "\n"
 
 # Function to start user session, if none platform, uses distribution to random choose.
 # Returns whatever was created.
@@ -158,11 +161,11 @@ def startUserSession(userID, TD, platform = None):
 # Generate movement of prob of people going to not playing
 def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
 	# fraction is percentage of users from all unassigned that move
-	print "START GENERATING un to nP"
-	print playingUsers
-	print notPlayingUsers
-	print unassignedUsers
-	print "\n"
+	# print "START GENERATING un to nP"
+	# print playingUsers
+	# print notPlayingUsers
+	# print unassignedUsers
+	# print "\n"
 	remove = []
 	for index, userID in enumerate(unassignedUsers):
 			# User selected to move
@@ -199,18 +202,18 @@ def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUs
 				# Remove the user
 				remove.append(index)
 	deleteWithKeys(remove, unassignedUsers)
-	print "DONE GENERATING un to nP"
-	print playingUsers
-	print notPlayingUsers
-	print unassignedUsers
-	print "\n"
+	# print "DONE GENERATING un to nP"
+	# print playingUsers
+	# print notPlayingUsers
+	# print unassignedUsers
+	# print "\n"
 
 def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 	# fraction / num users in team = each users chance of leaving
-	print "START GENERATING nP to tP"
-	print  playingUsers
-	print notPlayUsers
-	print "\n"
+	# print "START GENERATING nP to tP"
+	# print  playingUsers
+	# print notPlayUsers
+	# print "\n"
 	for key, userIDs in notPlayUsers.iteritems():
 		if len(userIDs) > 0:
 			prob = fraction / len(userIDs)
@@ -229,10 +232,10 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 				startUserSession(userID, TD)
 				#print "\n"
 		deleteWithKeys(remove, userIDs)
-	print "DONE GENERATING nP to tP:"
-	print playingUsers
-	print notPlayUsers
-	print "\n"
+	# print "DONE GENERATING nP to tP:"
+	# print playingUsers
+	# print notPlayUsers
+	# print "\n"
 
 def deleteTeamAssignment(userid):
 	assign = getTeamAssignmentWithUserID(userid)
@@ -278,7 +281,7 @@ def levelUp(playingUsers, notPlayingUsers, TD):
 	for teamID, tracker in global_vars.teamLevelTracker.iteritems():
 		if tracker["hits"] >= tracker["reqTotalHits"]:
 			levelTeam(teamID, TD)
-			print "LEVEL UP! TeamID: " + str(teamID) + "\n"
+			# print "LEVEL UP! TeamID: " + str(teamID) + "\n"
 			updateUserSessionWithTeam(playingUsers[teamID], teamID, TD)
 			removal.append(teamID)
 
@@ -301,13 +304,13 @@ def levelTeam(teamID, TD):
 # Function to update the user sessions in a team.
 def updateUserSessionWithTeam(team, teamID, TD):
 	for userID in team:
-		print "Updating " + str(userID)
+		# print "Updating " + str(userID)
 		oldSession = endUserSession(userID, TD)
-		print "Ending session: "
-		print "Session: " + str(oldSession) + "\n"
-		print "Starting session: "
+		# print "Ending session: "
+		# print "Session: " + str(oldSession) + "\n"
+		# print "Starting session: "
 		start = startUserSession(userID, TD, oldSession["platformType"])
-		print "Session: " + str(start) + "\n"
+		# print "Session: " + str(start) + "\n"
 
 # Write the teams buffer.
 def flushWriteTeams():
@@ -379,8 +382,8 @@ def getTeamAssignmentWithUserID(userID):
 	for assign in global_vars.globalTeamAssignments:
 		if assign["userid"] == userID:
 			result = assign
-			print "Find assign w/uid"
-			print "Teamm Assign: " + str(result)
+			# print "Find assign w/uid"
+			# print "Teamm Assign: " + str(result)
 	return result
 
 # Returns entire session else -1.
