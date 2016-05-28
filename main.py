@@ -14,7 +14,7 @@ from random import randint
 # Main function file.
 def main():
 
-	print "Initializing..."
+	# print "Initializing..."
 
 	global_vars.globalUsers = createUserDatabase(2000) #randint(2000, 3000)) #userID = index on the list
 	global_vars.globalTeams = createTeamDatabase(100) #randint(100,200))  #teamID = index on the list
@@ -53,7 +53,7 @@ def main():
 	# Loops for day simulation.
 	counter = 0
 	while counter < dayIteration:
-		print "Day Number: " + str(counter + 1)
+		# print "Day Number: " + str(counter + 1)
 		teamCounter = 0
 
 		for key, teams in playingMembers.iteritems():
@@ -73,35 +73,32 @@ def main():
 		TD += global_vars.dayDuration
 
 		# Simulate Users.
-<<<<<<< HEAD
 		# playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments)
 		# freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 		# unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
-		print global_vars.globalUSessions
-		print global_vars.globalTeamAssignments
-		print global_vars.globalTeams
-		print "Playing: " + str(playingMembers)
-		print "Free: " + str(freeMembers)
-		print "Unassigned: " + str(unassignedUsers)
-		print "All Members: " + str(allMembers)
-		print "\n\n"
-		print "START SIMULATION"
-=======
+		# print global_vars.globalUSessions
+		# print global_vars.globalTeamAssignments
+		# print global_vars.globalTeams
+		# print "Playing: " + str(playingMembers)
+		# print "Free: " + str(freeMembers)
+		# print "Unassigned: " + str(unassignedUsers)
+		# print "All Members: " + str(allMembers)
+		# print "\n\n"
+		# print "START SIMULATION"
 		#playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments)
 		#freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 		#unassignedUsers 	= getUnassignedUsers(global_vars.globalTeamAssignments)
 
->>>>>>> a512f4b0141847ef8b2a2a1f593d3aa55e420a47
 		simulateNextDay(playingMembers, freeMembers, unassignedUsers, TD)
-		print "END SIMULATION"
-		print global_vars.globalUSessions
-		print global_vars.globalTeamAssignments
-		print global_vars.globalTeams
-		print "Playing: " + str(playingMembers)
-		print "Free: " + str(freeMembers)
-		print "Unassigned: " + str(unassignedUsers)
-		print "All Members: " + str(allMembers)
-		print "\n\n"
+		# print "END SIMULATION"
+		# print global_vars.globalUSessions
+		# print global_vars.globalTeamAssignments
+		# print global_vars.globalTeams
+		# print "Playing: " + str(playingMembers)
+		# print "Free: " + str(freeMembers)
+		# print "Unassigned: " + str(unassignedUsers)
+		# print "All Members: " + str(allMembers)
+		# print "\n\n"
 		# Update the teams for next day.
 		counter += 1
 
