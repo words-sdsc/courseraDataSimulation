@@ -17,7 +17,7 @@ userSessionBuffer = []
 
 def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	# Take a snap shot of the previous sessions and team assignments.
-	global_vars.yesterday_globalUSessions = list(global_vars.globalUSessions)
+	global_vars.yesterday_globalUSessions 		= list(global_vars.globalUSessions)
 	global_vars.yesterday_globalTeamAssignments = list(global_vars.globalTeamAssignments)
 
 	# Function call for leveling up!
@@ -36,6 +36,7 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 # and then unassigned to not playing to playing. That way all transitions
 # are recorded.
 def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
+	#FIX IT
 	userRate = global_vars.dayDuration.total_seconds() /  1200 # Seconds that avg user should stay
 
 	playingToNotPlaying(0.5, playingUsers, notPlayingUsers, TD)
@@ -43,7 +44,6 @@ def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 
 	unassignedToNotPlaying(0.5, playingUsers, notPlayingUsers, unassignedUsers, TD)
 	notPlayingToPlaying(0.5, playingUsers, notPlayingUsers, TD)
-
 
 # Helper functions for simulation #
 
@@ -385,6 +385,7 @@ def getTeamAssignmentWithUserID(userID):
 			# print "Find assign w/uid"
 			# print "Teamm Assign: " + str(result)
 	return result
+
 
 # Returns entire session else -1.
 def getSessionWithUserID(userID):
