@@ -33,8 +33,8 @@ def calculateHitsRequired(teamID, team):
 		# Limit lower level for subtraction.
 		if currentLevel <= 1:
 			currentLevel = 2
-
-		reqTotalHits = ((currentLevel+7) * (currentLevel+7) - 1)
+		#required hits
+		reqTotalHits = ((currentLevel+0) * (currentLevel+0) - 1)
 
 		hitsReqPerSlice = math.ceil((reqTotalHits / tracker["slices"]))
 		tracker["hitsReqPerSlice"] = hitsReqPerSlice

@@ -52,7 +52,7 @@ def writeAdClicksCSV(startTime, dayDuration):
 		adEvent = {}
 		adEvent['txid'] = global_vars.counter
 		global_vars.counter += 1
-		adEvent['timeStamp'] = startTime + datetime.timedelta(hours=random.uniform(0, dayDuration.seconds // 3600))
+		adEvent['timeStamp'] = startTime + datetime.timedelta(seconds=random.choice(xrange(0, dayDuration.seconds)))
 
 		adEvent['teamid'] = totalUsers[indx][0]
 		adEvent['userid'] = totalUsers[indx][1]
