@@ -36,14 +36,14 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 # and then unassigned to not playing to playing. That way all transitions
 # are recorded.
 def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
-	#FIX IT
+	
 	userRate = global_vars.dayDuration.total_seconds() /  1200 # Seconds that avg user should stay
 
 	playingToNotPlaying(userRate, playingUsers, notPlayingUsers, TD)
-	notPlayingToUnassigned(0.6, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	notPlayingToUnassigned(0.1, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
-	unassignedToNotPlaying(0.3, playingUsers, notPlayingUsers, unassignedUsers, TD)
-	notPlayingToPlaying(0.2, playingUsers, notPlayingUsers, TD)
+	unassignedToNotPlaying(0.1, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	notPlayingToPlaying(0.1, playingUsers, notPlayingUsers, TD)
 
 # Helper functions for simulation #
 
@@ -163,6 +163,8 @@ def startUserSession(userID, TD, platform = None):
 	return newSession
 
 # Generate movement of prob of people going to not playing
+#[5/28/16, 7:58:00 PM] Charles Chen: assigned the non-assigned teams to a team
+#[5/28/16, 7:58:07 PM] Charles Chen: but does not allow them to play
 def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
 	# fraction is percentage of users from all unassigned that move
 	# print "START GENERATING un to nP"
