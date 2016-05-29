@@ -187,7 +187,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	return assignments
 
 def getStrongPlayers(n, freeusersindex, globalUsersDataset):
-	strongPlayerThreshold = 5/100
+	strongPlayerThreshold = 3/100
 	random.shuffle(freeusersindex)
 	pick = []
 	#initial set of free users
@@ -276,7 +276,7 @@ def createUserDatabase(noOfUsers=2000):
 		#'tags is a list'=[gameaccuracy, purchbeh, adbeh, chatbeh]
 		newUser['tags']={'gameaccuracy':round(accuracyFactor[i], 3),
 						 'purchbeh':round(purchaseFactor[i],3),
-						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3), 'clicksPerSec': random.uniform(1,10) }
+						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3), 'clicksPerSec': random.uniform(7,10) }
 		newUser['id'] = i
 		users.append(newUser)
 

@@ -37,13 +37,13 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 # are recorded.
 def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 
-	userRate = global_vars.dayDuration.total_seconds() /  1200 # Seconds that avg user should stay
+	userRate = global_vars.dayDuration.total_seconds() /  600 # Seconds that avg user should stay
 
 	playingToNotPlaying(userRate, playingUsers, notPlayingUsers, TD)
 	notPlayingToUnassigned(0.1, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
 	unassignedToNotPlaying(0.1, playingUsers, notPlayingUsers, unassignedUsers, TD)
-	notPlayingToPlaying(0.1, playingUsers, notPlayingUsers, TD)
+	notPlayingToPlaying(0.20, playingUsers, notPlayingUsers, TD)
 
 # Helper functions for simulation #
 

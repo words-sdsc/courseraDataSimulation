@@ -45,8 +45,7 @@ def main():
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
-	dayIteration =10 
-
+	dayIteration =200
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(hours=24)
 
@@ -57,7 +56,7 @@ def main():
 		teamCounter = 0
 
 		for key, teams in playingMembers.iteritems():
-			if teamCounter % 100 == 0:
+			if teamCounter % 50 == 0:
 				print "Generating team: " + str(teamCounter)
 
 			# Write the game_clicks.
