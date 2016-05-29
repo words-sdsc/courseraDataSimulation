@@ -42,7 +42,7 @@ def writeAdClicksCSV(startTime, dayDuration):
 	#pick 0-30% users for clicking based on their click probabilities
 	factor = random.uniform(0, 0.3)
 	#print factor
-	adUsers = np.random.choice(range(0, len(totalUsers)), factor*len(totalUsers), replace=True, p=adProbabilities).tolist()
+	adUsers = np.random.choice(range(0, len(totalUsers)), int(factor*len(totalUsers)), replace=True, p=adProbabilities).tolist()
 	adclicks = []
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE adclicks from these users
@@ -64,7 +64,7 @@ def writeAdClicksCSV(startTime, dayDuration):
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	assignLog = open("ad-clicks.log", "a")
 	for a in sorted(adclicks, key=lambda a: a['timeStamp']):
-		assignLog.write("time=%s, txID=%s, userSessionid=%s, teamid=%s, userid=%s, adID=%s, adCategory=%s\n" %
+		assignLog.write("%s, txID=%s, userSessionid=%s, teamid=%s, userid=%s, adID=%s, adCategory=%s\n" %
 			(a['timeStamp'].strftime(global_vars.timestamp_format), a['txid'], 
 			a['userSessionid'], a['teamid'], a['userid'], a['adID'], a['adCategory']))
 	assignLog.close()

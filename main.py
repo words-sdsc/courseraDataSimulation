@@ -57,7 +57,7 @@ def main():
 		teamCounter = 0
 
 		for key, teams in playingMembers.iteritems():
-			if teamCounter % 100 == 0:
+			if teamCounter % 50 == 0:
 				print "Generating team: " + str(teamCounter)
 
 			# Write the game_clicks.

@@ -50,7 +50,7 @@ def writeBuyClicksCSV(startTime, dayDuration):
 	#pick 30% users for clicking based on their click probabilities
 	factor = random.uniform(0, 0.3)
 	#print factor	
-	buyUsers = np.random.choice(range(0, len(totalUsers)), factor*len(totalUsers), replace=True, p=buyProbabilities).tolist()
+	buyUsers = np.random.choice(range(0, len(totalUsers)), int(factor*len(totalUsers)), replace=True, p=buyProbabilities).tolist()
 	buyclicks = []
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE buyclicks from these users

@@ -28,6 +28,10 @@ def getProbabilities(mu, sigma, noOfUsers):
 
 
 def getCountries(noOfUsers = 2000):
+
+	# convert country code | full name to just country code
+	countries[:] = [x.split("|")[0] for x in countries]
+
 	countryData = []
 	j = max( 2 , 1+noOfUsers/len(countries) )
 	for i in range(0, j):
