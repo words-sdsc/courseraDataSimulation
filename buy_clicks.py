@@ -38,7 +38,7 @@ def writeBuyClicksCSV(startTime, dayDuration):
 		#GET ASSIGNMENT FOR THIS SESSION
 		for assgn in assignmentsList:
 			if(assgn['assignmentid'] == s['assignmentid']):
-				teamid = assgn['teamid'] 
+				teamid = assgn['teamid']
 				userid = assgn['userid']
 		buyfactor = global_vars.globalUsers[userid]['tags']['purchbeh']
 		totalUsers.append((teamid, userid, s['userSessionid'], s['platformType'])) #list
@@ -49,7 +49,11 @@ def writeBuyClicksCSV(startTime, dayDuration):
 
 	#pick 30% users for clicking based on their click probabilities
 	factor = random.uniform(0, 0.3)
-	#print factor	
+
+	if len(totalUsers) <= 0:
+		return
+
+	#print factor
 	buyUsers = np.random.choice(range(0, len(totalUsers)), int(factor*len(totalUsers)), replace=True, p=buyProbabilities).tolist()
 	buyclicks = []
 
@@ -69,7 +73,7 @@ def writeBuyClicksCSV(startTime, dayDuration):
 		buyEvent['userSessionid'] = totalUsers[pickABuy][2]
 		buyclicks.append(buyEvent)
 		#print '%s %s' % (platform, buyEvent['buyPrice'])
-	
+
 		# increase accuracy based on price of item bought
 		accuracy = global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'] + buyEvent['buyPrice']/100
 		# see if accuracy too high
@@ -80,7 +84,7 @@ def writeBuyClicksCSV(startTime, dayDuration):
 		#print 'userid %s accuracy %s price %f' % (buyEvent['userid'],
 			#global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'], buyEvent['buyPrice'])
 
-		
+
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	buyLog = open("buy-clicks.log", "a")
@@ -89,4 +93,3 @@ def writeBuyClicksCSV(startTime, dayDuration):
 			(b['timeStamp'].strftime(global_vars.timestamp_format), b['txid'], b['userSessionid'],
 			b['teamid'], b['userid'], b['buyID'], b['buyPrice']))
 	buyLog.close()
-

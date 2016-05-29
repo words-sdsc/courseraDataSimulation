@@ -39,11 +39,11 @@ def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	#FIX IT
 	userRate = global_vars.dayDuration.total_seconds() /  1200 # Seconds that avg user should stay
 
-	playingToNotPlaying(userRate, playingUsers, notPlayingUsers, TD)
-	notPlayingToUnassigned(0.6, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	playingToNotPlaying(1, playingUsers, notPlayingUsers, TD)
+	notPlayingToUnassigned(1, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
-	unassignedToNotPlaying(0.4, playingUsers, notPlayingUsers, unassignedUsers, TD)
-	notPlayingToPlaying(userRate, playingUsers, notPlayingUsers, TD)
+	unassignedToNotPlaying(0, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	notPlayingToPlaying(0, playingUsers, notPlayingUsers, TD)
 
 # Helper functions for simulation #
 
