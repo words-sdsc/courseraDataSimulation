@@ -187,7 +187,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	return assignments
 
 def getStrongPlayers(n, freeusersindex, globalUsersDataset):
-	strongPlayerThreshold = 5
+	strongPlayerThreshold = 5/100
 	random.shuffle(freeusersindex)
 	pick = []
 	#initial set of free users
@@ -254,7 +254,7 @@ def createUserDatabase(noOfUsers=2000):
 	countries = getCountries(noOfUsers) #list
 	random.shuffle(countries)
 	ages = getages(18, 70, 25, noOfUsers, 30) #min (18), max (70), mean 25, sigma 30
-	accuracyFactor 	= getProbabilities(.5, .4, noOfUsers) #mu 0.5, sigma 0.4
+	accuracyFactor 	= getProbabilities(.005, .001, noOfUsers) #mu 0.5, sigma 0.4
 	purchaseFactor 	= getProbabilities(.5, .2, noOfUsers)
 	adFactor 		= getProbabilities(.5, .5, noOfUsers)
 	chatFactor 		= getProbabilities(.5, .4, noOfUsers)
