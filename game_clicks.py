@@ -3,6 +3,7 @@ import random
 import numpy.random
 import datetime
 import math
+import update_day
 
 # Keeps track of total index.
 clickIndex = 0
@@ -37,9 +38,7 @@ def calculateHitsRequired(teamID, team):
 
 		hitsReqPerSlice = math.ceil((reqTotalHits / tracker["slices"]))
 		tracker["hitsReqPerSlice"] = hitsReqPerSlice
-		tracker["hitsReqPerSlice"] = 30
 		tracker["reqTotalHits"] = reqTotalHits
-		tracker["reqTotalHits"] = 120
 	else:
 		tracker = global_vars.teamLevelTracker[teamID]
 		hitsReqPerSlice = tracker["hitsReqPerSlice"]
@@ -88,7 +87,6 @@ def createGameClickUsers(userIDs, numHits, time):
 
 	gameClickFileBuf = []
 
-	# TODO: will be defined after next day function is defined
 	userSession = 0
 
 	counter = 0
@@ -100,6 +98,7 @@ def createGameClickUsers(userIDs, numHits, time):
 	while counter < numHits:
 		# Randomly select a value from our distribution.
 		randUserID = random.choice(cpsDistribute)
+		userSession =  update_day.getSessionWithUserID(randUserID)["userSessionid"]
 		# Generate hit value
 		isHit = getIsHitBasedOffAccuracy(global_vars.globalUsers[randUserID]["tags"]["gameaccuracy"])
 		# Append Result
@@ -167,7 +166,12 @@ def getRandTime(leftExtreme, rightExtreme):
 	else:
 		sec = random.randint(rightExtreme.second, leftExtreme.second)
 
-	return datetime.datetime(year, month, day, hour, minute, sec, 0, None)
+	try:
+		result = datetime.datetime(year, month, day, hour, minute, sec, 0, None)
+	except ValueError:
+		result = datetime.datetime(year, month, day-1, hour, minute, sec, 0, None)
+
+	return result
 
 # Creates a list of userIDs reflecting clicksPerSec distribution.
 def getCPSUserList(userIDs, samples):

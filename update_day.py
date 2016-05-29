@@ -39,11 +39,11 @@ def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	#FIX IT
 	userRate = global_vars.dayDuration.total_seconds() /  1200 # Seconds that avg user should stay
 
-	playingToNotPlaying(0.5, playingUsers, notPlayingUsers, TD)
-	notPlayingToUnassigned(0.5, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	playingToNotPlaying(userRate, playingUsers, notPlayingUsers, TD)
+	notPlayingToUnassigned(0.6, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
-	unassignedToNotPlaying(0.5, playingUsers, notPlayingUsers, unassignedUsers, TD)
-	notPlayingToPlaying(0.5, playingUsers, notPlayingUsers, TD)
+	unassignedToNotPlaying(0.4, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	notPlayingToPlaying(userRate, playingUsers, notPlayingUsers, TD)
 
 # Helper functions for simulation #
 
@@ -120,9 +120,8 @@ def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUs
 				# Move the user.
 				unassignedUsers.append(userID)
 				remove.append(index)
-
 				# Delete empty team.
-				if len(userIDs) <= 0:
+				if len(userIDs) <= 0 and len(playingUsers[key]) <= 0:
 					deleteTeam(userIDs, playingUsers, notPlayingUsers, unassignedUsers, TD)
 				deleteTeamAssignment(userID)
 
@@ -268,6 +267,8 @@ def createTeam(team, playingUsers, notPlayingUsers):
 def deleteTeam(team, index, playingUsers, notPlayingUsers, unassignedUsers, TD):
 	teamRemoved = global_vars.globalTeams.pop(index)
 	teamRemoved["teamEndTime"] = TD
+	print "Removed team"
+	global teamBuffer
 	teamBuffer.append(teamRemoved.values())
 	# Delete all traces of this team.
 	del playingUsers[index]
@@ -296,7 +297,7 @@ def levelTeam(teamID, TD):
 
 			# Write to buffer
 			levelUpBuffer.append([global_vars.eventIDCounter, TD, teamID, team["currentLevel"] - 1, "end"])
-			levelUpBuffer.append([global_vars.eventIDCounter, TD, teamID, team["currentLevel"] + 1, "start"])
+			levelUpBuffer.append([global_vars.eventIDCounter, TD, teamID, team["currentLevel"], "start"])
 
 			return 1
 	return -1

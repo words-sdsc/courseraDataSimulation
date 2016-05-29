@@ -17,7 +17,7 @@ def main():
 	# print "Initializing..."
 
 	global_vars.globalUsers = createUserDatabase(2000) #randint(2000, 3000)) #userID = index on the list
-	global_vars.globalTeams = createTeamDatabase(100) #randint(100,200))  #teamID = index on the list
+	global_vars.globalTeams = createTeamDatabase(200) #randint(100,200))  #teamID = index on the list
 	global_vars.globalTeamAssignments = asssignUsersTOteams(global_vars.globalUsers, global_vars.globalTeams)
 	global_vars.globalUSessions = initializeUserSessions(global_vars.globalTeamAssignments, global_vars.globalTeams)
 
@@ -32,7 +32,7 @@ def main():
 	freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 
 	#Remove old log files
-	for f in ["ad-clicks.log","buy-clicks.log","game-clicks.log","team-assignments.log","users.log", "user-session.log", "level-events.log"]:
+	for f in ["ad-clicks.log","buy-clicks.log","game-clicks.log","team-assignments.log","users.log", "user-session.log", "level-events.log", "team.log"]:
 		if os.path.isfile(f):
 			os.remove(f)
 
@@ -45,7 +45,7 @@ def main():
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
-	dayIteration = 5
+	dayIteration = 10
 
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(hours=4)
@@ -53,7 +53,7 @@ def main():
 	# Loops for day simulation.
 	counter = 0
 	while counter < dayIteration:
-		# print "Day Number: " + str(counter + 1)
+		print "Time Slice Number: " + str(counter + 1)
 		teamCounter = 0
 
 		for key, teams in playingMembers.iteritems():
