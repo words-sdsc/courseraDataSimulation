@@ -39,11 +39,11 @@ def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	#FIX IT
 	userRate = global_vars.dayDuration.total_seconds() /  1200 # Seconds that avg user should stay
 
-	playingToNotPlaying(1, playingUsers, notPlayingUsers, TD)
-	notPlayingToUnassigned(1, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	playingToNotPlaying(userRate, playingUsers, notPlayingUsers, TD)
+	notPlayingToUnassigned(0.6, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
-	unassignedToNotPlaying(0, playingUsers, notPlayingUsers, unassignedUsers, TD)
-	notPlayingToPlaying(0, playingUsers, notPlayingUsers, TD)
+	unassignedToNotPlaying(0.3, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	notPlayingToPlaying(0.2, playingUsers, notPlayingUsers, TD)
 
 # Helper functions for simulation #
 
@@ -59,10 +59,9 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 		if length == 0:
 			length = 1
 		prob = fraction / length
-		prob = fraction
 		remove = []
 		for index, userID in enumerate(userIDs):
-			if random.uniform(0, 1) < prob:
+			if random.uniform(0, 1) <= prob:
 				#print "deleteing userid = ", userID
 				notPlayingUsers[key].append(userID)
 				remove.append(index)
@@ -111,8 +110,8 @@ def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUs
 	# print notPlayingUsers
 	# print unassignedUsers
 	# print "\n"
-
 	# fraction is percentage of users from all notplaying that move.
+	removeTeams = []
 	for key, userIDs in notPlayingUsers.iteritems():
 		remove = []
 		for index, userID in enumerate(userIDs):
@@ -121,11 +120,17 @@ def notPlayingToUnassigned(fraction, playingUsers, notPlayingUsers, unassignedUs
 				unassignedUsers.append(userID)
 				remove.append(index)
 				# Delete empty team.
-				if len(userIDs) <= 0 and len(playingUsers[key]) <= 0:
-					deleteTeam(userIDs, playingUsers, notPlayingUsers, unassignedUsers, TD)
 				deleteTeamAssignment(userID)
 
+		if playingUsers.has_key(key):
+			if len(userIDs) <= 0 and len(playingUsers[key]) <= 0:
+				removeTeams.append(key)
+		else:
+			if len(userIDs) <= 0:
+				removeTeams.append(key)
+
 		deleteWithKeys(remove, userIDs)
+	deleteTeams(removeTeams, playingUsers, notPlayingUsers, TD)
 	# print "DONE GENERATING nP to un"
 	# print playingUsers
 	# print notPlayingUsers
@@ -179,7 +184,6 @@ def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUs
 						playingUsers[randTeamID] = []
 
 					notPlayingUsers[randTeamID].append(userID)
-
 					teamID = randTeamID
 				else:
 					# Create new team!
@@ -194,6 +198,7 @@ def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUs
 					global_vars.teamIDCounter += 1
 					# Actual function to create team.
 					createTeam(team, playingUsers, notPlayingUsers)
+					notPlayingUsers[teamID].append(userID)
 
 				# Create team assignment info. Necessary for both choices.
 				#print "Creating TAssignment For: " + str(userID)
@@ -220,7 +225,7 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 			prob = fraction
 		remove = []
 		for index, userID in enumerate(userIDs):
-			if random.uniform(0, 1) < prob:
+			if random.uniform(0, 1) <= prob:
 				if key in playingUsers:
 					playingUsers[key].append(userID)
 				else:
@@ -260,20 +265,27 @@ def createTeam(team, playingUsers, notPlayingUsers):
 	global_vars.globalTeams.append(team)
 	# Are they required?
 	# playingUsers[team["teamid"]] = []
-	# notPlayingUsers[team["teamid"]] = []
+	notPlayingUsers[team["teamid"]] = []
+
+def deleteTeams(indexes, playingUsers, notPlayingUsers, TD):
+	for index in indexes:
+		deleteTeam(index, playingUsers, notPlayingUsers, TD)
 
 # Writes to buffer the end
 # team and delete team.
-def deleteTeam(team, index, playingUsers, notPlayingUsers, unassignedUsers, TD):
-	teamRemoved = global_vars.globalTeams.pop(index)
+def deleteTeam(index, playingUsers, notPlayingUsers, TD):
+	teamRemoved = getTeamWithTeamID(index)
+	global_vars.globalTeams.remove(teamRemoved)
+
 	teamRemoved["teamEndTime"] = TD
-	print "Removed team"
 	global teamBuffer
-	teamBuffer.append(teamRemoved.values())
+	teamBuffer.append([teamRemoved["teamid"], teamRemoved["name"], teamRemoved["teamCreationTime"], teamRemoved["teamEndTime"], teamRemoved["strength"], teamRemoved["currentLevel"]])
 	# Delete all traces of this team.
-	del playingUsers[index]
-	del notPlayingUsers[index]
-	del unassignedUsers[index]
+	if playingUsers.has_key(index):
+		del playingUsers[index]
+
+	if notPlayingUsers.has_key(index):
+		del notPlayingUsers[index]
 
 
 # Function to check if a team has leveled up from previous day.
@@ -362,7 +374,6 @@ def deleteWithKeys(keys, dictionary):
 	for key in keys:
 		del dictionary[key]
 
-# Helper function TODO: NOT IN USE CURRENTLY
 def getTeamWithTeamID(teamID):
 	for team in global_vars.globalTeams:
 		if team["teamid"] == teamID:
@@ -374,7 +385,7 @@ def getTeamWithAssignmentID(assignmentID):
 	for assign in global_vars.globalTeamAssignments:
 		if assign["assignmentid"]==assignmentID:
 			teamID = assign["teamid"]
-			return global_vars.globalTeams[teamID]
+			return getTeamWithTeamID(teamID)
 
 
 # Gets the team assignment. None if DNE.
