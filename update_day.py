@@ -36,7 +36,7 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 # and then unassigned to not playing to playing. That way all transitions
 # are recorded.
 def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
-	
+
 	userRate = global_vars.dayDuration.total_seconds() /  1200 # Seconds that avg user should stay
 
 	playingToNotPlaying(userRate, playingUsers, notPlayingUsers, TD)
@@ -311,8 +311,10 @@ def levelTeam(teamID, TD):
 
 			# Write to buffer
 			levelUpBuffer.append([global_vars.eventIDCounter, TD, teamID, team["currentLevel"] - 1, "end"])
+			global_vars.eventIDCounter += 1
 			levelUpBuffer.append([global_vars.eventIDCounter, TD, teamID, team["currentLevel"], "start"])
-
+			global_vars.eventIDCounter += 1
+			
 			return 1
 	return -1
 
