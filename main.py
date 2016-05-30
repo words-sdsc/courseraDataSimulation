@@ -72,9 +72,6 @@ def main():
 		TD += global_vars.dayDuration
 
 		# Simulate Users.
-		# playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments)
-		# freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
-		# unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
 		# print global_vars.globalUSessions
 		# print global_vars.globalTeamAssignments
 		# print global_vars.globalTeams
