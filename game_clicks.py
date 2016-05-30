@@ -166,10 +166,14 @@ def getRandTime(leftExtreme, rightExtreme):
 	else:
 		sec = random.randint(rightExtreme.second, leftExtreme.second)
 
-	try:
-		result = datetime.datetime(year, month, day, hour, minute, sec, 0, None)
-	except ValueError:
-		result = datetime.datetime(year, month, day-1, hour, minute, sec, 0, None)
+	noGoodDate = True
+	while noGoodDate:
+		try:
+			result = datetime.datetime(year, month, day, hour, minute, sec, 0, None)
+			noGoodDate = False
+		except ValueError:
+			day = day - 1
+			continue
 
 	return result
 

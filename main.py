@@ -81,9 +81,6 @@ def main():
 		# print "All Members: " + str(allMembers)
 		# print "\n\n"
 		# print "START SIMULATION"
-		#playingMembers 	= getPlayingTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments)
-		#freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
-		#unassignedUsers 	= getUnassignedUsers(global_vars.globalTeamAssignments)
 
 		simulateNextDay(playingMembers, freeMembers, unassignedUsers, TD)
 		# print "END SIMULATION"
