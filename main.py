@@ -11,6 +11,11 @@ from update_day import *
 import os
 from random import randint
 
+def sortLogFile(name):
+	f = open(name, 'r');
+	lines = f.readline()
+	print lines
+
 # Main function file.
 def main():
 
@@ -45,7 +50,7 @@ def main():
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
-	dayIteration = 200
+	dayIteration = 5
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(hours=20)
 
@@ -94,6 +99,8 @@ def main():
 		# print "\n\n"
 		# Update the teams for next day.
 		counter += 1
+
+	sortLogFile('game-clicks.log')
 
 # Main function call hook.
 if __name__ == "__main__":
