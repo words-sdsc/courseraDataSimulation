@@ -18,8 +18,8 @@ def writeGameClicksForTeam(teamID, team, time):
 	# Append file writer.
 	appendFile = open("game-clicks.log", "a")
 	for row in gameClicks:
-		appendFile.write("time=%s, clickid=%s,  userid=%s, usersessionid=%s, isHit=%s\n" %
-			(row[0], row[1], row[2], row[3], row[4]))
+		appendFile.write("%s, clickid=%s,  userid=%s, usersessionid=%s, isHit=%s\n" %
+			(row[0].strftime(global_vars.timestamp_format), row[1], row[2], row[3], row[4]))
 	appendFile.close()
 
 def calculateHitsRequired(teamID, team):
