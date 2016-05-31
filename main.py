@@ -14,6 +14,11 @@ from random import randint
 # Main function file.
 def main():
 
+	#Remove old log files
+	for f in ["ad-clicks.log","buy-clicks.log","game-clicks.log","team-assignments.log","users.log", "user-session.log", "level-events.log", "team.log"]:
+		if os.path.isfile(f):
+			os.remove(f)
+
 	# print "Initializing..."
 
 	global_vars.globalUsers = createUserDatabase(2000) #randint(2000, 3000)) #userID = index on the list
@@ -31,11 +36,6 @@ def main():
 	#____[3] get available team members who are assigned but not playing
 	freeMembers		= getFreeTeamMembers(global_vars.globalUSessions, global_vars.globalTeamAssignments) #['teamid']->[userid1,...] (free users with no open sessions)
 
-	#Remove old log files
-	for f in ["ad-clicks.log","buy-clicks.log","game-clicks.log","team-assignments.log","users.log", "user-session.log", "level-events.log", "team.log"]:
-		if os.path.isfile(f):
-			os.remove(f)
-
 	#____[4] unassigned users : returns a set of unassigned users
 	unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
 
@@ -45,7 +45,7 @@ def main():
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
-	dayIteration =200
+	dayIteration = 200
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(hours=20)
 
