@@ -20,7 +20,7 @@ def writeGameClicksForTeam(teamID, team, time):
 	# Append file writer.
 	appendFile = open("game-clicks.log", "a")
 	for row in gameClicks:
-		appendFile.write("%s, clickid=%s, userid=%s, usersessionid=%s, isHit=%s, teamId=%s, teamLevel=%s\n" %
+		appendFile.write("time=%s, clickid=%s, userid=%s, usersessionid=%s, isHit=%s, teamId=%s, teamLevel=%s\n" %
 			(row[0].strftime(global_vars.timestamp_format), row[1], row[2], row[3], row[4], teamID, teamLevel))
 	appendFile.close()
 
@@ -33,10 +33,10 @@ def calculateHitsRequired(teamID, team):
 		currentLevel = getTeamFromTeamID(teamID)["currentLevel"]
 
 		# Limit lower level for subtraction.
-		if currentLevel <= 1:
-			currentLevel = 2
+		#if currentLevel <= 1:
+		#	currentLevel = 2
 		#required hits
-		reqTotalHits = ((currentLevel+0) * (currentLevel+0) - 1)
+		reqTotalHits = ((currentLevel+0) * (currentLevel+0))
 
 		hitsReqPerSlice = math.ceil((reqTotalHits / tracker["slices"]))
 		tracker["hitsReqPerSlice"] = hitsReqPerSlice
