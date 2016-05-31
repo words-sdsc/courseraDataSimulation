@@ -352,8 +352,8 @@ def flushTeamAssign():
 	global teamAssignBuffer
 	appendFile = open("team-assignments.log", "a")
 	for buf in teamAssignBuffer:
-		appendFile.write("assignmentid=%s, userid=%s, teamid=%s, startTimeStamp=%s\n" %
-		(buf[0], buf[1], buf[2], buf[3].strftime(global_vars.timestamp_format)))
+		appendFile.write("%s team=%s, userid=%s, assignmentid=%s \n" %
+		(buf[3].strftime(global_vars.timestamp_format), buf[2], buf[1], buf[0]))
 
 	appendFile.close()
 	del teamAssignBuffer[:]

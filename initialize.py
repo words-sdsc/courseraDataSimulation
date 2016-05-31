@@ -168,8 +168,8 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 
 	assignLog = open("team-assignments.log", "w")
 	for a in sorted(assignments, key=lambda a: a['startTimeStamp']):
-		assignLog.write("%s team=%s, userid=%s\n" %
-			(a['startTimeStamp'].strftime(global_vars.timestamp_format), a['teamid'], a['userid']))
+		assignLog.write("%s team=%s, userid=%s, assignmentid=%s \n" %
+			(a['startTimeStamp'].strftime(global_vars.timestamp_format), a['teamid'], a['userid'], a['assignmentid']))
 	assignLog.close()
 
 	#for a in assignments:

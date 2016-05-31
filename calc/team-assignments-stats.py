@@ -12,12 +12,16 @@ teams = set()
 f = open("../team-assignments.log")
 for l in f:
 	#print l
-	ymd, hms, team, user = re.split("\s+,?", l, 3)
+	ts, team, user, assmnt = re.split(",?\s+", l, 3)
 	user = user.rstrip()
 
-	amnt.append({'ts': ymd + ' ' + hms, 't': team, 'u': user})
+	#print ts
+	#print team
+	#print user
+
+	amnt.append({'ts': ts, 't': team, 'u': user, 'a': assmnt})
 	
-	d = datetime.strptime(ymd + ' ' + hms, "%Y-%m-%d %H:%M:%S")
+	d = datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S")
 
 	if user in users:
 		u = users[user]
