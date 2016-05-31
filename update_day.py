@@ -363,8 +363,8 @@ def flushLevelUp():
 	global levelUpBuffer
 	appendFile = open("level-events.log", "a")
 	for buf in levelUpBuffer:
-		appendFile.write("eventid=%s, timeStamp=%s, teamid=%s, level=%s, eventType=%s\n" %
-		(buf[0], buf[1].strftime(global_vars.timestamp_format), buf[2], buf[3], buf[4]))
+		appendFile.write("%s eventid=%s, teamid=%s, level=%s, eventType=%s\n" %
+		(buf[1].strftime(global_vars.timestamp_format), buf[0], buf[2], buf[3], buf[4]))
 
 	del levelUpBuffer[:]
 
