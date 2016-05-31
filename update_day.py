@@ -366,7 +366,7 @@ def flushUserSession():
 	global userSessionBuffer
 	appendFile = open("user-session.log", "a")
 	for buf in userSessionBuffer:
-		appendFile.write("userSessionid=%s, assignmentid=%s, starTimeStamp=%s, endTimeStamp=%s, team_level=%s, platformType=%s\n" %
+		appendFile.write("userSessionid=%s, assignmentid=%s, startTimeStamp=%s, endTimeStamp=%s, team_level=%s, platformType=%s\n" %
 		(buf[0], buf[1], buf[2].strftime(global_vars.timestamp_format), buf[3].strftime(global_vars.timestamp_format), buf[4], buf[5]))
 
 	appendFile.close()
