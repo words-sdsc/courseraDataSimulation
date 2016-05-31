@@ -37,13 +37,13 @@ def simulateNextDay(playingUsers, notPlayingUsers, unassignedUsers, TD):
 # are recorded.
 def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 
-	userRate = global_vars.dayDuration.total_seconds() /  600 # Seconds that avg user should stay
+	userRate = global_vars.dayDuration.total_seconds() /  2400000 # Seconds that avg user should stay
 
 	playingToNotPlaying(userRate, playingUsers, notPlayingUsers, TD)
-	notPlayingToUnassigned(0.1, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	notPlayingToUnassigned(0.01, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
-	unassignedToNotPlaying(0.1, playingUsers, notPlayingUsers, unassignedUsers, TD)
-	notPlayingToPlaying(0.20, playingUsers, notPlayingUsers, TD)
+	unassignedToNotPlaying(0.01, playingUsers, notPlayingUsers, unassignedUsers, TD)
+	notPlayingToPlaying(0.40, playingUsers, notPlayingUsers, TD)
 
 # Helper functions for simulation #
 
@@ -54,11 +54,13 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 	# print notPlayingUsers
 	# print "\n"
 	# fraction / num users in team = each users chance of leaving
+	total = 0
 	for key, userIDs in playingUsers.iteritems():
 		length = len(userIDs)
 		if length == 0:
 			length = 1
 		prob = fraction / length
+		#print "prob = ", prob
 		remove = []
 		for index, userID in enumerate(userIDs):
 			if random.uniform(0, 1) <= prob:
@@ -69,6 +71,8 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 				session = endUserSession(userID, TD)
 				# print "Session" + str(session) + "\n"
 		deleteWithKeys(remove, userIDs)
+		total += len(remove)
+	print "Deleted number of users = ", total
 	# print "START GENERATING p to nP"
 	# print playingUsers
 	# print notPlayingUsers
@@ -220,6 +224,7 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 	# print  playingUsers
 	# print notPlayUsers
 	# print "\n"
+	total = 0
 	for key, userIDs in notPlayUsers.iteritems():
 		if len(userIDs) > 0:
 			prob = fraction / len(userIDs)
@@ -236,8 +241,10 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 				#print "NotPlayingToPlaying: " + str(userID)
 				#print getTeamAssignmentWithUserID(userID)
 				startUserSession(userID, TD)
+				total += 1
 				#print "\n"
 		deleteWithKeys(remove, userIDs)
+	print "Starting essions for number of users = ", total
 	# print "DONE GENERATING nP to tP:"
 	# print playingUsers
 	# print notPlayUsers

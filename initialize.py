@@ -236,7 +236,7 @@ def createTeamDatabase(noOfTeams=100):
 
 		newTeam['name']	=teamNames[i]
 		newTeam['teamCreationTime']	=datetime.datetime.now() - datetime.timedelta(days=teamAges[i]+random.uniform(0, 2))
-		newTeam['teamEndTime']		=float("inf")
+		newTeam['teamEndTime']		=datetime.datetime.max
 		newTeam['strength']	=strengthFactor[i]
 		newTeam['currentLevel']=1 #every team starts at level 1
 		newTeam['teamid'] = global_vars.teamIDCounter
@@ -244,6 +244,13 @@ def createTeamDatabase(noOfTeams=100):
 
 		teams.append(newTeam)
 	print '  ', noOfTeams, '  teams generated'
+
+	teamFile = open("team.log", "a")
+	for u in sorted(teams, key=lambda u: u['teamCreationTime']):
+		teamFile.write("teamid=%s, name=%s, teamCreationTime=%s, teamEndTime=%s, strength=%s, currentLevel=%s\n" %
+		(u['teamid'], u['name'],u['teamCreationTime'].strftime(global_vars.timestamp_format), u['teamEndTime'].strftime(global_vars.timestamp_format), u['strength'], u['currentLevel']))
+	teamFile.close()
+
 	return teams # list of users, where teamID = index on the list
 
 
