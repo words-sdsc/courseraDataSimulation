@@ -125,8 +125,9 @@ def generateTime(startTime, numUsers, dataBuffer):
 	prevTime = startTime
 	changeTime = None
 	while counter < numUsers:
-		changeTime = datetime.timedelta(seconds=deltaTime)
-		dataBuffer[counter][0] = getRandTime(prevTime, prevTime + changeTime)
+		#changeTime = datetime.timedelta(seconds=deltaTime)
+		dataBuffer[counter][0] = prevTime + datetime.timedelta(seconds=random.choice(range(0, deltaTime)))
+		#getRandTime(prevTime, prevTime + changeTime)
 		counter += 1
 		prevTime = prevTime + changeTime
 

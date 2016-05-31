@@ -36,7 +36,7 @@ for i in df["teamId"].unique().tolist():
 
 		#print formula
 		found = df["isHit"][(df["teamId"] == i) & (df["teamLevel"] == j)].iloc[0]
-		
+
 		#print found
 		if(formula != found):
 			passalltests = False
@@ -44,3 +44,26 @@ for i in df["teamId"].unique().tolist():
 
 if(passalltests):
 	print "[TEST PASS] Number of hits for each level match the formula in game-clicks.py"
+
+
+df = pd.read_table('../game-clicks.log', header=None, delimiter=',',
+                   converters={i:value for i in range(7)},
+                   names='time clickid userid usersessionid isHit teamId teamLevel'.split())
+
+df = df.convert_objects(convert_numeric=True)
+
+for i in df["teamId"].unique().tolist():
+	mx = df["teamLevel"][(df["teamId"] == i)].max()
+	#print 'Max level reached by team ', i,' = ', mx, ' testing each level ...'
+	for j in range(2,1+int(mx)):
+		#>>>>>>>>> this should match what is written in game-clicks.py
+
+		#print formula
+		Lold = df["time"][(df["teamId"] == i) & (df["teamLevel"] == j-1)].max()
+		Lnew = df["time"][(df["teamId"] == i) & (df["teamLevel"] == j)].min()
+		#print Lold, Lnew
+
+		#print found
+		if(Lold > Lnew):
+			passalltests = False
+			print 'ERROR: teamID=',i, '  teamLevel=',j,  Lold, Lnew
