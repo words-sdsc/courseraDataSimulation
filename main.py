@@ -12,9 +12,14 @@ import os
 from random import randint
 
 def sortLogFile(name):
-	f = open(name, 'r');
-	lines = f.readline()
-	print lines
+	f = open(name, 'r')
+	lines = f.readlines()
+	f.close()
+	f = open(name, 'w')
+	lines.sort()
+	for l in lines:
+		f.write(l)
+	f.close()
 
 # Main function file.
 def main():
@@ -50,7 +55,7 @@ def main():
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
-	dayIteration = 5
+	dayIteration = 2
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(hours=10)
 
