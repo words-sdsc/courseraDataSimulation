@@ -335,7 +335,7 @@ def flushWriteTeams():
 	appendFile = open("team.log", "a")
 	for buf in teamBuffer:
 		appendFile.write("teamid=%s, name=%s, teamCreationTime=%s, teamEndTime=%s, strength=%s, currentLevel=%s\n" %
-		(buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]))
+		(buf[0], buf[1], buf[2].strftime(global_vars.timestamp_format), buf[3].strftime(global_vars.timestamp_format), buf[4], buf[5]))
 
 	appendFile.close()
 	del teamBuffer[:]
@@ -346,7 +346,7 @@ def flushTeamAssign():
 	appendFile = open("team-assignments.log", "a")
 	for buf in teamAssignBuffer:
 		appendFile.write("assignmentid=%s, userid=%s, teamid=%s, startTimeStamp=%s\n" %
-		(buf[0], buf[1], buf[2], buf[3]))
+		(buf[0], buf[1], buf[2], buf[3].strftime(global_vars.timestamp_format)))
 
 	appendFile.close()
 	del teamAssignBuffer[:]
@@ -357,7 +357,7 @@ def flushLevelUp():
 	appendFile = open("level-events.log", "a")
 	for buf in levelUpBuffer:
 		appendFile.write("eventid=%s, timeStamp=%s, teamid=%s, level=%s, eventType=%s\n" %
-		(buf[0], buf[1], buf[2], buf[3], buf[4]))
+		(buf[0], buf[1].strftime(global_vars.timestamp_format), buf[2], buf[3], buf[4]))
 
 	del levelUpBuffer[:]
 
@@ -367,7 +367,7 @@ def flushUserSession():
 	appendFile = open("user-session.log", "a")
 	for buf in userSessionBuffer:
 		appendFile.write("userSessionid=%s, assignmentid=%s, starTimeStamp=%s, endTimeStamp=%s, team_level=%s, platformType=%s\n" %
-		(buf[0], buf[1], buf[2], buf[3], buf[4], buf[5]))
+		(buf[0], buf[1], buf[2].strftime(global_vars.timestamp_format), buf[3].strftime(global_vars.timestamp_format), buf[4], buf[5]))
 
 	appendFile.close()
 	del userSessionBuffer[:]
