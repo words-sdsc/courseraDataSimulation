@@ -37,6 +37,6 @@ eventIDCounter = 0
 platforms	= ['iphone', 'android', 'mac', 'windows', 'linux']
 freq 		= [0.4, 0.35, 0.05, 0.15, 0.05]
 
-timestamp_format = "%Y-%m-%d %H:%M:%S"
+timestamp_format = "%Y-%m-%dT%H:%M:%S"
 
 max_accuracy = 0.7
