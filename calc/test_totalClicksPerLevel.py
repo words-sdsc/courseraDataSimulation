@@ -71,6 +71,6 @@ for i in df["teamId"].unique().tolist():
 		#print found
 		if(Lold > Lnew):
 			passalltests = False
-			print 'ERROR: teamID=',i, '  new teamLevel=',j,  Lold, Lnew
+			print 'ERROR: teamID=',i, '  new teamLevel=',j,  Lold, ' old> ', Lnew
 if(passalltests):
 	print "[TEST 5 PASS] L+1 timestamps > L timestamps"
