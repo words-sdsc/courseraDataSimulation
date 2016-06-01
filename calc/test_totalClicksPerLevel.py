@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
-# test 2 and 5
+# TEST 2 
+# TEST 5
 
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning) 
@@ -22,7 +23,7 @@ df = df.convert_objects(convert_numeric=True)
 
 df = df.groupby(by=['teamId','teamLevel'],as_index=False)['isHit'].sum()
 
-print 'No of teams found in game-clicks.log = ', df["teamId"].max()
+print '\nNo of teams found in game-clicks.log = ', df["teamId"].max()
 
 passalltests = True
 

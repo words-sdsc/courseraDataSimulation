@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# test 3
+# TEST 3: At a given time, a user can only be assigned to one team
 
 import warnings
 warnings.filterwarnings("ignore", category=FutureWarning) 
@@ -43,6 +43,6 @@ check = df[df['assignmentid'] > 1]
 if not check.empty:
     print('[ERROR]: Found mumtiple user-team assignments with same time stamp!')
 else:
-	print('[TEST 3 PASS] No two user-team assignments have same timestamp')
+	print('[TEST 3 PASS] No two user-team assignments have same timestamp\n')
 
 
