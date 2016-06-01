@@ -82,7 +82,10 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 # Returns the session found and removed.
 def endUserSession(userID, TD):
 	# Edit globals
-	session=getSessionWithUserID(userID)
+	session 	=getSessionWithUserID(userID)
+	assignment 	= getTeamAssignmentWithUserID(userID)
+	teamID 		= assignment["teamid"]
+
 	#for assgn in global_vars.globalTeamAssignments:
 	#				if assgn['userid']==userID:
 	#					thisassign = assgn
@@ -95,7 +98,7 @@ def endUserSession(userID, TD):
 
 	#print session, userID
 	#print "Session for assgid = ", session['assignmentid']
-	buf = [session["userSessionid"], session["assignmentid"],session["startTimeStamp"], TD, session["team_level"],session["platformType"]]
+	buf = [session["userSessionid"], session["assignmentid"],session["startTimeStamp"], TD, session["team_level"],session["platformType"], userID, teamID]
 
 	# Add user to write buffer.
 	userSessionBuffer.append(buf)
@@ -378,8 +381,8 @@ def flushUserSession():
 	global userSessionBuffer
 	appendFile = open("user-session.log", "a")
 	for buf in userSessionBuffer:
-		appendFile.write("userSessionid=%s, assignmentid=%s, startTimeStamp=%s, endTimeStamp=%s, team_level=%s, platformType=%s\n" %
-		(buf[0], buf[1], buf[2].strftime(global_vars.timestamp_format), buf[3].strftime(global_vars.timestamp_format), buf[4], buf[5]))
+		appendFile.write("userSessionid=%s, userid=%s, teamid=%s, assignmentid=%s, startTimeStamp=%s, endTimeStamp=%s, team_level=%s, platformType=%s\n" %
+		(buf[0], buf[6], buf[7], buf[1], buf[2].strftime(global_vars.timestamp_format), buf[3].strftime(global_vars.timestamp_format), buf[4], buf[5]))
 
 	appendFile.close()
 	del userSessionBuffer[:]
