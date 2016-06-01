@@ -169,6 +169,8 @@ def startUserSession(userID, TD, platform = None):
 # Generate movement of prob of people going to not playing
 #[5/28/16, 7:58:00 PM] Charles Chen: assigned the non-assigned teams to a team
 #[5/28/16, 7:58:07 PM] Charles Chen: but does not allow them to play
+
+# assigns a team to unassigned
 def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUsers, TD):
 	# fraction is percentage of users from all unassigned that move
 	# print "START GENERATING un to nP"
@@ -352,10 +354,13 @@ def flushTeamAssign():
 	global teamAssignBuffer
 	appendFile = open("team-assignments.log", "a")
 	for buf in teamAssignBuffer:
-		appendFile.write("%s team=%s, userid=%s, assignmentid=%s \n" %
+		appendFile.write("time=%s, team=%s, userid=%s, assignmentid=%s\n" %
 		(buf[3].strftime(global_vars.timestamp_format), buf[2], buf[1], buf[0]))
 
 	appendFile.close()
+
+	#check teamAssignBuffer for duplicate teams per user
+
 	del teamAssignBuffer[:]
 
 # Write the level up buffer.

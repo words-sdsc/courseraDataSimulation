@@ -8,10 +8,6 @@ warnings.filterwarnings("ignore", category=FutureWarning)
 from datetime import datetime
 import numpy
 import pandas as pd 
-import re
-import time
-
-import pandas as pd
 
 def value(item):
     return item[item.find('=')+1:]

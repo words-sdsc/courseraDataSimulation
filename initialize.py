@@ -109,7 +109,7 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 		global_vars.counter += 1
 		newSession['assignmentid']	=assignment["assignmentid"]
 		newSession['startTimeStamp']=assignment["startTimeStamp"] + datetime.timedelta(days=random.uniform(0, 2))
-		newSession['endTimeStamp']	=float("inf")
+		newSession['endTimeStamp']	=datetime.datetime.max
 		newSession['team_level']	= teamDatabaseList[assignment['teamid']]['currentLevel'] #get team's current level
 		newSession['platformType']	= np.random.choice(platforms, 1, replace=False, p=freq)[0]
 		sessions.append(newSession)
@@ -168,7 +168,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 
 	assignLog = open("team-assignments.log", "w")
 	for a in sorted(assignments, key=lambda a: a['startTimeStamp']):
-		assignLog.write("%s team=%s, userid=%s, assignmentid=%s \n" %
+		assignLog.write("time=%s, team=%s, userid=%s, assignmentid=%s \n" %
 			(a['startTimeStamp'].strftime(global_vars.timestamp_format), a['teamid'], a['userid'], a['assignmentid']))
 	assignLog.close()
 
