@@ -14,6 +14,8 @@ import pandas as pd
 def value(item):
     return item[item.find('=')+1:]
 
+#*********************************** test 2
+
 df = pd.read_table('../game-clicks.log', header=None, delimiter=',',
                    converters={i:value for i in range(7)},
                    names='time clickid userid usersessionid isHit teamId teamLevel'.split())
@@ -43,8 +45,10 @@ for i in df["teamId"].unique().tolist():
 			print 'ERROR: teamID=',i, '  teamLevel=',j, '  formula=', formula,'  found=', found
 
 if(passalltests):
-	print "[TEST PASS] Number of hits for each level match the formula in game-clicks.py"
+	print "[TEST 2 PASS] Number of hits for each level match the formula in game-clicks.py"
 
+
+#*********************************** test 5
 
 df = pd.read_table('../game-clicks.log', header=None, delimiter=',',
                    converters={i:value for i in range(7)},
@@ -52,6 +56,7 @@ df = pd.read_table('../game-clicks.log', header=None, delimiter=',',
 
 df = df.convert_objects(convert_numeric=True)
 
+passalltests=True
 for i in df["teamId"].unique().tolist():
 	mx = df["teamLevel"][(df["teamId"] == i)].max()
 	#print 'Max level reached by team ', i,' = ', mx, ' testing each level ...'
@@ -66,4 +71,6 @@ for i in df["teamId"].unique().tolist():
 		#print found
 		if(Lold > Lnew):
 			passalltests = False
-			print 'ERROR: teamID=',i, '  teamLevel=',j,  Lold, Lnew
+			print 'ERROR: teamID=',i, '  new teamLevel=',j,  Lold, Lnew
+if(passalltests):
+	print "[TEST 5 PASS] L+1 timestamps > L timestamps"
