@@ -22,7 +22,7 @@ df = df.convert_objects(convert_numeric=True)
 
 df = df.groupby(by=['teamId','teamLevel'],as_index=False)['isHit'].sum()
 
-print 'No of teams found = ', df["teamId"].max()
+print 'No of teams found in game-clicks.log = ', df["teamId"].max()
 
 passalltests = True
 

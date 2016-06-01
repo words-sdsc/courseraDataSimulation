@@ -183,7 +183,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 			dup[assg['userid']]=[assg['teamid']]
 	for k,v in dup.items():
 		if len(v) >1:
-			print 'ERROR: userid:',k,'teams=',v
+			print 'Initialization ERROR: userid:',k,'teams=',v
 	return assignments
 
 def getStrongPlayers(n, freeusersindex, globalUsersDataset):

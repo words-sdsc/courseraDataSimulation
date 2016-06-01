@@ -72,7 +72,7 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 				# print "Session" + str(session) + "\n"
 		deleteWithKeys(remove, userIDs)
 		total += len(remove)
-	print "Deleted number of users = ", total
+	print 'Deleted number of users = ', total 
 	# print "START GENERATING p to nP"
 	# print playingUsers
 	# print notPlayingUsers
@@ -246,7 +246,7 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 				total += 1
 				#print "\n"
 		deleteWithKeys(remove, userIDs)
-	print "Starting essions for number of users = ", total
+	print "Starting sessions for number of users =", total
 	# print "DONE GENERATING nP to tP:"
 	# print playingUsers
 	# print notPlayUsers

@@ -55,7 +55,7 @@ def main():
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
- 	dayIteration = 5
+ 	dayIteration = 5000
  
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(hours=2.5)
