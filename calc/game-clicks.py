@@ -19,10 +19,10 @@ team = {}
 line = 1
 f = open("../game-clicks.log")
 for l in f:
-	#2016-06-02T02:15:02, clickid=21, userid=115, usersessionid=6323, isHit=0, teamId=7, teamLevel=1
+	#time=2016-06-02T02:15:02, clickid=21, userid=115, usersessionid=6323, isHit=0, teamId=7, teamLevel=1
 	l = l.rstrip()
 	ts, clickid, userid, sessid, ishit, teamid, teamlevel = re.split(",\s+", l, 6)
-	d = datetime.strptime(ts, "%Y-%m-%dT%H:%M:%S")
+	d = datetime.strptime(ts, "time=%Y-%m-%dT%H:%M:%S")
 	
 	if teamid not in team:
 		team[teamid] = { 'level': teamlevel }
