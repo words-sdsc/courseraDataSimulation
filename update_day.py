@@ -155,7 +155,7 @@ def startUserSession(userID, TD, platform = None):
 	global_vars.counter += 1
 	newSession['assignmentid'] = assignmentID
 	newSession['startTimeStamp'] = TD
-	newSession['endTimeStamp'] = float("inf")
+	newSession['endTimeStamp'] = datetime.datetime.max
 	newSession['team_level'] = getTeamWithAssignmentID(assignmentID)["currentLevel"]
 
 	platforms	= global_vars.platforms
@@ -201,7 +201,7 @@ def unassignedToNotPlaying(fraction, playingUsers, notPlayingUsers, unassignedUs
 					team = {}
 					team["name"] = datasets.getUserNames(1)[0]
 					team["teamCreationTime"] = TD
-					team["teamEndTime"] = float("inf")
+					team["teamEndTime"] = datetime.datetime.max
 					team["strength"] = datasets.getProbabilities(0.5,0.5,1)[0]
 					team["currentLevel"] = 1
 					team["teamid"] = global_vars.teamIDCounter
