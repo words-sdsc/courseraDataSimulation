@@ -41,7 +41,7 @@ print("\n----------------Group by time, team, userid and count >1")
 check = df[df['assignmentid'] > 1]
 
 if not check.empty:
-    print('[ERROR]: Found mumtiple user-team assignments with same time stamp!')
+    print('[ERROR]: Found multiple user-team assignments with same time stamp!')
 else:
 	print('[TEST 3 PASS] No two user-team assignments have same timestamp\n')
 
