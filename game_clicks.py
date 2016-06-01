@@ -121,12 +121,14 @@ def generateTime(startTime, numUsers, dataBuffer):
 	# Lee way for each random time picking
 	# Code will expire in 2^32 seconds or 2^64 seconds years.
 	deltaTime = int(global_vars.dayDuration.total_seconds()/numUsers)
+	L = range(0, deltaTime)
 	counter = 0
 	prevTime = startTime
 	changeTime = None
 	while counter < numUsers:
 		changeTime = datetime.timedelta(seconds=deltaTime)
-		dataBuffer[counter][0] = prevTime + datetime.timedelta(seconds=random.choice(xrange(0, deltaTime)))
+		random.shuffle(L)
+		dataBuffer[counter][0] = prevTime + datetime.timedelta(seconds=random.choice(L))
 		#getRandTime(prevTime, prevTime + changeTime)
 		counter += 1
 		prevTime = prevTime + changeTime
