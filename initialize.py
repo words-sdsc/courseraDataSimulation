@@ -285,6 +285,7 @@ def createUserDatabase(noOfUsers=2000):
 						 'purchbeh':round(purchaseFactor[i],3),
 						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3), 'clicksPerSec': random.uniform(7,10) }
 		newUser['id'] = i
+		global_vars.userIdToUser[i] = newUser;
 		users.append(newUser)
 
 	userLog = open("users.log", "w")

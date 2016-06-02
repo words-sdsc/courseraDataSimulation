@@ -3,6 +3,7 @@
 
 # List containing a list of users.
 globalUsers = []
+userIdToUser = {}
 
 # List containing current active teams per time update (day).
 globalTeams = []

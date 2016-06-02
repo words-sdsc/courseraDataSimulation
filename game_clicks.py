@@ -76,7 +76,7 @@ def calculateTotalAccuracyPerSec(team):
 	totalCPS = 0
 	totalAcc = 0
 	for userID in team:
-		user = getUserFromUserID(userID)
+		user = global_vars.userIdToUser[userID]
 		totalCPS += user["tags"]["clicksPerSec"]
 		totalAcc += user["tags"]["gameaccuracy"]
 
@@ -188,16 +188,17 @@ def getCPSUserList(userIDs, samples):
 	while len(result) <= samples:
 		randUserID = random.choice(userIDs)
 		# CDF of normal distribution. Add the user if succeed.
-		if numpy.random.normal(0.5, 0.4) <= getUserFromUserID(randUserID)["tags"]["clicksPerSec"]:
+		if numpy.random.normal(0.5, 0.4) <= global_vars.userIdToUser[randUserID]["tags"]["clicksPerSec"]:
 			result.append(randUserID)
 
 	return result
 
-def getUserFromUserID(userID):
-	for user in global_vars.globalUsers:
-		if user["id"] == userID:
-			return user
-	return None
+# replaced with global_vars.userIdToUser dict
+#def getUserFromUserID(userID):
+	#for user in global_vars.globalUsers:
+		#if user["id"] == userID:
+			#return user
+	#return None
 
 def getTeamFromTeamID(teamID):
 	for team in global_vars.globalTeams:
