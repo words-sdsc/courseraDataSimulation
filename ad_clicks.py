@@ -39,8 +39,8 @@ def writeAdClicksCSV(startTime, dayDuration):
 
 	adProbabilities = [x/addition for x in adProbabilities]
 
-	#pick 0-30% users for clicking based on their click probabilities
-	factor = random.uniform(0, 0.3)
+	#pick 0-5% users for clicking based on their click probabilities
+	factor = random.uniform(0, 0.05)
 	#print factor
 	if len(totalUsers) <= 0:
 		return
