@@ -47,8 +47,8 @@ def writeBuyClicksCSV(startTime, dayDuration):
 
 	buyProbabilities = [x/addition for x in buyProbabilities]
 
-	#pick 30% users for clicking based on their click probabilities
-	factor = random.uniform(0, 0.3)
+	#pick 0-1% users for clicking based on their click probabilities
+	factor = random.uniform(0, 0.01)
 
 	if len(totalUsers) <= 0:
 		return
