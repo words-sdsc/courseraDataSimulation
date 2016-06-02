@@ -23,8 +23,8 @@ df = df.convert_objects(convert_numeric=True)
 #all members of new user-team assignment datastructure are flushed at same timestamp
 df = df.groupby(by=['time'],as_index=False)['assignmentid'].count()
 
-print("\n----------------Count of Team-assignments formed at same time stamp: ")
-print(df[df['assignmentid'] > 1])
+#print("\n----------------Count of Team-assignments formed at same time stamp: ")
+#print(df[df['assignmentid'] > 1])
 
 #***********************************STEP2: read the file again and group by time, team, user
 
@@ -37,7 +37,7 @@ df = df.convert_objects(convert_numeric=True)
 #when a user is assigned to a team with same timestamp - that's an error
 df = df.groupby(by=['time','team','userid'],as_index=False)['assignmentid'].count()
 
-print("\n----------------Group by time, team, userid and count >1")
+#print("\n----------------Group by time, team, userid and count >1")
 check = df[df['assignmentid'] > 1]
 
 if not check.empty:
