@@ -2,6 +2,7 @@ import global_vars
 import random
 import numpy as np
 import datetime
+import os
 
 def writeBuyClicksCSV(startTime, dayDuration):
 	#get users who are playing and their buying probabilities
@@ -87,9 +88,14 @@ def writeBuyClicksCSV(startTime, dayDuration):
 
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
-	buyLog = open("buy-clicks.log", "a")
+	if not os.path.isfile("buy-clicks.log"):
+		buyLog = open("buy-clicks.log", "a")
+		buyLog.write("timestamp, txID, userSessionid, team, userid, buyid, price\n")
+	else:
+		buyLog = open("buy-clicks.log", "a")
+
 	for b in sorted(buyclicks, key=lambda a: a['timeStamp']):
-		buyLog.write("%s, txID=%s, userSessionid=%s, team=%s, userid=%s, buyID=%s, price=%s\n" %
+		buyLog.write("%s, %s, %s, %s, %s, %s, %s\n" %
 			(b['timeStamp'].strftime(global_vars.timestamp_format), b['txid'], b['userSessionid'],
 			b['teamid'], b['userid'], b['buyID'], b['buyPrice']))
 	buyLog.close()
