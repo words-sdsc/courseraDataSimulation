@@ -15,10 +15,12 @@ teamLevelTracker = {}
 # List containing current sessions per time update (day).
 yesterday_globalUSessions 	= None
 globalUSessions 			= None
+hashmapUSessions = {} #userID -> session
 
 # List containing current team assignments per time update (day).
 yesterday_globalTeamAssignments = None
 globalTeamAssignments 			= None
+hasmapTeamAssignments = {}
 
 # Day Duration
 dayDuration = None

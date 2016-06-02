@@ -113,6 +113,9 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 		newSession['team_level']	= teamDatabaseList[assignment['teamid']]['currentLevel'] #get team's current level
 		newSession['platformType']	= np.random.choice(platforms, 1, replace=False, p=freq)[0]
 		sessions.append(newSession)
+		#update GLOBAL HASMAP
+		global_vars.hashmapUSessions[assignment["userid"]] = newSession
+
 	print "  ",len(sessions), "user sessions generated from ", len(assignmentsList), " available assignments (1 session/user)"
 	return sessions
 
@@ -165,6 +168,9 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 			newAssignment['teamid']	=team
 			newAssignment['startTimeStamp']=datetime.datetime.now() - datetime.timedelta(days=random.uniform(0, 3))
 			assignments.append(newAssignment)
+			#update GLOBAL HASMAP
+			global_vars.hasmapTeamAssignments[u]=newAssignment
+
 
 	assignLog = open("team-assignments.log", "w")
 	for a in sorted(assignments, key=lambda a: a['startTimeStamp']):
@@ -188,7 +194,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 
 def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 	strongPlayerThreshold = 3/100
-	random.shuffle(freeusersindex)
+	###random.shuffle(freeusersindex)
 	pick = []
 	#initial set of free users
 
@@ -216,7 +222,7 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 	return pick
 
 def getRandomPlayers(n, freeusersindex):
-	random.shuffle(freeusersindex)
+	###random.shuffle(freeusersindex)
 	pick = np.random.choice(freeusersindex, n, replace=False) #just return n random
 	return pick.tolist()
 
@@ -285,6 +291,7 @@ def createUserDatabase(noOfUsers=2000):
 						 'purchbeh':round(purchaseFactor[i],3),
 						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3), 'clicksPerSec': random.uniform(7,10) }
 		newUser['id'] = i
+		#update GLOBAL HASMAP
 		global_vars.userIdToUser[i] = newUser;
 		users.append(newUser)
 

@@ -127,7 +127,7 @@ def generateTime(startTime, numUsers, dataBuffer):
 	changeTime = None
 	while counter < numUsers:
 		changeTime = datetime.timedelta(seconds=deltaTime)
-		random.shuffle(L)
+		#random.shuffle(L)
 		dataBuffer[counter][0] = prevTime + datetime.timedelta(seconds=random.choice(L))
 		#getRandTime(prevTime, prevTime + changeTime)
 		counter += 1
@@ -184,14 +184,15 @@ def getRandTime(leftExtreme, rightExtreme):
 
 # Creates a list of userIDs reflecting clicksPerSec distribution.
 def getCPSUserList(userIDs, samples):
-	result = []
-	while len(result) <= samples:
-		randUserID = random.choice(userIDs)
-		# CDF of normal distribution. Add the user if succeed.
-		if numpy.random.normal(0.5, 0.4) <= global_vars.userIdToUser[randUserID]["tags"]["clicksPerSec"]:
-			result.append(randUserID)
+	return numpy.random.choice(userIDs, samples, replace=True).tolist()
+	#result = []
+	#while len(result) <= samples:
+	#	randUserID = random.choice(userIDs)
+	#	# CDF of normal distribution. Add the user if succeed.
+	#	if numpy.random.normal(0.5, 0.4) <= global_vars.userIdToUser[randUserID]["tags"]["clicksPerSec"]:
+	#		result.append(randUserID)
 
-	return result
+	#return result
 
 # replaced with global_vars.userIdToUser dict
 #def getUserFromUserID(userID):
