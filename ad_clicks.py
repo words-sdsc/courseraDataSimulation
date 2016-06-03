@@ -44,7 +44,7 @@ def writeAdClicksCSV(startTime, dayDuration):
 	#print factor
 	if len(totalUsers) <= 0:
 		return
-	adUsers = np.random.choice(range(0, len(totalUsers)), int(factor*len(totalUsers)), replace=True, p=adProbabilities).tolist()
+	adUsers  = np.random.choice(range(0, len(totalUsers)), int(factor*len(totalUsers)), replace=True, p=adProbabilities).tolist()
 	adclicks = []
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE adclicks from these users

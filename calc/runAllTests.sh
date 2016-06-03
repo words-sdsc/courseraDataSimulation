@@ -2,10 +2,10 @@
 
 clear
 
-python test_teamLevelAdvance.py
+python test_teamLevelAdvance.py engine='python' 
 
 
-python test_onetooneTeamAssignment.py
+python test_onetooneTeamAssignment.py engine='python' 
 
 
-python test_totalClicksPerLevel.py
+python test_totalClicksPerLevel.py engine='python' 
