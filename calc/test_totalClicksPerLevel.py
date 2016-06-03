@@ -33,7 +33,7 @@ for i in df["teamId"].unique().tolist():
 	for j in range(1,int(mx)):
 		#>>>>>>>>> this should match what is written in game-clicks.py
 
-		formula = ((j+0) * (j+0))   #line 39 of game-clicks.py		
+		formula = ((j+7) * (j+7))   #line 39 of reqTotalHits from game-clicks.py		
 
 		#print formula
 		found = df["isHit"][(df["teamId"] == i) & (df["teamLevel"] == j)].iloc[0]
