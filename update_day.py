@@ -73,7 +73,7 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 				# print "Session" + str(session) + "\n"
 		deleteWithKeys(remove, userIDs)
 		total += len(remove)
-	print 'Deleted number of users = ', total 
+	# print 'Deleted number of users = ', total 
 	# print "START GENERATING p to nP"
 	# print playingUsers
 	# print notPlayingUsers
@@ -107,6 +107,7 @@ def endUserSession(userID, TD):
 	# delete the old session, currently inefficient, could be optimized
 	# print "Deleting session: " + str(session) + "\n"
 	global_vars.globalUSessions.remove(session)
+	del global_vars.hashmapUSessions[userID]
 
 	return session
 
@@ -167,6 +168,7 @@ def startUserSession(userID, TD, platform = None):
 		newSession['platformType'] = platform
 	# Add to global session.
 	global_vars.globalUSessions.append(newSession)
+	global_vars.hashmapUSessions[userID] = newSession
 
 	return newSession
 
@@ -250,7 +252,7 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 				total += 1
 				#print "\n"
 		deleteWithKeys(remove, userIDs)
-	print "Starting sessions for number of users =", total
+	# print "Starting sessions for number of users =", total
 	# print "DONE GENERATING nP to tP:"
 	# print playingUsers
 	# print notPlayUsers
@@ -260,6 +262,8 @@ def deleteTeamAssignment(userid):
 	assign = getTeamAssignmentWithUserID(userid)
 	#print assign
 	global_vars.globalTeamAssignments.remove(assign)
+	del global_vars.hasmapTeamAssignments[userid]
+
 
 # Create team assignment and write to buffer.
 def createTeamAssignment(teamid, userid, TD):
@@ -271,6 +275,7 @@ def createTeamAssignment(teamid, userid, TD):
 	assignT["startTimeStamp"] = TD
 
 	global_vars.globalTeamAssignments.append(assignT)
+	global_vars.hasmapTeamAssignments[userid]=assignT
 
 	# Write to buffer.
 	teamAssignBuffer.append([assignT["assignmentid"], assignT["userid"], assignT["teamid"], assignT["startTimeStamp"]])
@@ -410,20 +415,28 @@ def getTeamWithAssignmentID(assignmentID):
 
 # Gets the team assignment. None if DNE.
 def getTeamAssignmentWithUserID(userID):
-	result = None
-	for assign in global_vars.globalTeamAssignments:
-		if assign["userid"] == userID:
-			result = assign
+	if userID in global_vars.hasmapTeamAssignments:
+		return global_vars.hasmapTeamAssignments[userID]
+	else:
+		return None
+	#result = None
+	#for assign in global_vars.globalTeamAssignments:
+	#	if assign["userid"] == userID:
+	#		result = assign
 			# print "Find assign w/uid"
 			# print "Teamm Assign: " + str(result)
-	return result
+	#return result
 
 
 # Returns entire session else -1.
 def getSessionWithUserID(userID):
-	assignment = getTeamAssignmentWithUserID(userID)
+	if userID in global_vars.hashmapUSessions:
+		return global_vars.hashmapUSessions[userID]
+	else:
+		return None
+	#assignment = getTeamAssignmentWithUserID(userID)
 	#print "Assignment = ", assignment["assignmentid"]
-	for session in global_vars.globalUSessions:
-		if session["assignmentid"] == assignment["assignmentid"]:
-			return session
-	return None
+	#for session in global_vars.globalUSessions:
+	#	if session["assignmentid"] == assignment["assignmentid"]:
+	#		return session
+	#return None

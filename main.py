@@ -63,12 +63,13 @@ def main():
 	# Loops for day simulation.
 	counter = 0
 	while counter < dayIteration:
-		print "Day : " + str(counter + 1) + " out of " + str(dayIteration)
+		if(counter %10 ==0):
+			print "Day : " + str(counter + 1) + " out of " + str(dayIteration)
 		teamCounter = 0
 
 		for key, teams in playingMembers.iteritems():
-			if teamCounter % 50 == 0:
-				print "Generating team: " + str(teamCounter)
+			#if teamCounter % 50 == 0:
+			#	print "Generating team: " + str(teamCounter)
 
 			# Write the game_clicks.
 			# Write one team for now.
