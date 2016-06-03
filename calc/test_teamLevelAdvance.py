@@ -15,24 +15,24 @@ def value(item):
 
 #*********************************** test 1
 
-#teamdf = pd.read_table('../team.log', header=None, delimiter=',',
+#teamdf = pd.read_table('../team.csv', header=None, delimiter=',',
 	#converters={i:value for i in range(6)},
 	#names='teamid name teamCreationTime teamEndTime strength currentLevel'.split())
 #teamdf = teamdf.convert_objects(convert_numeric=True)
 
 passalltests = True
 
-levdf = pd.read_table('../level-events.log', header=None, delimiter=',',
+levdf = pd.read_table('../level-events.csv', header=None, delimiter=',',
 	converters={i:value for i in range(5)},
 	names='time eventid teamid level eventType'.split())
 levdf = levdf.convert_objects(convert_numeric=True)
 
-sesdf = pd.read_table('../user-session.log', header=None, delimiter=',',
+sesdf = pd.read_table('../user-session.csv', header=None, delimiter=',',
 	converters={i:value for i in range(8)},
 	names='userSessionid userid teamid assignmentid startTimeStamp endTimeStamp team_level platformType'.split())
 sesdf = sesdf.convert_objects(convert_numeric=True)
 
-print '\nNo of level increases found in level-events.log = ', len(levdf[levdf['eventType'] == 'end'])
+print '\nNo of level increases found in level-events.csv = ', len(levdf[levdf['eventType'] == 'end'])
 
 for teamid in sorted(levdf['teamid'].unique()):
 	#print 'Checking team', teamid

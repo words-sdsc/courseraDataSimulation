@@ -40,11 +40,11 @@ eventIDCounter = 0
 platforms	= ['iphone', 'android', 'mac', 'windows', 'linux']
 freq 		= [0.4, 0.35, 0.05, 0.15, 0.05]
 
-timestamp_format = "%Y-%m-%dT%H:%M:%S"
+timestamp_format = "%Y-%m-%d %H:%M:%S"
 
 max_accuracy = 0.7
 
-#FILES ["ad-clicks.log","buy-clicks.log","game-clicks.log","team-assignments.log","users.log", "user-session.log", "level-events.log", "team.log"]:
+#FILES ["ad-clicks.csv","buy-clicks.csv","game-clicks.csv","team-assignments.csv","users.csv", "user-session.csv", "level-events.csv", "team.csv"]:
 ad_clicks = None
 buy_clicks = None
 game_clicks = None

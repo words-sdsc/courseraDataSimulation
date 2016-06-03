@@ -14,7 +14,7 @@ def value(item):
 
 #***********************************STEP1: group by time
 
-df = pd.read_table('../team-assignments.log', header=None, delimiter=',',
+df = pd.read_table('../team-assignments.csv', header=None, delimiter=',',
                    converters={i:value for i in range(7)},
                    names='time team userid assignmentid'.split())
 
@@ -28,7 +28,7 @@ df = df.groupby(by=['time'],as_index=False)['assignmentid'].count()
 
 #***********************************STEP2: read the file again and group by time, team, user
 
-df = pd.read_table('../team-assignments.log', header=None, delimiter=',',
+df = pd.read_table('../team-assignments.csv', header=None, delimiter=',',
                    converters={i:value for i in range(7)},
                    names='time team userid assignmentid'.split())
 

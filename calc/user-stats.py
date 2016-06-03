@@ -8,7 +8,7 @@ import time
 user = {}
 age = []
 
-f = open("../users.log")
+f = open("../users.csv")
 for l in f:
 	#print l
 	ymd, hms, id, nick, twit, dob, country = re.split("\s+,?", l, 6)

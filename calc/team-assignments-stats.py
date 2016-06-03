@@ -9,7 +9,7 @@ amnt = []
 users = {}
 teams = set()
 
-f = open("../team-assignments.log")
+f = open("../team-assignments.csv")
 for l in f:
 	#print l
 	ts, team, user, assmnt = re.split(",?\s+", l, 3)
@@ -25,7 +25,7 @@ for l in f:
 
 	if user in users:
 		u = users[user]
-        # consecutive assignments to same team are ok, since log
+        # consecutive assignments to same team are ok, since csv
         # does not contain unassignment events.
 		#if u['team'] == team:
 			#print 'ERROR: user %s joined same team %s consecutively' % (user, team)

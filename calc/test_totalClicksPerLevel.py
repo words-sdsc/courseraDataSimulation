@@ -15,7 +15,7 @@ def value(item):
 
 #*********************************** test 2
 
-df = pd.read_table('../game-clicks.log', header=None, delimiter=',',
+df = pd.read_table('../game-clicks.csv', header=None, delimiter=',',
                    converters={i:value for i in range(7)},
                    names='time clickid userid usersessionid isHit teamId teamLevel'.split())
 
@@ -23,7 +23,7 @@ df = df.convert_objects(convert_numeric=True)
 
 df = df.groupby(by=['teamId','teamLevel'],as_index=False)['isHit'].sum()
 
-print 'No of teams found in game-clicks.log = ', df["teamId"].max()
+print 'No of teams found in game-clicks.csv = ', df["teamId"].max()
 
 passalltests = True
 
@@ -49,7 +49,7 @@ if(passalltests):
 
 #*********************************** test 5
 
-df = pd.read_table('../game-clicks.log', header=None, delimiter=',',
+df = pd.read_table('../game-clicks.csv', header=None, delimiter=',',
                    converters={i:value for i in range(7)},
                    names='time clickid userid usersessionid isHit teamId teamLevel'.split())
 

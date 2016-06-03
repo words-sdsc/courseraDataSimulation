@@ -19,14 +19,22 @@ import math
 import global_vars
 
 def openAllFiles():
-	global_vars.ad_clicks = open("ad-clicks.log", "a")
-	global_vars.buy_clicks = open("buy-clicks.log", "a")
-	global_vars.game_clicks = open("game-clicks.log", "a")
-	global_vars.team_assignments = open("team-assignments.log", "a")
-	global_vars.users = open("users.log", "a")
-	global_vars.user_session = open("user-session.log", "a")
-	global_vars.level_events = open("level-events.log", "a")
-	global_vars.team = open("team.log", "a")
+	global_vars.ad_clicks = open("ad-clicks.csv", "a")
+	
+	global_vars.buy_clicks = open("buy-clicks.csv", "a")
+	global_vars.buy_clicks.write("timestamp, txID, userSessionid, team, userid, buyid, price\n")
+	
+	global_vars.game_clicks = open("game-clicks.csv", "a")
+	
+	global_vars.team_assignments = open("team-assignments.csv", "a")
+	
+	global_vars.users = open("users.csv", "a")
+	
+	global_vars.user_session = open("user-session.csv", "a")
+
+	global_vars.level_events = open("level-events.csv", "a")
+	
+	global_vars.team = open("team.csv", "a")
 
 def closeAllFiles():
 	global_vars.ad_clicks.close()
@@ -192,7 +200,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 			global_vars.hasmapTeamAssignments[u]=newAssignment
 
 
-	assignLog = global_vars.team_assignments # open("team-assignments.log", "w")
+	assignLog = global_vars.team_assignments # open("team-assignments.csv", "w")
 	for a in sorted(assignments, key=lambda a: a['startTimeStamp']):
 		assignLog.write("time=%s, team=%s, userid=%s, assignmentid=%s \n" %
 			(a['startTimeStamp'].strftime(global_vars.timestamp_format), a['teamid'], a['userid'], a['assignmentid']))
@@ -271,7 +279,7 @@ def createTeamDatabase(noOfTeams=100):
 		teams.append(newTeam)
 	print '  ', noOfTeams, '  teams generated'
 
-	teamFile = global_vars.team # open("team.log", "a")
+	teamFile = global_vars.team # open("team.csv", "a")
 	for u in sorted(teams, key=lambda u: u['teamCreationTime']):
 		teamFile.write("teamid=%s, name=%s, teamCreationTime=%s, teamEndTime=%s, strength=%s, currentLevel=%s\n" %
 		(u['teamid'], u['name'],u['teamCreationTime'].strftime(global_vars.timestamp_format), u['teamEndTime'].strftime(global_vars.timestamp_format), u['strength'], u['currentLevel']))
@@ -315,7 +323,7 @@ def createUserDatabase(noOfUsers=2000):
 		global_vars.userIdToUser[i] = newUser;
 		users.append(newUser)
 
-	userLog = global_vars.users # open("users.log", "w")
+	userLog = global_vars.users # open("users.csv", "w")
 	for u in sorted(users, key=lambda u: u['timeStamp']):
 		userLog.write("%s id=%s, nick=%s, twitter=%s dob=%s country=%s\n" %
 			(u['timeStamp'].strftime(global_vars.timestamp_format), u['id'], u['nickname'],

@@ -24,8 +24,8 @@ def sortLogFile(name):
 # Main function file.
 def main():
 
-	#Remove old log files
-	for f in ["ad-clicks.log","buy-clicks.log","game-clicks.log","team-assignments.log","users.log", "user-session.log", "level-events.log", "team.log"]:
+	#Remove old csv files
+	for f in ["ad-clicks.csv","buy-clicks.csv","game-clicks.csv","team-assignments.csv","users.csv", "user-session.csv", "level-events.csv", "team.csv"]:
 		if os.path.isfile(f):
 			os.remove(f)
 
@@ -79,9 +79,9 @@ def main():
 			writeGameClicksForTeam(key, teams, TD)
 			teamCounter += 1
 
-		# *APPENDS* ad clicks to "ad-clicks.log" for current players from time = TD to time = TD+dayDuration
+		# *APPENDS* ad clicks to "ad-clicks.csv" for current players from time = TD to time = TD+dayDuration
 		writeAdClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
-		# *APPENDS* buy clicks to "buy-clicks.log" for current players from time = TD to time = TD+dayDuration
+		# *APPENDS* buy clicks to "buy-clicks.csv" for current players from time = TD to time = TD+dayDuration
 		writeBuyClicksCSV(TD, global_vars.dayDuration) # takes teamAssignments, userSessions, TeamAssignments from global variables
 
 		TD += global_vars.dayDuration
@@ -111,7 +111,7 @@ def main():
 		counter += 1
 
 	closeAllFiles()
-	sortLogFile('game-clicks.log')
+	sortLogFile('game-clicks.csv')
 	
 
 
