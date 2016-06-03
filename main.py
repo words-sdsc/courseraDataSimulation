@@ -34,8 +34,8 @@ def main():
 	# print "Initializing..."
 	openAllFiles()
 
-	global_vars.globalUsers = createUserDatabase(2000) #randint(2000, 3000)) #userID = index on the list
-	global_vars.globalTeams = createTeamDatabase(200) #randint(100,200))  #teamID = index on the list
+	global_vars.globalUsers = createUserDatabase(randint(2000, 3000)) #userID = index on the list
+	global_vars.globalTeams = createTeamDatabase(randint(100,200))  #teamID = index on the list
 	global_vars.globalTeamAssignments = asssignUsersTOteams(global_vars.globalUsers, global_vars.globalTeams)
 	global_vars.globalUSessions = initializeUserSessions(global_vars.globalTeamAssignments, global_vars.globalTeams)
 
@@ -55,7 +55,7 @@ def main():
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
- 	dayIteration = 100
+ 	dayIteration = 1000
 	
     #start time for Day = 0
     #set start time to be dayIteration days from now in the past.
