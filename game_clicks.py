@@ -18,11 +18,11 @@ def writeGameClicksForTeam(teamID, team, time):
 
 	# Data created, flush it to file.
 	# Append file writer.
-	appendFile = open("game-clicks.log", "a")
+	appendFile = global_vars.game_clicks # open("game-clicks.log", "a")
 	for row in gameClicks:
 		appendFile.write("time=%s, clickid=%s, userid=%s, usersessionid=%s, isHit=%s, teamId=%s, teamLevel=%s\n" %
 			(row[0].strftime(global_vars.timestamp_format), row[1], row[2], row[3], row[4], teamID, teamLevel))
-	appendFile.close()
+	#appendFile.close()
 
 def calculateHitsRequired(teamID, team):
 	tracker = None

@@ -30,6 +30,7 @@ def main():
 			os.remove(f)
 
 	# print "Initializing..."
+	openAllFiles()
 
 	global_vars.globalUsers = createUserDatabase(2000) #randint(2000, 3000)) #userID = index on the list
 	global_vars.globalTeams = createTeamDatabase(200) #randint(100,200))  #teamID = index on the list
@@ -60,10 +61,11 @@ def main():
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(minutes=30)
 
+	print "..."
 	# Loops for day simulation.
 	counter = 0
 	while counter < dayIteration:
-		if((counter+1) %10 ==0):
+		if((counter+1) %25 == 0):
 			print "Day : " + str(counter + 1) + " out of " + str(dayIteration)
 		teamCounter = 0
 
@@ -107,7 +109,10 @@ def main():
 		# Update the teams for next day.
 		counter += 1
 
+	closeAllFiles()
 	sortLogFile('game-clicks.log')
+	
+
 
 # Main function call hook.
 if __name__ == "__main__":
