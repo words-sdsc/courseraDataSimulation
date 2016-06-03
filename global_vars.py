@@ -42,7 +42,7 @@ freq 		= [0.4, 0.35, 0.05, 0.15, 0.05]
 
 timestamp_format = "%Y-%m-%d %H:%M:%S"
 
-max_accuracy = 0.7
+max_accuracy = 0.07
 
 #FILES ["ad-clicks.csv","buy-clicks.csv","game-clicks.csv","team-assignments.csv","users.csv", "user-session.csv", "level-events.csv", "team.csv"]:
 ad_clicks = None
