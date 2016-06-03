@@ -53,11 +53,11 @@ def main():
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
- 	dayIteration = 1000
+ 	dayIteration = 100
 	
     #start time for Day = 0
     #set start time to be dayIteration days from now in the past.
-    TD = datetime.datetime.now() - datetime.timedelta(days=dayIteration)#+ datetime.timedelta(days=random.uniform(2, 3))
+	TD = datetime.datetime.now() - datetime.timedelta(days=dayIteration)#+ datetime.timedelta(days=random.uniform(2, 3))
  
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(minutes=30)
