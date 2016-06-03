@@ -9,16 +9,9 @@ from datetime import datetime
 import numpy
 import pandas as pd   
 
-def value(item):
-    return item[item.find('=')+1:]
-
 #***********************************STEP1: group by time
 
-df = pd.read_table('../team-assignments.csv', header=None, delimiter=',',
-                   converters={i:value for i in range(7)},
-                   names='time team userid assignmentid'.split())
-
-df = df.convert_objects(convert_numeric=True)
+df = pd.read_csv('../team-assignments.csv', sep=', ')
 
 #all members of new user-team assignment datastructure are flushed at same timestamp
 df = df.groupby(by=['time'],as_index=False)['assignmentid'].count()
@@ -28,11 +21,7 @@ df = df.groupby(by=['time'],as_index=False)['assignmentid'].count()
 
 #***********************************STEP2: read the file again and group by time, team, user
 
-df = pd.read_table('../team-assignments.csv', header=None, delimiter=',',
-                   converters={i:value for i in range(7)},
-                   names='time team userid assignmentid'.split())
-
-df = df.convert_objects(convert_numeric=True)
+df = pd.read_csv('../team-assignments.csv', sep=', ')
 
 #when a user is assigned to a team with same timestamp - that's an error
 df = df.groupby(by=['time','team','userid'],as_index=False)['assignmentid'].count()

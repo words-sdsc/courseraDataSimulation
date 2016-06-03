@@ -10,9 +10,6 @@ from datetime import datetime
 import numpy
 import pandas as pd 
 
-def value(item):
-    return item[item.find('=')+1:]
-
 #*********************************** test 1
 
 #teamdf = pd.read_table('../team.csv', header=None, delimiter=',',
@@ -22,15 +19,9 @@ def value(item):
 
 passalltests = True
 
-levdf = pd.read_table('../level-events.csv', header=None, delimiter=',',
-	converters={i:value for i in range(5)},
-	names='time eventid teamid level eventType'.split())
-levdf = levdf.convert_objects(convert_numeric=True)
+levdf = pd.read_csv('../level-events.csv', sep=', ')
 
-sesdf = pd.read_table('../user-session.csv', header=None, delimiter=',',
-	converters={i:value for i in range(8)},
-	names='userSessionid userid teamid assignmentid startTimeStamp endTimeStamp team_level platformType'.split())
-sesdf = sesdf.convert_objects(convert_numeric=True)
+sesdf = pd.read_csv('../user-session.csv', sep=', ')
 
 print '\nNo of level increases found in level-events.csv = ', len(levdf[levdf['eventType'] == 'end'])
 

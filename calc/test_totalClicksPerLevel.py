@@ -10,16 +10,9 @@ from datetime import datetime
 import numpy
 import pandas as pd 
 
-def value(item):
-    return item[item.find('=')+1:]
-
 #*********************************** test 2
 
-df = pd.read_table('../game-clicks.csv', header=None, delimiter=',',
-                   converters={i:value for i in range(7)},
-                   names='time clickid userid usersessionid isHit teamId teamLevel'.split())
-
-df = df.convert_objects(convert_numeric=True)
+df = pd.read_csv('../game-clicks.csv', sep=', ')
 
 df = df.groupby(by=['teamId','teamLevel'],as_index=False)['isHit'].sum()
 
@@ -49,11 +42,7 @@ if(passalltests):
 
 #*********************************** test 5
 
-df = pd.read_table('../game-clicks.csv', header=None, delimiter=',',
-                   converters={i:value for i in range(7)},
-                   names='time clickid userid usersessionid isHit teamId teamLevel'.split())
-
-df = df.convert_objects(convert_numeric=True)
+df = pd.read_csv('../game-clicks.csv', sep=', ')
 
 passalltests=True
 for i in df["teamId"].unique().tolist():

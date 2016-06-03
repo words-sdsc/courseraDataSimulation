@@ -13,9 +13,11 @@ from random import randint
 
 def sortLogFile(name):
 	f = open(name, 'r')
+	hdr = f.readline()
 	lines = f.readlines()
 	f.close()
 	f = open(name, 'w')
+	f.write(hdr)
 	lines.sort()
 	for l in lines:
 		f.write(l)

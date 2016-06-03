@@ -352,10 +352,9 @@ def flushWriteTeams():
 	global teamBuffer
 	appendFile = global_vars.team # open("team.csv", "a")
 	for buf in teamBuffer:
-		appendFile.write("teamid=%s, name=%s, teamCreationTime=%s, teamEndTime=%s, strength=%s, currentLevel=%s\n" %
+		appendFile.write("%s, %s, %s, %s, %s, %s\n" %
 		(buf[0], buf[1], buf[2].strftime(global_vars.timestamp_format), buf[3].strftime(global_vars.timestamp_format), buf[4], buf[5]))
 
-	#appendFile.close()
 	del teamBuffer[:]
 
 # Write the assign teams buffer.
@@ -363,10 +362,8 @@ def flushTeamAssign():
 	global teamAssignBuffer
 	appendFile = global_vars.team_assignments # open("team-assignments.csv", "a")
 	for buf in teamAssignBuffer:
-		appendFile.write("time=%s, team=%s, userid=%s, assignmentid=%s\n" %
+		appendFile.write("%s, %s, %s, %s\n" %
 		(buf[3].strftime(global_vars.timestamp_format), buf[2], buf[1], buf[0]))
-
-	#appendFile.close()
 
 	#check teamAssignBuffer for duplicate teams per user
 
@@ -377,7 +374,7 @@ def flushLevelUp():
 	global levelUpBuffer
 	appendFile = global_vars.level_events #open("level-events.csv", "a")
 	for buf in levelUpBuffer:
-		appendFile.write("time=%s, eventid=%s, teamid=%s, level=%s, eventType=%s\n" %
+		appendFile.write("%s, %s, %s, %s, %s\n" %
 		(buf[1].strftime(global_vars.timestamp_format), buf[0], buf[2], buf[3], buf[4]))
 
 	del levelUpBuffer[:]
@@ -387,10 +384,9 @@ def flushUserSession():
 	global userSessionBuffer
 	appendFile = global_vars.user_session # open("user-session.csv", "a")
 	for buf in userSessionBuffer:
-		appendFile.write("userSessionid=%s, userid=%s, teamid=%s, assignmentid=%s, startTimeStamp=%s, endTimeStamp=%s, team_level=%s, platformType=%s\n" %
+		appendFile.write("%s, %s, %s, %s, %s, %s, %s, %s\n" %
 		(buf[0], buf[6], buf[7], buf[1], buf[2].strftime(global_vars.timestamp_format), buf[3].strftime(global_vars.timestamp_format), buf[4], buf[5]))
 
-	#appendFile.close()
 	del userSessionBuffer[:]
 
 # Delete dictionary elements given key
