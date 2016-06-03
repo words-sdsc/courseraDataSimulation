@@ -50,13 +50,14 @@ def main():
 	#____[4] unassigned users : returns a set of unassigned users
 	unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
 
-	#start time for Day = 0
-	TD = datetime.datetime.now() + datetime.timedelta(days=random.uniform(2, 3))
-
 	# SETTINGS FOR ITERATIONS #
 
 	# Number of day iterations.
  	dayIteration = 1000
+	
+    #start time for Day = 0
+    #set start time to be dayIteration days from now in the past.
+    TD = datetime.datetime.now() - datetime.timedelta(days=dayIteration)#+ datetime.timedelta(days=random.uniform(2, 3))
  
 	# Time measure per day.
 	global_vars.dayDuration = datetime.timedelta(minutes=30)
