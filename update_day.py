@@ -44,7 +44,7 @@ def userMovement(playingUsers, notPlayingUsers, unassignedUsers, TD):
 	notPlayingToUnassigned(0.01, playingUsers, notPlayingUsers, unassignedUsers, TD)
 
 	unassignedToNotPlaying(0.01, playingUsers, notPlayingUsers, unassignedUsers, TD)
-	notPlayingToPlaying(0.40, playingUsers, notPlayingUsers, TD)
+	notPlayingToPlaying(0.01, playingUsers, notPlayingUsers, TD)
 
 # Helper functions for simulation #
 
@@ -73,7 +73,7 @@ def playingToNotPlaying(fraction, playingUsers, notPlayingUsers, TD):
 				# print "Session" + str(session) + "\n"
 		deleteWithKeys(remove, userIDs)
 		total += len(remove)
-	# print 'Deleted number of users = ', total 
+	#print 'Deleted number of users = ', total 
 	# print "START GENERATING p to nP"
 	# print playingUsers
 	# print notPlayingUsers
@@ -252,7 +252,7 @@ def notPlayingToPlaying(fraction, playingUsers, notPlayUsers, TD):
 				total += 1
 				#print "\n"
 		deleteWithKeys(remove, userIDs)
-	# print "Starting sessions for number of users =", total
+	#print "Starting sessions for number of users =", total
 	# print "DONE GENERATING nP to tP:"
 	# print playingUsers
 	# print notPlayUsers
