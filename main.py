@@ -63,7 +63,7 @@ def main():
 	# Loops for day simulation.
 	counter = 0
 	while counter < dayIteration:
-		if(counter %10 ==0):
+		if((counter+1) %10 ==0):
 			print "Day : " + str(counter + 1) + " out of " + str(dayIteration)
 		teamCounter = 0
 
