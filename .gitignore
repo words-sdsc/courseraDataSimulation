@@ -1,5 +1,6 @@
 *.pyc
 *.csv
+*.log
 *.swp
 build
 dist
