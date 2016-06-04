@@ -54,15 +54,17 @@ def main():
 
 	# SETTINGS FOR ITERATIONS #
 
+	minutesPerDay = 30
+
 	# Number of day iterations.
  	dayIteration = 1000
 	
     #start time for Day = 0
     #set start time to be dayIteration days from now in the past.
-	TD = datetime.datetime.now() - datetime.timedelta(days=dayIteration)#+ datetime.timedelta(days=random.uniform(2, 3))
+	TD = datetime.datetime.now() - datetime.timedelta(minutes=dayIteration*minutesPerDay)
  
 	# Time measure per day.
-	global_vars.dayDuration = datetime.timedelta(minutes=30)
+	global_vars.dayDuration = datetime.timedelta(minutes=minutesPerDay)
 
 	print "..."
 	# Loops for day simulation.
