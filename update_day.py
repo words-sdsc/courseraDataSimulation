@@ -384,8 +384,13 @@ def flushUserSession():
 	global userSessionBuffer
 	appendFile = global_vars.user_session # open("user-session.csv", "a")
 	for buf in userSessionBuffer:
-		appendFile.write("%s, %s, %s, %s, %s, %s, %s, %s\n" %
-		(buf[0], buf[6], buf[7], buf[1], buf[2].strftime(global_vars.timestamp_format), buf[3].strftime(global_vars.timestamp_format), buf[4], buf[5]))
+    #OLD: userSessionid, userid, teamid, assignmentid, startTimeStamp, endTimeStamp, team_level, platformType
+	#	(buf[0], buf[6], buf[7], buf[1], buf[2].strftime(global_vars.timestamp_format), buf[3].strftime(global_vars.timestamp_format), buf[4], buf[5]))
+	#NEW: timestamp, userSessionid, userid, teamid, assignmentid, type, team_level, platformType
+		appendFile.write("%s, %s, %s, %s, %s, start, %s, %s\n" %
+		(buf[2].strftime(global_vars.timestamp_format), buf[0], buf[6], buf[7], buf[1], buf[4], buf[5]))
+		appendFile.write("%s, %s, %s, %s, %s, end, %s, %s\n" %
+		(buf[3].strftime(global_vars.timestamp_format), buf[0], buf[6], buf[7], buf[1], buf[4], buf[5]))
 
 	del userSessionBuffer[:]
 

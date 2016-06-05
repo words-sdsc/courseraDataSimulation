@@ -26,19 +26,19 @@ def openAllFiles():
 	global_vars.buy_clicks.write("timestamp, txID, userSessionid, team, userid, buyid, price\n")
 	
 	global_vars.game_clicks = open("game-clicks.csv", "a")
-	global_vars.game_clicks.write("time, clickid, userid, usersessionid, isHit, teamId, teamLevel\n")
+	global_vars.game_clicks.write("timestamp, clickid, userid, usersessionid, isHit, teamId, teamLevel\n")
 	
 	global_vars.team_assignments = open("team-assignments.csv", "a")
-	global_vars.team_assignments.write("time, team, userid, assignmentid\n")
+	global_vars.team_assignments.write("timestamp, team, userid, assignmentid\n")
 	
 	global_vars.users = open("users.csv", "a")
 	global_vars.users.write("timestamp, id, nick, twitter, dob, country\n")
 	
 	global_vars.user_session = open("user-session.csv", "a")
-	global_vars.user_session.write("userSessionid, userid, teamid, assignmentid, startTimeStamp, endTimeStamp, team_level, platformType\n")
+	global_vars.user_session.write("timestamp, userSessionid, userid, teamid, assignmentid, type, team_level, platformType\n")
 
 	global_vars.level_events = open("level-events.csv", "a")
-	global_vars.level_events.write("time, eventid, teamid, level, eventType\n")
+	global_vars.level_events.write("timestamp, eventid, teamid, level, eventType\n")
 	
 	global_vars.team = open("team.csv", "a")
 	global_vars.team.write("teamid, name, teamCreationTime, teamEndTime, strength, currentLevel\n")
