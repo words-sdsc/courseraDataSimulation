@@ -35,8 +35,9 @@ for teamid in sorted(levdf['teamid'].unique()):
 			#print 'check', level
 
 			# check max session time for at level-1 is less than min start time at level
-			endTimePrevLevel = sesdf[(sesdf['teamid'] == teamid) & (sesdf['team_level'] == (level-1))]['endTimeStamp'].max()
-			startTimeLevel = sesdf[(sesdf['teamid'] == teamid) & (sesdf['team_level'] == level)]['startTimeStamp'].min()
+			endTimePrevLevel = sesdf[(sesdf['teamid'] == teamid) & (sesdf['team_level'] == (level-1)) & (sesdf['type'] == 'end')]['timestamp'].max()
+			startTimeLevel = sesdf[(sesdf['teamid'] == teamid) & (sesdf['team_level'] == level) & (sesdf['type'] == 'start')]['timestamp'].min()
+			#print 'end', endTimePrevLevel, 'start', startTimeLevel
 			if endTimePrevLevel > startTimeLevel:
 				print 'ERROR, team', teamid, 'session timestamps wrong for level', level, 'max end=', endTimePrevLevel, 'min start=', startTimeLevel
 				passalltests = False
