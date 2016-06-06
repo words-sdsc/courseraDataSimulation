@@ -52,8 +52,8 @@ for i in df["teamId"].unique().tolist():
 		#>>>>>>>>> this should match what is written in game-clicks.py
 
 		#print formula
-		Lold = df["time"][(df["teamId"] == i) & (df["teamLevel"] == j-1)].max()
-		Lnew = df["time"][(df["teamId"] == i) & (df["teamLevel"] == j)].min()
+		Lold = df["timestamp"][(df["teamId"] == i) & (df["teamLevel"] == j-1)].max()
+		Lnew = df["timestamp"][(df["teamId"] == i) & (df["teamLevel"] == j)].min()
 		#print Lold, Lnew
 
 		#print found

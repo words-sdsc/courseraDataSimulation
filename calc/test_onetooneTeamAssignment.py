@@ -14,7 +14,7 @@ import pandas as pd
 df = pd.read_csv('../team-assignments.csv', sep=', ')
 
 #all members of new user-team assignment datastructure are flushed at same timestamp
-df = df.groupby(by=['time'],as_index=False)['assignmentid'].count()
+df = df.groupby(by=['timestamp'],as_index=False)['assignmentid'].count()
 
 #print("\n----------------Count of Team-assignments formed at same time stamp: ")
 #print(df[df['assignmentid'] > 1])
@@ -24,7 +24,7 @@ df = df.groupby(by=['time'],as_index=False)['assignmentid'].count()
 df = pd.read_csv('../team-assignments.csv', sep=', ')
 
 #when a user is assigned to a team with same timestamp - that's an error
-df = df.groupby(by=['time','team','userid'],as_index=False)['assignmentid'].count()
+df = df.groupby(by=['timestamp','team','userid'],as_index=False)['assignmentid'].count()
 
 #print("\n----------------Group by time, team, userid and count >1")
 check = df[df['assignmentid'] > 1]
