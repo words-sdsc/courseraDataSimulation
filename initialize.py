@@ -137,13 +137,15 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 	sessions = []
 	platforms	= global_vars.platforms
 	freq 		=  global_vars.freq
+
+	minutesPerDay = (global_vars.dayDuration.seconds//60)%60
 	print "Generating user sessions ..."
 	for assignment in pickedAssignments:
 		newSession = {}
 		newSession['userSessionid']  = global_vars.counter
 		global_vars.counter += 1
 		newSession['assignmentid']	=assignment["assignmentid"]
-		newSession['startTimeStamp']=assignment["startTimeStamp"] + datetime.timedelta(days=random.uniform(0, 2))
+		newSession['startTimeStamp']=global_vars.startDateTime - datetime.timedelta(minutes=random.uniform(0,minutesPerDay))
 		newSession['endTimeStamp']	=datetime.datetime.max
 		newSession['team_level']	= teamDatabaseList[assignment['teamid']]['currentLevel'] #get team's current level
 		newSession['platformType']	= np.random.choice(platforms, 1, replace=False, p=freq)[0]
@@ -194,6 +196,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 		iter = list(strongPlayers)
 		iter.extend(morePlayers) # merge two lists
 
+		minutesPerDay = (global_vars.dayDuration.seconds//60)%60
 
 		for u in iter:
 			newAssignment={}
@@ -201,7 +204,7 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 			global_vars.counter += 1
 			newAssignment['userid']	=u
 			newAssignment['teamid']	=team
-			newAssignment['startTimeStamp']=datetime.datetime.now() - datetime.timedelta(days=random.uniform(0, 3))
+			newAssignment['startTimeStamp']=global_vars.startDateTime - datetime.timedelta(minutes=random.uniform(minutesPerDay, 2*minutesPerDay))
 			assignments.append(newAssignment)
 			#update GLOBAL HASMAP
 			global_vars.hasmapTeamAssignments[u]=newAssignment

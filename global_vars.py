@@ -1,6 +1,8 @@
 # File to house all globally defined values.
 # Variable to house users.
 
+startDateTime = None
+
 # List containing a list of users.
 globalUsers = []
 userIdToUser = {}

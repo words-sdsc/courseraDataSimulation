@@ -25,7 +25,21 @@ def sortLogFile(name):
 
 # Main function file.
 def main():
+	# SETTINGS FOR ITERATIONS #
 
+	minutesPerDay = 30
+
+	# Number of day iterations.
+ 	dayIteration = 1000
+	
+	# Time measure per day.
+	global_vars.dayDuration = datetime.timedelta(minutes=minutesPerDay)
+
+	#start time for Day = 0
+    #set start time to be dayIteration days from now in the past.
+	TD = datetime.datetime.now() - datetime.timedelta(minutes=dayIteration*minutesPerDay)
+ 	global_vars.startDateTime = TD
+ 	
 	#Remove old csv files
 	for f in ["ad-clicks.csv","buy-clicks.csv","game-clicks.csv","team-assignments.csv","users.csv", "user-session.csv", "level-events.csv", "team.csv"]:
 		if os.path.isfile(f):
@@ -51,20 +65,6 @@ def main():
 
 	#____[4] unassigned users : returns a set of unassigned users
 	unassignedUsers = getUnassignedUsers(global_vars.globalTeamAssignments)
-
-	# SETTINGS FOR ITERATIONS #
-
-	minutesPerDay = 30
-
-	# Number of day iterations.
- 	dayIteration = 1000
-	
-    #start time for Day = 0
-    #set start time to be dayIteration days from now in the past.
-	TD = datetime.datetime.now() - datetime.timedelta(minutes=dayIteration*minutesPerDay)
- 
-	# Time measure per day.
-	global_vars.dayDuration = datetime.timedelta(minutes=minutesPerDay)
 
 	print "..."
 	# Loops for day simulation.
