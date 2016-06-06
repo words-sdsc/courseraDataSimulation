@@ -71,7 +71,7 @@ def main():
 	counter = 0
 	while counter < dayIteration:
 		if((counter+1) %25 == 0):
-			print "Day : " + str(counter + 1) + " out of " + str(dayIteration)
+			print "Iteration : " + str(counter + 1) + " out of " + str(dayIteration)
 		teamCounter = 0
 
 		for key, teams in playingMembers.iteritems():
