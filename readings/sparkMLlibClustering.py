@@ -1,13 +1,13 @@
-#Where is the output of this script: clusterCenters.txt
-
 #What it does: This script creates two clusters and prints the cluster centers to file: 
 
-#How to run this script: $SPARK_HOME/bin/spark-submit sparkMLlibClustering.py
+#Where is the output of this script: clusterCenters.txt
 
 #Dependecies: pandas, numpy
 # To install these goto Applications->SystemTools->Terminal and type the following command:
 # > sudo easy_install pandas
 # > sudo easy_install numpy
+
+#How to run this script: $SPARK_HOME/bin/spark-submit sparkMLlibClustering.py
 
 import pandas as pd
 from pyspark.mllib.clustering import KMeans, KMeansModel
