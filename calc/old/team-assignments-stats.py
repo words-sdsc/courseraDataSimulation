@@ -12,7 +12,7 @@ teams = set()
 f = open("../team-assignments.csv")
 for l in f:
 	#print l
-	ts, team, user, assmnt = re.split(",?\s+", l, 3)
+	ts, team, user, assmnt = re.split(",?", l, 3)
 	user = user.rstrip()
 
 	#print ts
