@@ -5,7 +5,7 @@
 #How to run this script: $SPARK_HOME/bin/spark-submit sparkMLlibClustering.py
 
 #Dependecies: pandas, numpy
-# To install pandas goto Applications->SystemTools->Terminal and type the following command:
+# To install these goto Applications->SystemTools->Terminal and type the following command:
 # > sudo easy_install pandas
 # > sudo easy_install numpy
 
