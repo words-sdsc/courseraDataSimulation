@@ -89,7 +89,7 @@ def writeBuyClicksCSV(startTime, dayDuration):
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	for b in sorted(buyclicks, key=lambda a: a['timeStamp']):
-		global_vars.buy_clicks.write("%s, %s, %s, %s, %s, %s, %s\n" %
+		global_vars.buy_clicks.write("%s,%s,%s,%s,%s,%s,%s\n" %
 			(b['timeStamp'].strftime(global_vars.timestamp_format), b['txid'], b['userSessionid'],
 			b['teamid'], b['userid'], b['buyID'], b['buyPrice']))
 	#buyLog.close()

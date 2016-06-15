@@ -12,7 +12,7 @@ import pandas as pd
 
 #*********************************** test 2
 
-df = pd.read_csv('../game-clicks.csv', sep=', ')
+df = pd.read_csv('../game-clicks.csv', sep=',')
 
 df = df.groupby(by=['teamId','teamLevel'],as_index=False)['isHit'].sum()
 
@@ -34,7 +34,7 @@ for i in df["teamId"].unique().tolist():
 		#print found
 		if(formula != found):
 			passalltests = False
-			print 'ERROR: teamID=',i, '  teamLevel=',j, '  formula=', formula,'  found=', found
+			print 'ERROR: teamId=',i, '  teamLevel=',j, '  formula=', formula,'  found=', found
 
 if(passalltests):
 	print "[TEST 2 PASS] Number of hits for each level match the formula in game-clicks.py"
@@ -42,7 +42,7 @@ if(passalltests):
 
 #*********************************** test 5
 
-df = pd.read_csv('../game-clicks.csv', sep=', ')
+df = pd.read_csv('../game-clicks.csv', sep=',')
 
 passalltests=True
 for i in df["teamId"].unique().tolist():
