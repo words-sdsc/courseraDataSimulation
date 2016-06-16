@@ -4,15 +4,15 @@
 
 # [STEP 1] 
 # Before you can run this script in the Virtual Machine, you need numpy and pandas
-# To install these goto Applications->SystemTools->Terminal and type the following command:
-# $ . ./setupWeek4.sh and hit enter
-# ____when you see --More-- keep pressing space bar
-# ____answer yes to all questions
+# Open Applications->SystemTools->Terminal and type the following command:
+# $ . ./setupWeek4.sh and hit Enter
+# [wait] answer yes to all questions
+# [wait] when you see --More-- keep pressing space bar
 
 # [STEP 2]
-# Make sure to change the path to files ad-clicks.csv and buy-clicks.csv before you run this script
+# Change the path to files ad-clicks.csv and buy-clicks.csv to that on your machine
 
-# [STEP 3] To run this script, write following on terminal:
+# [STEP 3] To run this script, write following on terminal, and hit enter:
 # PYSPARK_PYTHON=/home/cloudera/anaconda3/bin/python spark-submit sparkMLlibClustering.py
 
 import pandas as pd
