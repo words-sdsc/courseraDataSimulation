@@ -1,19 +1,22 @@
-# What this script does: This script creates two clusters and prints the cluster centers to file: 
+# What this script does: This script creates two clusters and prints the cluster centers to a file
 
 # Where is the output of this script: clusterCenters.txt
 
+# Steps to run this script on Cloudera VM: 
 # [STEP 1] 
-# Before you can run this script in the Virtual Machine, you need numpy and pandas
-# Open Applications->SystemTools->Terminal and type the following command:
-# $ . ./setupWeek4.sh and hit Enter
-# [wait] answer yes to all questions
-# [wait] when you see --More-- keep pressing space bar
+# 	o Before you can run this script in the Virtual Machine, you need numpy and pandas
+# 	o Open Applications->SystemTools->Terminal and type the following command:
+# 		$ . ./setupWeek4.sh and hit Enter
+# 		[wait] answer yes to all questions
+# 		[wait] when you see --More-- keep pressing space bar
 
 # [STEP 2]
-# Change the path to files ad-clicks.csv and buy-clicks.csv to that on your machine
+# 	o Change the path to files ad-clicks.csv and buy-clicks.csv to that on your machine
 
 # [STEP 3] To run this script, write following on terminal, and hit enter:
-# PYSPARK_PYTHON=/home/cloudera/anaconda3/bin/python spark-submit sparkMLlibClustering.py
+# 		$ PYSPARK_PYTHON=/home/cloudera/anaconda3/bin/python spark-submit sparkMLlibClustering.py
+
+# To run this script on other platforms, install numpy and pandas
 
 import pandas as pd
 from pyspark.mllib.clustering import KMeans, KMeansModel
