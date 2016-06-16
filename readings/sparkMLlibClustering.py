@@ -4,10 +4,9 @@
 
 #Dependecies: pandas, numpy
 # To install these goto Applications->SystemTools->Terminal and type the following command:
-# > sudo easy_install pandas
-# > sudo easy_install numpy
+# $ . ./setupWeek4.sh
 
-#How to run this script: $SPARK_HOME/bin/spark-submit sparkMLlibClustering.py
+#How to run this script: usr/bin/spark-submit sparkMLlibClustering.py
 
 import pandas as pd
 from pyspark.mllib.clustering import KMeans, KMeansModel

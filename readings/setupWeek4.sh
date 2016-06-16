@@ -1,11 +1,14 @@
 #!/bin/sh
 
 sudo yum install -y python-pip
+sudo pip install --upgrade pip
 
-pip uninstall numpy
+sudo pip uninstall -y numpy
 
-pip uninstall pandas
+sudo pip uninstall -y pandas
 
-pip install numpy --user
+sudo pip install -U --force nose
 
-pip install pandas --user
+sudo pip install numpy
+
+sudo pip install pandas
