@@ -2,12 +2,14 @@
 
 # Where is the output of this script: clusterCenters.txt
 
-# Dependecies: pandas, numpy
+# Before you can run this script in the Virtual Machine, you need numpy and pandas
 # To install these goto Applications->SystemTools->Terminal and type the following command:
-# $ . ./setupWeek4.sh and hit enter, answer yes to all questions
+# $ . ./setupWeek4.sh and hit enter
+# _________when you see --More-- keep pressing space bar
+# _________answer yes to all questions
 
 # How to run this script, write following on terminal:
-# $ PYSPARK_PYTHON=/home/cloudera/anaconda3/bin/python spark-submit sparkMLlibClustering.py
+# $ PYSPARK_PYTHON=/home/cloudera/anaconda2/bin/python spark-submit sparkMLlibClustering.py
 
 import pandas as pd
 from pyspark.mllib.clustering import KMeans, KMeansModel
@@ -22,11 +24,6 @@ conf = (SparkConf()
          .set("spark.executor.memory", "1g"))
 sc 			= SparkContext(conf = conf)
 sqlContext 	= SQLContext(sc)
-
-#redirect stdout
-orig_stdout = sys.stdout
-f = file('clusterCenters.txt', 'w')
-sys.stdout = f
 
 #Read ad-clicks.csv file
 
@@ -64,8 +61,12 @@ parsedData = pDF.rdd.map(lambda line: array([line[1], line[2]])) #adCount, price
 
 clusters = KMeans.train(parsedData, 2, maxIterations=10, runs=10, initializationMode="random")
 
-#Display the centers of two clusters
+#redirect stdout
+orig_stdout = sys.stdout
+f = open('clusterCenters.txt', 'w')
+sys.stdout = f
 
+#Display the centers of two clusters
 print(clusters.centers)
 print("First number is the # of ad-clicks and second number is revenue per user")
 print("Compare the 1st number of each cluster to see how differently users behave when it comes to clicking ads")
