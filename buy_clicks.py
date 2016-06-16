@@ -2,6 +2,7 @@ import global_vars
 import random
 import numpy as np
 import datetime
+import os
 
 def writeBuyClicksCSV(startTime, dayDuration):
 	#get users who are playing and their buying probabilities
@@ -14,13 +15,13 @@ def writeBuyClicksCSV(startTime, dayDuration):
 	#numberOfItems = 30
 
 	# price distributions for each platform
-	platformBuyPriceDist = { 'iphone': [.05, .05, .20, .25, .30, .15],
-		'mac': [.15, .15, .15, .30, .15, .10],
-		'android' : [.40, .25, .15, .10, .05, .05 ],
-		'windows': [ .60, .15, .10, .05, .05, .05 ],
-		'linux': [.75, .05, .05, .05, .05, .05] }
+	platformBuyPriceDist = { 'iphone': [.05, .05, .05, .15, .30, .40],
+		'mac': [.05, .05, .15, .50, .15, .10],
+        'android' : [.10, .10, .60, .10, .05, .05 ],
+        'windows': [ .70, .10, .10, .05, .03, .02 ],
+		'linux': [.90, .05, .02, .01, .01, .01] }
 
-	buyPrices = [0.99, 1.99, 2.99, 4.99, 9.99, 19.99]
+	buyPrices = [1.00, 2.00, 3.00, 5.00, 10.00, 20.00]
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE buy database if global variable is None
 	if(global_vars.buyDatabase is None):
 		# NOTE: if you change the number of elements in buyPrices,
@@ -38,7 +39,7 @@ def writeBuyClicksCSV(startTime, dayDuration):
 		#GET ASSIGNMENT FOR THIS SESSION
 		for assgn in assignmentsList:
 			if(assgn['assignmentid'] == s['assignmentid']):
-				teamid = assgn['teamid'] 
+				teamid = assgn['teamid']
 				userid = assgn['userid']
 		buyfactor = global_vars.globalUsers[userid]['tags']['purchbeh']
 		totalUsers.append((teamid, userid, s['userSessionid'], s['platformType'])) #list
@@ -47,10 +48,14 @@ def writeBuyClicksCSV(startTime, dayDuration):
 
 	buyProbabilities = [x/addition for x in buyProbabilities]
 
-	#pick 30% users for clicking based on their click probabilities
-	factor = random.uniform(0, 0.3)
-	#print factor	
-	buyUsers = np.random.choice(range(0, len(totalUsers)), factor*len(totalUsers), replace=True, p=buyProbabilities).tolist()
+	#pick 0-1% users for clicking based on their click probabilities
+	factor = random.uniform(0, 0.01)
+
+	if len(totalUsers) <= 0:
+		return
+
+	#print factor
+	buyUsers = np.random.choice(range(0, len(totalUsers)), int(factor*len(totalUsers)), replace=True, p=buyProbabilities).tolist()
 	buyclicks = []
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE buyclicks from these users
@@ -62,16 +67,18 @@ def writeBuyClicksCSV(startTime, dayDuration):
 		buyEvent['timeStamp'] = startTime + datetime.timedelta(hours=random.uniform(0, dayDuration.seconds // 3600))
 		buyEvent['teamid'] = totalUsers[indx][0]
 		buyEvent['userid'] = totalUsers[indx][1]
+		buyEvent['userSessionid'] = totalUsers[indx][2]
 		platform = totalUsers[indx][3]
 		pickABuy = np.random.choice(len(buyPrices), 1, p=platformBuyPriceDist[platform])[0]
+		#if platform == 'linux':
+		#	print pickABuy, buyDatabase[pickABuy][1], buyDatabase
 		buyEvent['buyID'] = buyDatabase[pickABuy][0]
 		buyEvent['buyPrice'] = buyDatabase[pickABuy][1]
-		buyEvent['userSessionid'] = totalUsers[pickABuy][2]
 		buyclicks.append(buyEvent)
 		#print '%s %s' % (platform, buyEvent['buyPrice'])
-	
+
 		# increase accuracy based on price of item bought
-		accuracy = global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'] + buyEvent['buyPrice']/100
+		accuracy = global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'] + buyEvent['buyPrice']/1000
 		# see if accuracy too high
 		if accuracy > global_vars.max_accuracy:
 			accuracy = global_vars .max_accuracy
@@ -80,13 +87,11 @@ def writeBuyClicksCSV(startTime, dayDuration):
 		#print 'userid %s accuracy %s price %f' % (buyEvent['userid'],
 			#global_vars.globalUsers[buyEvent['userid']]['tags']['gameaccuracy'], buyEvent['buyPrice'])
 
-		
+
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
-	buyLog = open("buy-clicks.log", "a")
 	for b in sorted(buyclicks, key=lambda a: a['timeStamp']):
-		buyLog.write("%s, txID=%s, userSessionid=%s, team=%s, userid=%s, buyID=%s, price=%s\n" %
+		global_vars.buy_clicks.write("%s,%s,%s,%s,%s,%s,%s\n" %
 			(b['timeStamp'].strftime(global_vars.timestamp_format), b['txid'], b['userSessionid'],
 			b['teamid'], b['userid'], b['buyID'], b['buyPrice']))
-	buyLog.close()
-
+	#buyLog.close()

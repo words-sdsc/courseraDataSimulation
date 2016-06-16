@@ -18,6 +18,41 @@ import datetime
 import math
 import global_vars
 
+def openAllFiles():
+	global_vars.ad_clicks = open("ad-clicks.csv", "a")
+	global_vars.ad_clicks.write("timestamp,txId,userSessionId,teamId,userId,adId,adCategory\n")
+	
+	global_vars.buy_clicks = open("buy-clicks.csv", "a")
+	global_vars.buy_clicks.write("timestamp,txId,userSessionId,team,userId,buyId,price\n")
+	
+	global_vars.game_clicks = open("game-clicks.csv", "a")
+	global_vars.game_clicks.write("timestamp,clickId,userId,userSessionId,isHit,teamId,teamLevel\n")
+	
+	global_vars.team_assignments = open("team-assignments.csv", "a")
+	global_vars.team_assignments.write("timestamp,team,userId,assignmentId\n")
+	
+	global_vars.users = open("users.csv", "a")
+	global_vars.users.write("timestamp,userId,nick,twitter,dob,country\n")
+	
+	global_vars.user_session = open("user-session.csv", "a")
+	global_vars.user_session.write("timestamp,userSessionId,userId,teamId,assignmentId,sessionType,teamLevel,platformType\n")
+
+	global_vars.level_events = open("level-events.csv", "a")
+	global_vars.level_events.write("timestamp,eventId,teamId,teamLevel,eventType\n")
+	
+	global_vars.team = open("team.csv", "a")
+	global_vars.team.write("teamId,name,teamCreationTime,teamEndTime,strength,currentLevel\n")
+
+def closeAllFiles():
+	global_vars.ad_clicks.close()
+	global_vars.buy_clicks.close()
+	global_vars.game_clicks.close()
+	global_vars.team_assignments.close()
+	global_vars.users.close()
+	global_vars.user_session.close()
+	global_vars.level_events.close()
+	global_vars.team.close()
+
 def getUnassignedUsers(globalTeamAssignments):
 	allMembers  	= getAllTeamMembers(globalTeamAssignments).values() #['teamid']->[userid1, userid2,...] (all members)
 	assignedMembers = []
@@ -69,14 +104,28 @@ def getPlayingTeamMembers(userSessionsList, assignmentsList):
 		#GET ASSIGNMENT FOR THIS SESSION
 		for assgn in assignmentsList:
 			if(assgn['assignmentid'] == s['assignmentid']):
+				#print 'found assignment for session : ', s['userSessionid'], assgn['userid']
 				teamid = assgn['teamid']
 				userid = assgn['userid']
 				if teamid in members:
 					members[teamid].append(userid)
 				else:
 					members[teamid]=[userid]
-	#for k,v in members.items():
-	#	print k,v
+	for k,v in members.items():
+		for user in v:
+			#get assignmentid
+			switch = 0
+			for assgn in global_vars.globalTeamAssignments:
+				if assgn['userid']==user:
+					thisassign = assgn
+					for ses in global_vars.globalUSessions:
+						if ses['assignmentid']==thisassign['assignmentid']:
+							switch+=1
+			if switch==0:
+				print "ERROR: playing member WITH NO SESSION"
+
+			#get sessionid
+
 	return members
 
 def initializeUserSessions(assignmentsList, teamDatabaseList):
@@ -84,21 +133,26 @@ def initializeUserSessions(assignmentsList, teamDatabaseList):
 
 	howManySessions = 0.5
 	# 50% of assigned users play (have a session) at the start of the game
-	pickedAssignments = np.random.choice(assignmentsList, howManySessions * len(assignmentsList), replace=False)
+	pickedAssignments = np.random.choice(assignmentsList, int(howManySessions * len(assignmentsList)), replace=False)
 	sessions = []
 	platforms	= global_vars.platforms
 	freq 		=  global_vars.freq
+
+	minutesPerDay = (global_vars.dayDuration.seconds//60)%60
 	print "Generating user sessions ..."
 	for assignment in pickedAssignments:
 		newSession = {}
 		newSession['userSessionid']  = global_vars.counter
 		global_vars.counter += 1
 		newSession['assignmentid']	=assignment["assignmentid"]
-		newSession['startTimeStamp']=assignment["startTimeStamp"] + datetime.timedelta(days=random.uniform(0, 2))
-		newSession['endTimeStamp']	=float("inf")
+		newSession['startTimeStamp']=global_vars.startDateTime - datetime.timedelta(minutes=random.uniform(0,minutesPerDay))
+		newSession['endTimeStamp']	=datetime.datetime.max
 		newSession['team_level']	= teamDatabaseList[assignment['teamid']]['currentLevel'] #get team's current level
 		newSession['platformType']	= np.random.choice(platforms, 1, replace=False, p=freq)[0]
 		sessions.append(newSession)
+		#update GLOBAL HASMAP
+		global_vars.hashmapUSessions[assignment["userid"]] = newSession
+
 	print "  ",len(sessions), "user sessions generated from ", len(assignmentsList), " available assignments (1 session/user)"
 	return sessions
 
@@ -112,10 +166,10 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	assignments = [] #list
 
 	#all players are free at the start of the game
-	freeUsers = range(0,len(userDatabaseList))
+	freeUsers = list(range(0,len(userDatabaseList)))
 
 	#pick a set of indices of teams (60%) that get >0 users assigned
-	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), math.floor(howManyTeams*len(teamDatabaseList)))
+	pickedTeams = np.random.choice(range(0,len(teamDatabaseList)), int(math.floor(howManyTeams*len(teamDatabaseList))))
 	# team length min = 1, maxteamsize = 20
 	teamSizes   = np.random.choice(range(1,20), len(pickedTeams))
 
@@ -123,7 +177,9 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 	for team, n in zip(pickedTeams, teamSizes):
 		#print team
 		strongPlayers = []
+		morePlayers = []
 		percentStrongPlayers = math.floor(0.5 * n)     	#every strong team (strength>0.6) should have 50% strong players
+
 		if(teamDatabaseList[team]['strength'] > strongTeamThreshhold):
 			#print 'getStrongPlayers: before len of freeUsers', len(freeUsers)
 			strongPlayers = getStrongPlayers(percentStrongPlayers, freeUsers, userDatabaseList) #list
@@ -134,9 +190,13 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 
 		morePlayers = getRandomPlayers(n, freeUsers) # list
 		#reduce size of available users
-		#freeUsers = [x for x in freeUsers if x not in morePlayers]
-		iter = strongPlayers
+		freeUsers = [x for x in freeUsers if x not in morePlayers] #needed so next iteration does not use these users
+		#overlap = [y for y in strongPlayers if y in morePlayers]
+		#print "overlap = ", overlap
+		iter = list(strongPlayers)
 		iter.extend(morePlayers) # merge two lists
+
+		minutesPerDay = (global_vars.dayDuration.seconds//60)%60
 
 		for u in iter:
 			newAssignment={}
@@ -144,25 +204,39 @@ def asssignUsersTOteams(userDatabaseList, teamDatabaseList):
 			global_vars.counter += 1
 			newAssignment['userid']	=u
 			newAssignment['teamid']	=team
-			newAssignment['startTimeStamp']=datetime.datetime.now() - datetime.timedelta(days=random.uniform(0, 3))
+			newAssignment['startTimeStamp']=global_vars.startDateTime - datetime.timedelta(minutes=random.uniform(minutesPerDay, 2*minutesPerDay))
 			assignments.append(newAssignment)
+			#update GLOBAL HASMAP
+			global_vars.hasmapTeamAssignments[u]=newAssignment
 
-	assignLog = open("team-assignments.log", "w")
+
+	assignLog = global_vars.team_assignments # open("team-assignments.csv", "w")
 	for a in sorted(assignments, key=lambda a: a['startTimeStamp']):
-		assignLog.write("%s team=%s, userid=%s\n" %
-			(a['startTimeStamp'].strftime(global_vars.timestamp_format), a['teamid'], a['userid']))
-	assignLog.close()
+		assignLog.write("%s,%s,%s,%s\n" %
+			(a['startTimeStamp'].strftime(global_vars.timestamp_format), a['teamid'], a['userid'], a['assignmentid']))
+	#assignLog.close()
 
 	#for a in assignments:
 	#	print a['userid'],'::',a['teamid'], '::', a['startTimeStamp']
 	print '  ',sum(teamSizes) ,' users assigned to ', len(pickedTeams),' teams'
+	dup = {}
+	for assg in assignments:
+		if assg['userid'] in dup:
+			dup[assg['userid']].append(assg['teamid'])
+		else:
+			dup[assg['userid']]=[assg['teamid']]
+	for k,v in dup.items():
+		if len(v) >1:
+			print 'Initialization ERROR: userid:',k,'teams=',v
 	return assignments
 
 def getStrongPlayers(n, freeusersindex, globalUsersDataset):
-	strongPlayerThreshold = 5
-	random.shuffle(freeusersindex)
+	strongPlayerThreshold = 3/100
+	###random.shuffle(freeusersindex)
 	pick = []
-	pickinitial = np.random.choice(freeusersindex, n, replace=False)
+	#initial set of free users
+
+	pickinitial = np.random.choice(freeusersindex, int(n), replace=False)
 	for p in pickinitial:
 		playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
 		#print playerStrength
@@ -178,7 +252,7 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 				p = np.random.choice(freeusersindex, 1)
 				playerStrength = globalUsersDataset[p]['tags']['gameaccuracy'] * globalUsersDataset[p]['tags']['clicksPerSec']
 				#print '>>>>>>>>>>>>>>>>>>>>', playerStrength
-			if(p not in pickinitial):
+			if(p not in pickinitial) & (p not in pick):
 				pick.extend(p.tolist())
 		#print playerStrength
 	#for t in pick:
@@ -186,7 +260,7 @@ def getStrongPlayers(n, freeusersindex, globalUsersDataset):
 	return pick
 
 def getRandomPlayers(n, freeusersindex):
-	random.shuffle(freeusersindex)
+	###random.shuffle(freeusersindex)
 	pick = np.random.choice(freeusersindex, n, replace=False) #just return n random
 	return pick.tolist()
 
@@ -206,7 +280,7 @@ def createTeamDatabase(noOfTeams=100):
 
 		newTeam['name']	=teamNames[i]
 		newTeam['teamCreationTime']	=datetime.datetime.now() - datetime.timedelta(days=teamAges[i]+random.uniform(0, 2))
-		newTeam['teamEndTime']		=float("inf")
+		newTeam['teamEndTime']		=datetime.datetime.max
 		newTeam['strength']	=strengthFactor[i]
 		newTeam['currentLevel']=1 #every team starts at level 1
 		newTeam['teamid'] = global_vars.teamIDCounter
@@ -214,6 +288,13 @@ def createTeamDatabase(noOfTeams=100):
 
 		teams.append(newTeam)
 	print '  ', noOfTeams, '  teams generated'
+
+	teamFile = global_vars.team # open("team.csv", "a")
+	for u in sorted(teams, key=lambda u: u['teamCreationTime']):
+		teamFile.write("%s,%s,%s,%s,%s,%s\n" %
+		(u['teamid'], u['name'],u['teamCreationTime'].strftime(global_vars.timestamp_format), u['teamEndTime'].strftime(global_vars.timestamp_format), u['strength'], u['currentLevel']))
+	#teamFile.close()
+
 	return teams # list of users, where teamID = index on the list
 
 
@@ -224,9 +305,9 @@ def createUserDatabase(noOfUsers=2000):
 	countries = getCountries(noOfUsers) #list
 	random.shuffle(countries)
 	ages = getages(18, 70, 25, noOfUsers, 30) #min (18), max (70), mean 25, sigma 30
-	accuracyFactor 	= getProbabilities(.5, .4, noOfUsers) #mu 0.5, sigma 0.4
-	purchaseFactor 	= getProbabilities(.5, .2, noOfUsers)
-	adFactor 		= getProbabilities(.5, .5, noOfUsers)
+	accuracyFactor 	= getProbabilities(.001, .0001, noOfUsers) #mu 0.5, sigma 0.4
+	purchaseFactor 	= getProbabilities(.0005, .00001, noOfUsers)
+	adFactor 		= list(purchaseFactor) #getProbabilities(.0005, .00001, noOfUsers)
 	chatFactor 		= getProbabilities(.5, .4, noOfUsers)
 	twitterHandles	= getTwitterIDs(noOfUsers)
 	nicknames		= getUserNames(noOfUsers)
@@ -246,16 +327,18 @@ def createUserDatabase(noOfUsers=2000):
 		#'tags is a list'=[gameaccuracy, purchbeh, adbeh, chatbeh]
 		newUser['tags']={'gameaccuracy':round(accuracyFactor[i], 3),
 						 'purchbeh':round(purchaseFactor[i],3),
-						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3), 'clicksPerSec': random.uniform(1,10) }
+						 'adbeh':round(adFactor[i],3), 'chatbeh':round(chatFactor[i],3), 'clicksPerSec': random.uniform(7,10) }
 		newUser['id'] = i
+		#update GLOBAL HASMAP
+		global_vars.userIdToUser[i] = newUser;
 		users.append(newUser)
 
-	userLog = open("users.log", "w")
+	userLog = global_vars.users # open("users.csv", "w")
 	for u in sorted(users, key=lambda u: u['timeStamp']):
-		userLog.write("%s id=%s, nick=%s, twitter=%s dob=%s country=%s\n" %
+		userLog.write("%s,%s,%s,%s,%s,%s\n" %
 			(u['timeStamp'].strftime(global_vars.timestamp_format), u['id'], u['nickname'],
 			u['twitter'], u['dob'], u['country']))
-	userLog.close()
+	#userLog.close()
 
 	print '  ', noOfUsers, ' users generated'
 	return users

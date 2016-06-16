@@ -1,3 +1,7 @@
 *.pyc
+*.csv
 *.log
 *.swp
+build
+dist
+main.spec
