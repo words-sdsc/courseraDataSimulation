@@ -67,11 +67,13 @@ def writeBuyClicksCSV(startTime, dayDuration):
 		buyEvent['timeStamp'] = startTime + datetime.timedelta(hours=random.uniform(0, dayDuration.seconds // 3600))
 		buyEvent['teamid'] = totalUsers[indx][0]
 		buyEvent['userid'] = totalUsers[indx][1]
+		buyEvent['userSessionid'] = totalUsers[indx][2]
 		platform = totalUsers[indx][3]
 		pickABuy = np.random.choice(len(buyPrices), 1, p=platformBuyPriceDist[platform])[0]
+		#if platform == 'linux':
+		#	print pickABuy, buyDatabase[pickABuy][1], buyDatabase
 		buyEvent['buyID'] = buyDatabase[pickABuy][0]
 		buyEvent['buyPrice'] = buyDatabase[pickABuy][1]
-		buyEvent['userSessionid'] = totalUsers[pickABuy][2]
 		buyclicks.append(buyEvent)
 		#print '%s %s' % (platform, buyEvent['buyPrice'])
 
