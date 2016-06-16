@@ -15,13 +15,13 @@ def writeBuyClicksCSV(startTime, dayDuration):
 	#numberOfItems = 30
 
 	# price distributions for each platform
-	platformBuyPriceDist = { 'iphone': [.05, .05, .20, .25, .30, .15],
-		'mac': [.15, .15, .15, .30, .15, .10],
-		'android' : [.40, .25, .15, .10, .05, .05 ],
-		'windows': [ .60, .15, .10, .05, .05, .05 ],
-		'linux': [.75, .05, .05, .05, .05, .05] }
+	platformBuyPriceDist = { 'iphone': [.05, .05, .05, .15, .30, .40],
+		'mac': [.05, .05, .15, .50, .15, .10],
+        'android' : [.10, .10, .60, .10, .05, .05 ],
+        'windows': [ .70, .10, .10, .05, .03, .02 ],
+		'linux': [.90, .05, .02, .01, .01, .01] }
 
-	buyPrices = [0.99, 1.99, 2.99, 4.99, 9.99, 19.99]
+	buyPrices = [1.00, 2.00, 3.00, 5.00, 10.00, 20.00]
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE buy database if global variable is None
 	if(global_vars.buyDatabase is None):
 		# NOTE: if you change the number of elements in buyPrices,
@@ -89,7 +89,7 @@ def writeBuyClicksCSV(startTime, dayDuration):
 
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	for b in sorted(buyclicks, key=lambda a: a['timeStamp']):
-		global_vars.buy_clicks.write("%s, %s, %s, %s, %s, %s, %s\n" %
+		global_vars.buy_clicks.write("%s,%s,%s,%s,%s,%s,%s\n" %
 			(b['timeStamp'].strftime(global_vars.timestamp_format), b['txid'], b['userSessionid'],
 			b['teamid'], b['userid'], b['buyID'], b['buyPrice']))
 	#buyLog.close()

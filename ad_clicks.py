@@ -66,6 +66,6 @@ def writeAdClicksCSV(startTime, dayDuration):
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~APPEND to file
 	assignLog = global_vars.ad_clicks # open("ad-clicks.csv", "a")
 	for a in sorted(adclicks, key=lambda a: a['timeStamp']):
-		assignLog.write("%s, %s, %s, %s, %s, %s, %s\n" %
+		assignLog.write("%s,%s,%s,%s,%s,%s,%s\n" %
 			(a['timeStamp'].strftime(global_vars.timestamp_format), a['txid'],
 			a['userSessionid'], a['teamid'], a['userid'], a['adID'], a['adCategory']))

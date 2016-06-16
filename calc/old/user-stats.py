@@ -11,7 +11,7 @@ age = []
 f = open("../users.csv")
 for l in f:
 	#print l
-	ymd, hms, id, nick, twit, dob, country = re.split("\s+,?", l, 6)
+	ymd, hms, id, nick, twit, dob, country = re.split("\s*,?", l, 6)
 	user[id] = {
 		'ts': ymd + ' ' + hms, 'nick': nick, 'twitter': twit,
 		'dob': dob, 'country': country 
