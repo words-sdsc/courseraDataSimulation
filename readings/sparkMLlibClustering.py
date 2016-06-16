@@ -18,6 +18,8 @@
 
 # To run this script on other platforms, install numpy and pandas
 
+# For even more detailed comments, refer to the document titled "Week 4 pySpark MLlib Clustering"
+
 import pandas as pd
 from pyspark.mllib.clustering import KMeans, KMeansModel
 from numpy import array
