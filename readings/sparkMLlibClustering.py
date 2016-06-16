@@ -1,12 +1,13 @@
-#What it does: This script creates two clusters and prints the cluster centers to file: 
+# What this script does: This script creates two clusters and prints the cluster centers to file: 
 
-#Where is the output of this script: clusterCenters.txt
+# Where is the output of this script: clusterCenters.txt
 
-#Dependecies: pandas, numpy
+# Dependecies: pandas, numpy
 # To install these goto Applications->SystemTools->Terminal and type the following command:
-# $ . ./setupWeek4.sh
+# $ . ./setupWeek4.sh and hit enter, answer yes to all questions
 
-#How to run this script: usr/bin/spark-submit sparkMLlibClustering.py
+# How to run this script, write following on terminal:
+# $ PYSPARK_PYTHON=/home/cloudera/anaconda3/bin/python spark-submit sparkMLlibClustering.py
 
 import pandas as pd
 from pyspark.mllib.clustering import KMeans, KMeansModel
@@ -65,10 +66,10 @@ clusters = KMeans.train(parsedData, 2, maxIterations=10, runs=10, initialization
 
 #Display the centers of two clusters
 
-print clusters.centers
-print "First number is the # of ad-clicks and second number is revenue per user"
-print "Compare the 1st number of each cluster to see how differently users behave when it comes to clicking ads"
-print "Compare the 2nd number of each cluster to see how differently users behave when it comes to buying stuff"
+print(clusters.centers)
+print("First number is the # of ad-clicks and second number is revenue per user")
+print("Compare the 1st number of each cluster to see how differently users behave when it comes to clicking ads")
+print("Compare the 2nd number of each cluster to see how differently users behave when it comes to buying stuff")
 
 #Redirect back the stdout
 sys.stdout = orig_stdout
