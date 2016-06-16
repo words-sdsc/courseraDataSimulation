@@ -1,21 +1,12 @@
 #!/bin/sh
 
-# get anaconda
+#update Spark
+sudo yum install -y spark-core spark-master spark-worker spark-history-server spark-python
+
+#get Anaconda  
 wget http://repo.continuum.io/archive/Anaconda3-4.0.0-Linux-x86_64.sh
+# _________when you see --More-- keep pressing space bar
+# _________answer yes to all questions
 
-# install anaconda
+#install Anaconda
 bash Anaconda3-4.0.0-Linux-x86_64.sh
-
-
-sudo yum install -y python-pip
-sudo pip install --upgrade pip
-
-sudo pip uninstall -y numpy
-
-sudo pip uninstall -y pandas
-
-sudo pip install -U --force nose
-
-sudo pip install numpy
-
-sudo pip install pandas
