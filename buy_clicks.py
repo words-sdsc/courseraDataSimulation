@@ -15,11 +15,14 @@ def writeBuyClicksCSV(startTime, dayDuration):
 	#numberOfItems = 30
 
 	# price distributions for each platform
-	platformBuyPriceDist = { 'iphone': [.05, .05, .05, .15, .30, .40],
-		'mac': [.05, .05, .15, .50, .15, .10],
-        'android' : [.10, .10, .60, .10, .05, .05 ],
-        'windows': [ .70, .10, .10, .05, .03, .02 ],
-		'linux': [.90, .05, .02, .01, .01, .01] }
+	platformBuyPriceDist = { 
+		'iphone': [0, .05, .05, .15, .30, .45],
+		'mac': [.10, .50, .15, .10, .10, .05],
+		#'mac': [.05, .05, .15, .50, .15, .10],
+		'android' : [.10, .10, .60, .10, .05, .05 ],
+		'windows': [ .70, .10, .10, .05, .03, .02 ],
+		'linux': [.90, .05, .02, .01, .01, .01] 
+    }
 
 	buyPrices = [1.00, 2.00, 3.00, 5.00, 10.00, 20.00]
 	#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~GENERATE buy database if global variable is None
