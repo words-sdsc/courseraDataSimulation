@@ -1,11 +1,16 @@
 #!/bin/sh
 
-sudo yum install -y python-pip
+#Run this script ONCE on Cloudera VM
+#This script prepares Cloudera VM for sparkMLlibCustering.py
 
-pip uninstall numpy
+#update Spark
+sudo yum install -y spark-core spark-master spark-worker spark-history-server spark-python
 
-pip uninstall pandas
+#get Anaconda  
+wget http://repo.continuum.io/archive/Anaconda3-4.0.0-Linux-x86_64.sh
 
-pip install numpy --user
+#install Anaconda
+bash Anaconda3-4.0.0-Linux-x86_64.sh
 
-pip install pandas --user
+# _________when you see --More-- keep pressing SPACE BAR
+# _________answer yes to all questions
