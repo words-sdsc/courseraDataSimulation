@@ -2,8 +2,8 @@
 
 # Where is the output of this script: clusterCenters.txt
 
-# Steps to run this script on Cloudera VM: 
-# [STEP 1] 
+# Steps to run this script on Cloudera VM:
+# [STEP 1]
 # 	o Before you can run this script in the Virtual Machine, you need numpy and pandas
 # 	o Open Applications->SystemTools->Terminal and type the following command:
 # 		$ . ./setupWeek4.sh and hit Enter
@@ -36,32 +36,32 @@ sqlContext 	= SQLContext(sc)
 
 #Read ad-clicks.csv file
 
-adclicksDF = pd.read_csv('/Users/aloksingh/Downloads/capstone/second/courseraDataSimulation/ad-clicks.csv')
+adclicksDF = pd.read_csv('ad-clicks.csv') #change based on your environment
 adclicksDF = adclicksDF.rename(columns=lambda x: x.strip()) #remove whitespaces from headers
 adclicksDF['adCount'] = 1 #each row is a single click, hence add extra column and make it =1
 
 #Read buy-clicks.csv file
 
-buyClicksDF = pd.read_csv('/Users/aloksingh/Downloads/capstone/second/courseraDataSimulation/buy-clicks.csv')
+buyClicksDF = pd.read_csv('buy-clicks.csv') #change based on your environment.
 buyClicksDF = buyClicksDF.rename(columns=lambda x: x.strip()) #remove whitespaces from headers
 
 #Select user attributes for clustering
 
-userPurchases = buyClicksDF[['userid','price']] #select only userid and price
-useradClicks = adclicksDF[['userid','adCount']]
+userPurchases = buyClicksDF[['userId','price']] #select only userId and price
+useradClicks = adclicksDF[['userId','adCount']]
 
 #Perform aggregation to get total ad-clicks per user
 
-adsPerUser = useradClicks.groupby('userid').sum()
+adsPerUser = useradClicks.groupby('userId').sum()
 adsPerUser = adsPerUser.reset_index()
 
 #Perform aggregation to get total revenue generated per user
 
-revenuePerUser = userPurchases.groupby('userid').sum()
+revenuePerUser = userPurchases.groupby('userId').sum()
 revenuePerUser = revenuePerUser.reset_index()
-trainingDF = adsPerUser.merge(revenuePerUser, on='userid') #userid, adCount, price
+trainingDF = adsPerUser.merge(revenuePerUser, on='userId') #userId, adCount, price
 
-#Remove userid before training and keep other two attributes
+#Remove userId before training and keep other two attributes
 
 pDF = sqlContext.createDataFrame(trainingDF)
 parsedData = pDF.rdd.map(lambda line: array([line[1], line[2]])) #adCount, price (i.e. revenue)
