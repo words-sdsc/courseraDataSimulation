@@ -6,9 +6,9 @@
 # [STEP 1]
 # 	o Before you can run this script in the Virtual Machine, you need numpy and pandas
 # 	o Open Applications->SystemTools->Terminal and type the following command:
-# 		$ . ./setupWeek4.sh and hit Enter
-# 		[wait] answer yes to all questions
-# 		[wait] when you see --More-- keep pressing space bar
+# 		$ . ./setupWeek3.sh and hit Enter
+# 		[ wait ] answer yes to all questions
+# 		[ wait ] when you see --More-- keep pressing space bar
 
 # [STEP 2]
 # 	o Change the path to files ad-clicks.csv and buy-clicks.csv to that on your machine
@@ -18,7 +18,7 @@
 
 # To run this script on other platforms, install numpy and pandas
 
-# For even more detailed comments, refer to the document titled "Week 4 pySpark MLlib Clustering"
+# For even more detailed comments, refer to the document titled "Week 3 pySpark MLlib Clustering"
 
 import pandas as pd
 from pyspark.mllib.clustering import KMeans, KMeansModel
