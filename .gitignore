@@ -2,6 +2,7 @@
 *.csv
 *.log
 *.swp
+*.pyc
 build
 dist
 main.spec
