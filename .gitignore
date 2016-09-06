@@ -3,6 +3,7 @@
 *.log
 *.swp
 *.pyc
+*.data
 build
 dist
 main.spec
