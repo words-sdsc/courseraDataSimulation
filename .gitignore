@@ -4,9 +4,9 @@
 *.swp
 *.pyc
 *.data
-*.ipynb
 build
 dist
 main.spec
 metastore_db
 MW.data
+.ipynb_checkpoints
