@@ -8,5 +8,5 @@ build
 dist
 main.spec
 metastore_db
-MW.data
+MW-timestamp.csv
 .ipynb_checkpoints
