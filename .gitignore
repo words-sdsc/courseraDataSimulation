@@ -4,6 +4,7 @@
 *.swp
 *.pyc
 *.data
+*.ipynb
 build
 dist
 main.spec
