@@ -18,3 +18,5 @@ echo "export PYSPARK_DRIVER_PYTHON_OPTS=\"notebook\"" >> ~/.bashrc
 echo "export PYSPARK_DRIVER_PYTHON=jupyter"  >> ~/.bashrc
 
 source ~/.bashrc
+
+# run 'pyspark' to start Spark and open Notebook
