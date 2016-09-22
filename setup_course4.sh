@@ -1,6 +1,8 @@
 #!/bin/bash
 
 # SETUP FILE FOR MACHINE LEARNING COURSE
+
+# run '. ./setup_course4.sh' on your terminal
  
 # upgrade spark python to work with python 3
 sudo yum upgrade -y spark-python
