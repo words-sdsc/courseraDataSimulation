@@ -16,8 +16,8 @@ def computeCost(featuresAndPrediction, model):
     return arrayCollection.map(lambda row: error(row[0], row[1])).reduce(lambda x, y: x + y)
 
 
-def elbow(elbowset, wssseList):
-	for howManyClusters in range(2,31):
+def elbow(elbowset, wssseList, k_values):
+	for howManyClusters in k_values:
 		print "Training for k = {} ".format(howManyClusters)
 		kmeans      = KM(k=howManyClusters, seed = 1)
 		model       = kmeans.fit(elbowset)
